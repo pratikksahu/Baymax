@@ -5,7 +5,7 @@ from dataClass.FrameInfo import FrameInfo
 from dataClass.FacePoint import FacePoint
 import cv2
 
-cascPath = "haarcascade_frontalface_default.xml"
+cascPath = "Classifier\haarcascade_frontalface_default.xml"
 faceCascade = cv2.CascadeClassifier(cascPath)
 
 

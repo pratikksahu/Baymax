@@ -1,42 +1,43 @@
 from dataClass.FrameInfo import FrameInfo
 from dataClass.FacePoint import FacePoint
 
-class Controller:
+
+#Used to get movements for camera and
+
+class Movement:
 
     def __init__(self, frameInfo=FrameInfo()):
         self.facePoint = FacePoint()
         self.frameInfo = frameInfo
-        self._isDetected = False
+        self.isFaceDetected = False
         self.stopped = False
 
     def start(self):
         print('Started')
         return self
 
-    def sendCommand(self):
-        self.drive()
-        self.adjustCamera()
 
-    def drive(self):
-        if self._isDetected:
+    def adjustWheels(self):
+        if self.isFaceDetected:
             if self.facePoint.x+self.facePoint.w > self.frameInfo.frameWidthLimitR:  # Right Screen Margin
-                print('LEFT')
+                return 'LEFT'
             elif self.facePoint.x < self.frameInfo.frameWidthLimitL:  # Left Screen Margin
-                print('RIGHT')
+                return 'RIGHT'
+        return 'NOMOV'
 
     def adjustCamera(self):
-        if self._isDetected:
+        if self.isFaceDetected:
             if self.facePoint.y < self.frameInfo.frameHeightLimitT:  # Top Screen Margin
-                print('DOWN')
+                return 'DOWN'
             elif self.facePoint.y + self.facePoint.h > self.frameInfo.frameHeightLimitB:  # Bottom Screen Margin
-                print('UP')
+                return 'UP'
+        return 'NOMOV'
 
-    def stop(self):
-        self._isDetected = False
-        self.stopped = True
+    def setFaceDetected(self , isFaceDetected = False):
+        self.isFaceDetected = isFaceDetected
 
     def setFacePoint(self , facePoint):
         self.facePoint = facePoint
 
-    def setFaceDetected(self , isDetected = False):
-        self._isDetected = isDetected
+    def stop(self):
+        self.stopped = True
