@@ -1,3 +1,4 @@
+from Controller import Controller
 import argparse
 from dataPointObject.dataPointObjectClass import FacePoint, FrameInfo
 import os
@@ -23,33 +24,39 @@ frameInfo = FrameInfo()
 facePoint = FacePoint()
 video_getter = None
 video_shower = None
+isFaceDetected = False
 
 def putIterationsPerSec(frame, iteration_per_sec):
     cv2.putText(frame , '{:0.0f}'.format(iteration_per_sec) , (10,450) , cv2.FONT_HERSHEY_COMPLEX , 0.6 , (255,255,255))
     return frame
 
 def start(source=0):
-    global video_getter , video_shower , frameInfo , facePoint
+    global video_getter , video_shower , frameInfo , facePoint , isFaceDetected
     #Get video feed from camera or video file
     video_getter = VideoGet(source).start()
+    frameInfo = video_getter.frameInfo
+
     #Show processed video frame
     video_shower = VideoShow(video_getter.frame , video_getter.frameInfo).start()
     
+    controller = Controller(frameInfo=frameInfo).start()
     #FPS Counter
     cps = CountsPerSec().start()
     while True:
         sleep(0.002)
-        frameInfo = video_getter.frameInfo
         facePoint = video_shower.facePoint
+        isFaceDetected = video_shower.facePoint != FacePoint()
 
+        
         #Calculate directions only when face is in view
-        if video_shower.facePoint != FacePoint():
-            driveBot()        
-            driveCamera()              
+        controller.setFaceDetected(isFaceDetected)
+        controller.setFacePoint(facePoint)
+        controller.sendCommand()          
 
-        if video_getter.stopped or video_shower.stopped:
+        if video_getter.stopped or video_shower.stopped or controller.stopped:
             video_shower.stop()
             video_getter.stop()
+            controller.stop()
             break
         
         frame = video_getter.frame
