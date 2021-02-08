@@ -1,7 +1,8 @@
 import threading
 import logging as log
 import datetime as dt
-from dataPointObject.dataPointObjectClass import FrameInfo, FacePoint
+from dataClass.FrameInfo import FrameInfo
+from dataClass.FacePoint import FacePoint
 import cv2
 
 cascPath = "haarcascade_frontalface_default.xml"

@@ -1,6 +1,7 @@
 import threading
 import cv2
-from dataPointObject.dataPointObjectClass import FrameInfo
+from dataClass.FrameInfo import FrameInfo
+from dataClass.FacePoint import FacePoint
 
 
 class VideoGet:

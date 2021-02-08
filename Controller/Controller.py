@@ -1,4 +1,5 @@
-from dataPointObject.dataPointObjectClass import *
+from dataClass.FrameInfo import FrameInfo
+from dataClass.FacePoint import FacePoint
 
 class Controller:
 

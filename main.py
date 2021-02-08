@@ -1,13 +1,13 @@
 from Controller import Controller
 import argparse
-from dataPointObject.dataPointObjectClass import FacePoint, FrameInfo
+from dataClass.FrameInfo import FrameInfo
+from dataClass.FacePoint import FacePoint
 import os
 import cv2
 from time import sleep
-from CountsPerSec import CountsPerSec
-from VideoGet import VideoGet
-from VideoShow import VideoShow
-from dataPointObject import *
+from helper.CountsPerSec import CountsPerSec
+from videoProcessing.VideoGet import VideoGet
+from videoProcessing.VideoShow import VideoShow
 
 #Argument parser
 ap = argparse.ArgumentParser()
