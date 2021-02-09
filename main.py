@@ -26,6 +26,9 @@ frameInfo = FrameInfo()
 facePoint = FacePoint()
 video_getter = None
 video_shower = None
+facePointTemp = FacePoint()
+currentTime = 0
+startTime = datetime.now()
 
 
 def putIterationsPerSec(frame, iteration_per_sec):
@@ -34,21 +37,25 @@ def putIterationsPerSec(frame, iteration_per_sec):
     return frame
 
 #FrameInfo(frameWidth=640, frameWidthLimitR=576, frameWidthLimitL=64, frameHeight=480, frameHeightLimitB=432, frameHeightLimitT=48)
-def start(source=0):
-    global video_getter, video_shower, frameInfo, facePoint, isFaceDetected, moveDirection
 
+
+def start(source=0):
+    global video_getter, video_shower, frameInfo, facePoint, moveDirection, facePointTemp, startTime, currentTime
+    isSaving = True
+    isFaceDetected = True
     # Get video feed from camera or video file
     video_getter = VideoGet(source).start()
     frameInfo = video_getter.frameInfo
-    
+
     # Show processed video frame
     video_shower = VideoShow(
         video_getter.frame, video_getter.frameInfo).start()
+    facePoint = video_shower.facePoint
 
-    #To Get moving commands
+    # To Get moving commands
     movement = Movement(frameInfo=frameInfo).start()
 
-    #To Send moving commands to raspberryq
+    # To Send moving commands to raspberryq
     raspberry = Raspberry().start()
     # FPS Counter
     cps = CountsPerSec().start()
@@ -56,15 +63,30 @@ def start(source=0):
         sleep(0.001)
         facePoint = video_shower.facePoint
 
-        #TODO Dont send any command when face goes out of visible screen while it is out of safe area
+        # TODO Dont send any command when face goes out of visible screen while it is out of safe area
+        currentTime = (datetime.now() - startTime).seconds
+        if (currentTime % 2 == 0) & (currentTime % 3 != 0) & (currentTime != 0):
+            if isSaving:
+                isSaving = False
+                facePointTemp = facePoint
+
+        if (currentTime % 3 == 0) & (currentTime != 0):
+            if not isSaving:
+                if facePointTemp == facePoint:
+                    isFaceDetected = False
+                else:
+                    isFaceDetected = True
+            isSaving = True
 
         # Calculate directions only when face is in view
         movement.setFacePoint(facePoint)
         # Sending commands to raspberry
-        raspberry.setWheelCamera(movement.adjustWheels() ,movement.adjustCamera())
-        raspberry.moveCamera()
-        raspberry.moveWheel()
-        
+        raspberry.setWheelCamera(
+            movement.adjustWheels(), movement.adjustCamera())
+
+        if isFaceDetected:
+            raspberry.moveCamera()
+            raspberry.moveWheel()
 
         if video_getter.stopped or video_shower.stopped or movement.stopped:
             video_shower.stop()
@@ -77,7 +99,6 @@ def start(source=0):
         frame = putIterationsPerSec(frame, cps.countsPerSec())
         video_shower.frame = frame
         cps.increment()
-        
 
 
 def main():

@@ -8,7 +8,6 @@ class FacePoint:
     h:int = 0  #Height of rectangle
 
     def __eq__(self, o: object) -> bool:
-        if self.x == o.x & self.y == o.y & self.w == o.w & self.h == o.h :
-            return True
-        else :
-            return False
+        if (isinstance(o,FacePoint)):
+            return self.x == o.x and self.y == o.y and self.w == o.w and self.h == o.h 
+        return False
