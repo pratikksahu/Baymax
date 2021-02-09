@@ -80,16 +80,6 @@ def start(source=0):
         cps.increment()
 
 
-# def moveWheel():
-#     if adjustWheel != 'NOMOV':
-#         print(adjustWheel)
-
-
-# def moveCamera():
-#     if adjustCamera != 'NOMOV':
-#         print(adjustCamera)
-
-
 def main():
 
     # If source is a string consisting only of integers, check that it doesn't

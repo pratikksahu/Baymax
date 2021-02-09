@@ -4,6 +4,7 @@ from dataClass.FacePoint import FacePoint
 
 #Used to get movements for camera and
 
+
 class Movement:
 
     def __init__(self, frameInfo=FrameInfo()):
@@ -22,7 +23,7 @@ class Movement:
             if self.facePoint.x+self.facePoint.w > self.frameInfo.frameWidthLimitR:  # Right Screen Margin
                 return 'LEFT'
             elif self.facePoint.x < self.frameInfo.frameWidthLimitL:  # Left Screen Margin
-                return 'RIGHT'
+                return 'RIGHT'                
         return 'NOMOV'
 
     def adjustCamera(self):
