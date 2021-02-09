@@ -19,7 +19,7 @@ class VideoGet:
             self.vs = VideoStream(0).start()
         else:
             self.vs = VideoStream(src).start()
-
+        print(self.vs.frame)
         self.frame = self.vs.read()
         self.frame = imutils.resize(self.frame, width=480 , height=640)
         self.frameInfo = FrameInfo()

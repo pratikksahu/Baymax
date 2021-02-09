@@ -50,6 +50,7 @@ class VideoShow:
                 # probability
                 cv2.rectangle(self.frame, (startX, startY),
                               (endX, endY), (0, 0, 255), 2)
+                cv2.putText(self.frame ,("X:{} Y:{} W:{} H:{}".format(startX, startY, endX, endY)) , (startX, startY-5) , cv2.FONT_HERSHEY_SIMPLEX, 0.3, (0, 0, 255) )                              
             # Draw Constraints in every frame irrespective of whether face has been detected or not
             cv2.putText(self.frame, ("Safe Area Line"), (self.frameInfo.frameWidthLimitL,
                                                          self.frameInfo.frameHeightLimitT - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255))

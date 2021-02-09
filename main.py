@@ -59,9 +59,8 @@ def start(source=0):
         isFaceDetected = True
 
         # Calculate directions only when face is in view
-        movement.setFaceDetected(isFaceDetected)
-        movement.setFacePoint(facePoint)
-        print(movement.adjustWheels())
+        # movement.setFaceDetected(isFaceDetected)
+        # movement.setFacePoint(facePoint)
         #Sending commands to raspberry
         # raspberry.setWheelCamera(movement.adjustWheels() ,movement.adjustCamera())
         # raspberry.moveCamera()
