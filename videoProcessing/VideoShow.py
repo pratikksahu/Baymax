@@ -46,16 +46,16 @@ class VideoShow:
                 # object
                 box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
                 (startX, startY, endX, endY) = box.astype("int")
-                X = int(startX/2)
-                Y = int(startY/2)
-                W = int(endX/2)
-                H = int(endY/2)
-                self.facePoint = FacePoint(startX, startY, endX, endY)
+                X = int(startX)
+                Y = int(startY)
+                W = int(endX - startX)
+                H = int(endY - startY)
+                self.facePoint = FacePoint(X, Y, W, H)
                 # draw the bounding box of the face along with the associated
                 # probability
                 cv2.rectangle(self.frame, (startX, startY),
                               (endX, endY), (0, 0, 255), 2)
-                cv2.putText(self.frame ,("X:{} Y:{} W:{} H:{}".format(startX, startY, endX, endY)) , (startX, startY-5) , cv2.FONT_HERSHEY_SIMPLEX, 0.3, (0, 0, 255) )                              
+                cv2.putText(self.frame ,("X:{} Y:{} W:{} H:{}".format(X,Y,W,H)) , (startX, startY-5) , cv2.FONT_HERSHEY_SIMPLEX, 0.3, (0, 0, 255) )                              
             # Draw Constraints in every frame irrespective of whether face has been detected or not
             cv2.putText(self.frame, ("Safe Area Line"), (self.frameInfo.frameWidthLimitL,
                                                          self.frameInfo.frameHeightLimitT - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255))

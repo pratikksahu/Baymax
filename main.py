@@ -40,7 +40,6 @@ def start(source=0):
     # Get video feed from camera or video file
     video_getter = VideoGet(source).start()
     frameInfo = video_getter.frameInfo
-    print(frameInfo)
     # Show processed video frame
     video_shower = VideoShow(
         video_getter.frame, video_getter.frameInfo).start()
@@ -57,13 +56,14 @@ def start(source=0):
         facePoint = video_shower.facePoint
         # isFaceDetected = video_shower.facePoint != FacePoint()
         isFaceDetected = True
+
         # Calculate directions only when face is in view
-        # movement.setFaceDetected(isFaceDetected)
-        # movement.setFacePoint(facePoint)
-        # # Sending commands to raspberry
-        # raspberry.setWheelCamera(movement.adjustWheels() ,movement.adjustCamera())
-        # raspberry.moveCamera()
-        # raspberry.moveWheel()
+        movement.setFaceDetected(isFaceDetected)
+        movement.setFacePoint(facePoint)
+        # Sending commands to raspberry
+        raspberry.setWheelCamera(movement.adjustWheels() ,movement.adjustCamera())
+        raspberry.moveCamera()
+        raspberry.moveWheel()
 
 
         if video_getter.stopped or video_shower.stopped or movement.stopped:
@@ -77,16 +77,6 @@ def start(source=0):
         frame = putIterationsPerSec(frame, cps.countsPerSec())
         video_shower.frame = frame
         cps.increment()
-
-
-# def moveWheel():
-#     if adjustWheel != 'NOMOV':
-#         print(adjustWheel)
-
-
-# def moveCamera():
-#     if adjustCamera != 'NOMOV':
-#         print(adjustCamera)
 
 
 def main():

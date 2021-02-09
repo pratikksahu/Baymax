@@ -11,7 +11,7 @@ class VideoGet:
     """
 
     def __init__(self, src=0):
-        self.verticalFactor = .1
+        self.verticalFactor = .2
         self.horizontalFactor = .1
         if(src == 0):
             self.stream = cv2.VideoCapture(src, cv2.CAP_DSHOW)
@@ -19,8 +19,8 @@ class VideoGet:
             self.stream = cv2.VideoCapture(src)
 
         (self.grabbed, self.frame) = self.stream.read()
-        self._width = self.stream.get(3)
-        self._height = self.stream.get(4) 
+        self._width = self.stream.get(3) 
+        self._height = self.stream.get(4)
         self.frameInfo = FrameInfo(frameWidth=int(self._width),
                                    frameWidthLimitR=int(self._width - self.horizontalFactor*self._width),
                                    frameWidthLimitL=int(self._width*self.horizontalFactor),
