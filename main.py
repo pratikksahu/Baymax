@@ -9,7 +9,7 @@ from time import sleep
 from helper.CountsPerSec import CountsPerSec
 from videoProcessing.VideoGet import VideoGet
 from videoProcessing.VideoShow import VideoShow
-from threading import Thread
+from datetime import date, datetime
 
 # Argument parser
 ap = argparse.ArgumentParser()
@@ -26,7 +26,6 @@ frameInfo = FrameInfo()
 facePoint = FacePoint()
 video_getter = None
 video_shower = None
-isFaceDetected = False
 
 
 def putIterationsPerSec(frame, iteration_per_sec):
@@ -37,9 +36,11 @@ def putIterationsPerSec(frame, iteration_per_sec):
 #FrameInfo(frameWidth=640, frameWidthLimitR=576, frameWidthLimitL=64, frameHeight=480, frameHeightLimitB=432, frameHeightLimitT=48)
 def start(source=0):
     global video_getter, video_shower, frameInfo, facePoint, isFaceDetected, moveDirection
+
     # Get video feed from camera or video file
     video_getter = VideoGet(source).start()
     frameInfo = video_getter.frameInfo
+    
     # Show processed video frame
     video_shower = VideoShow(
         video_getter.frame, video_getter.frameInfo).start()
@@ -52,19 +53,18 @@ def start(source=0):
     # FPS Counter
     cps = CountsPerSec().start()
     while True:
-        sleep(0.002)
+        sleep(0.001)
         facePoint = video_shower.facePoint
-        # isFaceDetected = video_shower.facePoint != FacePoint()
-        isFaceDetected = True
+
+        #TODO Dont send any command when face goes out of visible screen while it is out of safe area
 
         # Calculate directions only when face is in view
-        movement.setFaceDetected(isFaceDetected)
         movement.setFacePoint(facePoint)
         # Sending commands to raspberry
         raspberry.setWheelCamera(movement.adjustWheels() ,movement.adjustCamera())
         raspberry.moveCamera()
         raspberry.moveWheel()
-
+        
 
         if video_getter.stopped or video_shower.stopped or movement.stopped:
             video_shower.stop()
@@ -77,6 +77,7 @@ def start(source=0):
         frame = putIterationsPerSec(frame, cps.countsPerSec())
         video_shower.frame = frame
         cps.increment()
+        
 
 
 def main():

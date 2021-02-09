@@ -1,7 +1,6 @@
 from dataClass.FrameInfo import FrameInfo
 from dataClass.FacePoint import FacePoint
 
-
 #Used to get movements for camera and
 
 class Movement:
@@ -18,23 +17,19 @@ class Movement:
 
 
     def adjustWheels(self):
-        if self.isFaceDetected:
-            if self.facePoint.x+self.facePoint.w > self.frameInfo.frameWidthLimitR:  # Right Screen Margin
-                return 'RIGHT'
-            elif self.facePoint.x < self.frameInfo.frameWidthLimitL:  # Left Screen Margin
-                return 'LEFT'
+        if self.facePoint.x+self.facePoint.w > self.frameInfo.frameWidthLimitR:  # Right Screen Margin
+            return 'RIGHT'
+        elif self.facePoint.x < self.frameInfo.frameWidthLimitL:  # Left Screen Margin
+            return 'LEFT'
         return 'NOMOV'
 
     def adjustCamera(self):
-        if self.isFaceDetected:
-            if self.facePoint.y < self.frameInfo.frameHeightLimitT:  # Top Screen Margin
-                return 'DOWN'
-            elif self.facePoint.y + self.facePoint.h > self.frameInfo.frameHeightLimitB:  # Bottom Screen Margin
-                return 'UP'
+        if self.facePoint.y < self.frameInfo.frameHeightLimitT:  # Top Screen Margin
+            return 'DOWN'
+        elif self.facePoint.y + self.facePoint.h > self.frameInfo.frameHeightLimitB:  # Bottom Screen Margin
+            return 'UP'
         return 'NOMOV'
 
-    def setFaceDetected(self , isFaceDetected = False):
-        self.isFaceDetected = isFaceDetected
 
     def setFacePoint(self , facePoint):
         self.facePoint = facePoint
