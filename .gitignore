@@ -3,3 +3,5 @@ __pycache__/
 
 #Test file
 video
+
+*.mp4
