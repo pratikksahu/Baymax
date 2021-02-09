@@ -2,6 +2,8 @@ import threading
 import cv2
 from dataClass.FrameInfo import FrameInfo
 from dataClass.FacePoint import FacePoint
+from imutils.video import VideoStream
+import imutils
 
 
 class VideoGet:
@@ -14,22 +16,24 @@ class VideoGet:
         self.verticalFactor = .2
         self.horizontalFactor = .1
         if(src == 0):
-            self.stream = cv2.VideoCapture(src, cv2.CAP_DSHOW)
+            self.vs = VideoStream(0).start()
         else:
-            self.stream = cv2.VideoCapture(src)
+            self.vs = VideoStream(src).start()
 
-        (self.grabbed, self.frame) = self.stream.read()
-        self.frameInfo = FrameInfo(frameWidth=int(self.stream.get(3)),
-                                   frameWidthLimitR=int(self.stream.get(
-                                       3) - self.horizontalFactor*self.stream.get(3)),
-                                   frameWidthLimitL=int(
-                                       self.stream.get(3)*self.horizontalFactor),
-                                   frameHeight=int(self.stream.get(4)),
-                                   frameHeightLimitB=int(self.stream.get(
-                                       4) - self.verticalFactor*self.stream.get(4)),
-                                   frameHeightLimitT=int(
-                                       self.verticalFactor*self.stream.get(4))
-                                   )
+        self.frame = self.vs.read()
+        self.frame = imutils.resize(self.frame, width=480 , height=640)
+        self.frameInfo = FrameInfo()
+        # self.frameInfo = FrameInfo(frameWidth=int(self.frame.get(3)),
+        #                            frameWidthLimitR=int(self.frame.get(
+        #                                3) - self.horizontalFactor*self.frame.get(3)),
+        #                            frameWidthLimitL=int(
+        #                                self.frame.get(3)*self.horizontalFactor),
+        #                            frameHeight=int(self.frame.get(4)),
+        #                            frameHeightLimitB=int(self.frame.get(
+        #                                4) - self.verticalFactor*self.frame.get(4)),
+        #                            frameHeightLimitT=int(
+        #                                self.verticalFactor*self.frame.get(4))
+        #                            )
         self.stopped = False
 
     def start(self):
@@ -38,10 +42,7 @@ class VideoGet:
 
     def get(self):
         while not self.stopped:
-            if not self.grabbed:
-                self.stop()
-            else:
-                (self.grabbed, self.frame) = self.stream.read()
-
+            self.frame = self.vs.read()
+            self.frame = imutils.resize(self.frame, width=480 , height=640)
     def stop(self):
         self.stopped = True
