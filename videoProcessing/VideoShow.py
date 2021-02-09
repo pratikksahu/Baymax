@@ -25,8 +25,9 @@ class VideoShow:
     def show(self):
         while not self.stopped:
             (h, w) = self.frame.shape[:2]
-            blob = cv2.dnn.blobFromImage(cv2.resize(
-                self.frame, (300, 300)), 1.0, (300, 300), (104.0, 177.0, 123.0))
+            blob = cv2.dnn.blobFromImage(self.frame, 1.0, (300, 300), (104.0, 177.0, 123.0))
+            # blob = cv2.dnn.blobFromImage(cv2.resize(
+                # self.frame, (300, 300)), 1.0, (300, 300), (104.0, 177.0, 123.0))
             self.net.setInput(blob)
             detections = self.net.forward()
 
@@ -45,6 +46,10 @@ class VideoShow:
                 # object
                 box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
                 (startX, startY, endX, endY) = box.astype("int")
+                X = int(startX/2)
+                Y = int(startY/2)
+                W = int(endX/2)
+                H = int(endY/2)
                 self.facePoint = FacePoint(startX, startY, endX, endY)
                 # draw the bounding box of the face along with the associated
                 # probability
