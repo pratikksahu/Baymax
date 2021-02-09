@@ -65,12 +65,12 @@ def start(source=0):
 
         # TODO Dont send any command when face goes out of visible screen while it is out of safe area
         currentTime = (datetime.now() - startTime).seconds
-        if (currentTime % 2 == 0) & (currentTime % 3 != 0) & (currentTime != 0):
+        if (currentTime % 2 == 0)  and (currentTime != 0):
             if isSaving:
                 isSaving = False
                 facePointTemp = facePoint
 
-        if (currentTime % 3 == 0) & (currentTime != 0):
+        if (currentTime % 2 != 0) and (currentTime != 0):
             if not isSaving:
                 if facePointTemp == facePoint:
                     isFaceDetected = False
@@ -78,15 +78,17 @@ def start(source=0):
                     isFaceDetected = True
             isSaving = True
 
+        movement.setFaceDetected(isFaceDetected)
+        raspberry.setFaceDetected(isFaceDetected)
         # Calculate directions only when face is in view
         movement.setFacePoint(facePoint)
         # Sending commands to raspberry
         raspberry.setWheelCamera(
             movement.adjustWheels(), movement.adjustCamera())
 
-        if isFaceDetected:
-            raspberry.moveCamera()
-            raspberry.moveWheel()
+        
+        raspberry.moveCamera()
+        raspberry.moveWheel()
 
         if video_getter.stopped or video_shower.stopped or movement.stopped:
             video_shower.stop()
