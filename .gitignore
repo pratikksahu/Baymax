@@ -5,3 +5,6 @@ __pycache__/
 video
 
 *.mp4
+
+*.zip 
+*.rar
