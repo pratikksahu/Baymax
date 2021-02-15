@@ -144,5 +144,4 @@ if __name__ == '__main__':
         verify = str(os.environ.get('ASK_VERIFY_REQUESTS', '')).lower()
         if verify == 'false':
             app.config['ASK_VERIFY_REQUESTS'] = False
-    Thread(target=follow_face , args=[0,30]).start()
     app.run(debug=True)
