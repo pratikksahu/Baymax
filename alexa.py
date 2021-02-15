@@ -24,9 +24,6 @@ app = Flask(__name__)
 ask = Ask(app, "/")
 logging.getLogger('flask_ask').setLevel(logging.DEBUG)
 
-STATUSON = ['on', 'high']
-STATUSOFF = ['off', 'low']
-
 
 
 def putIterationsPerSec(frame, iteration_per_sec):
