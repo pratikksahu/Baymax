@@ -44,7 +44,7 @@ def follow_face(source=0 , dur = 30):
     isSaving = True
     isFaceDetected = True
     # Get video feed from camera or video file
-    video_getter = VideoGet(source).start()
+    video_getter = VideoGet("videoProcessing/pewd.mp4").start()
     frameInfo = video_getter.frameInfo
 
     # Show processed video frame
@@ -144,4 +144,5 @@ if __name__ == '__main__':
         verify = str(os.environ.get('ASK_VERIFY_REQUESTS', '')).lower()
         if verify == 'false':
             app.config['ASK_VERIFY_REQUESTS'] = False
+    Thread(target=follow_face , args=[0,30]).start()
     app.run(debug=True)
