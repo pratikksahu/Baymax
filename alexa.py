@@ -126,7 +126,6 @@ def followDurationIntent(duration, room):
 
         if(unit == 'M' or unit == 'H'):
             dur = int(dur)*60
-        dur = int(dur)
         unit = 'S'
     Thread(target=follow_face , args=[0,dur]).start()
     unit = 'Seconds'
