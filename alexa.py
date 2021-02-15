@@ -44,7 +44,7 @@ def follow_face(source=0 , dur = 30):
     isSaving = True
     isFaceDetected = True
     # Get video feed from camera or video file
-    video_getter = VideoGet("videoProcessing/pewd.mp4").start()
+    video_getter = VideoGet("videoProcessing/meloop.mp4").start()
     frameInfo = video_getter.frameInfo
 
     # Show processed video frame
