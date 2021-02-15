@@ -117,15 +117,17 @@ def Gpio_Intent(status, room):
 def followDurationIntent(duration, room):
     regex = re.compile('[0-9]{1,}[HSM]{1}')
     res = re.search(regex,str(duration))
-    dur = ''
+    dur = 0
     if(res != None):
         res = res.group()
         unit = res[len(res) - 1]
+        j = len(res) - 2
         for i in range(len(res) - 1):
-            dur+=res[i]
+            dur+=int(int(res[i]) * math.pow(10,j))
+            j = j - 1
 
         if(unit == 'M' or unit == 'H'):
-            dur = int(dur)*60
+            dur = dur*60
         unit = 'S'
     Thread(target=follow_face , args=[0,dur]).start()
     unit = 'Seconds'
