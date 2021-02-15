@@ -14,7 +14,7 @@ from videoProcessing.VideoShow import VideoShow
 from datetime import date, datetime
 from threading import Thread
 import re
-import keyboard
+
 
 from flask import Flask
 from flask_ask import Ask, request, session, question, statement
