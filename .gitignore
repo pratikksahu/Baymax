@@ -4,6 +4,7 @@ __pycache__/
 #Files exclusive to training 
 dataset
 embeddings.pickle
+output
 *.mp4
 
 *.zip 

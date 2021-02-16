@@ -82,10 +82,10 @@ class GetEmbedded:
                                 self.knownEmbeddings.append(vec.flatten())
                                 print(t)
                                 t = t+1
-                    if len(self.knownEmbeddings) > 0 and len(self.knownNames) > 0:
-                        data = {"embeddings": self.knownEmbeddings, "names": self.knownNames}
-                        f = open("embeddings.pickle", "wb")
-                        f.write(pickle.dumps(data))
-                        f.close()
-                    self.knownEmbeddings.clear()
-                    self.knownNames.clear()
+        if len(self.knownEmbeddings) > 0 and len(self.knownNames) > 0:
+            data = {"embeddings": self.knownEmbeddings, "names": self.knownNames}
+            f = open("embeddings.pickle", "wb")
+            f.write(pickle.dumps(data))
+            f.close()
+        self.knownEmbeddings.clear()
+        self.knownNames.clear()
