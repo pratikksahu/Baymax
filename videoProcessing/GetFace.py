@@ -6,7 +6,7 @@ import cv2
 from datetime import datetime
 import os
 import imutils
-
+import time
 
 class GetFaceCamera:
     """
@@ -19,7 +19,6 @@ class GetFaceCamera:
         self.frame = frame
         self._folderName = folderName
         self.stopped = False
-        self._total = 0
 
     def start(self):
         threading.Thread(name='show', target=self.show).start()
@@ -27,6 +26,7 @@ class GetFaceCamera:
 
     def show(self):
         while not self.stopped:
+            timestr = time.strftime("%Y%m%d-%H%M%S")
             (h, w) = self.frame.shape[:2]
             blob = cv2.dnn.blobFromImage(
                 self.frame, 1.0, (300, 300), (104.0, 177.0, 123.0))
@@ -53,8 +53,7 @@ class GetFaceCamera:
                     faceimg = self.frame[(
                         Y - 50):(Y + 20) + H, (X - 40):X + W + 50]
                     cv2.imwrite(
-                        "{}{}{}.jpg".format(self._folderName, os.sep, self._total), faceimg)
-                    self._total = self._total + 1
+                        "{}{}{}.jpg".format(self._folderName, os.sep, timestr), faceimg)
 
             cv2.imshow("Video", self.frame)
             # cv2.imshow("Gray" , gray)
@@ -82,6 +81,7 @@ class GetFaceImage:
 
     def show(self):
         for root, dirs, files in os.walk(self._inputFolder):
+            timestr = time.strftime("%Y%m%d-%H%M%S")
             for dir in dirs:
                 if not os.listdir("{}{}{}".format(root, os.sep, dir)):
                     print("Empty Directory {}".format(dir))
@@ -91,8 +91,8 @@ class GetFaceImage:
                     file_count = len(files)
                     print("Total files in directory {} is {}".format(
                         dir, file_count))
-                    outputFileAppend = 40
                     for fileName in files:
+                        
                         image = cv2.imread("{}{}{}{}{}".format(
                             root, os.sep, dir, os.sep, fileName))
                         image = imutils.resize(image, width=600)
@@ -119,9 +119,12 @@ class GetFaceImage:
                                 Y = int(startY)
                                 W = int(endX - startX)
                                 H = int(endY - startY)
-                                faceimg = image[Y:Y + H, X:X + W ]
-                                
-                                os.makedirs( "{}{}{}".format(self._outputFolder,os.sep,dir),exist_ok=True)
+                                # faceimg = image[Y:Y + H, X:X + W]
+
+                                faceimg = image[(
+                                    Y - 50):(Y + 20) + H, (X - 40):X + W + 50]
+
+                                os.makedirs("{}{}{}".format(
+                                    self._outputFolder, os.sep, dir), exist_ok=True)
                                 cv2.imwrite(
-                                    "{}{}{}{}{}.jpg".format(self._outputFolder,os.sep,dir,os.sep,outputFileAppend), faceimg)
-                                outputFileAppend = outputFileAppend + 1
+                                    "{}{}{}{}{}.jpg".format(self._outputFolder, os.sep, dir, os.sep, timestr), faceimg)
