@@ -28,6 +28,8 @@ class GetEmbedded:
         return self
 
     def show(self):
+        t = 0
+        name = ''
         for root, dirs, files in os.walk(self._datasetFolder):
             for dir in dirs:
                 if not os.listdir("{}{}{}".format(root, os.sep, dir)):
@@ -38,7 +40,13 @@ class GetEmbedded:
                     file_count = len(files)
                     print("Total files in directory {} is {}".format(
                         dir, file_count))
-                    t = 0
+                    if(dir == 'ankit') or (dir == 'pratik'):
+                        name = dir
+                        print('T RESET')
+                        t = 0
+                    else:
+                        name = 'unknown'
+                    
                     for fileName in files:
                         image = cv2.imread("{}{}{}{}{}".format(
                             root, os.sep, dir, os.sep, fileName))
@@ -81,9 +89,10 @@ class GetEmbedded:
 
                                 # add the name of the person + corresponding face
                                 # embedding to their respective lists
-                                self.knownNames.append(dir)
+                                self.knownNames.append(name)
                                 self.knownEmbeddings.append(vec.flatten())
-                                print(t)
+                                if t % 100 == 0:
+                                    print("{} images processed".format(t))
                                 t = t+1
         if len(self.knownEmbeddings) > 0 and len(self.knownNames) > 0:
             data = {"embeddings": self.knownEmbeddings,
@@ -91,5 +100,3 @@ class GetEmbedded:
             f = open("embeddings.pickle", "wb")
             f.write(pickle.dumps(data))
             f.close()
-        self.knownEmbeddings.clear()
-        self.knownNames.clear()
