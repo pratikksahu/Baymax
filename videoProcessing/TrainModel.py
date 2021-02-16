@@ -7,7 +7,7 @@ import shutil
 import os
 
 class TrainModel:
-    def __init__(self):
+    def __init__(self , modelOutput):
         # load the face embeddings
         print("Loading face embeddings of the dataset")
         data = pickle.loads(open("embeddings.pickle", "rb").read())
@@ -22,15 +22,15 @@ class TrainModel:
         recognizer = SVC(C=1.0, kernel="linear", probability=True)
         recognizer.fit(data["embeddings"], labels)
         
-        if(os.path.isdir("output")):
-            shutil.rmtree("output")
-        os.makedirs("output",exist_ok=True)
+        if(os.path.isdir(modelOutput)):
+            shutil.rmtree(modelOutput)
+        os.makedirs(modelOutput,exist_ok=True)
         # write the actual face recognition model to disk
-        f = open("output/recognizer.pickle", "wb")
+        f = open("{}{}recognizer.pickle".format(modelOutput,os.sep), "wb")
         f.write(pickle.dumps(recognizer))
         f.close()
 
         # write the label encoder to disk
-        f = open("output/label.pickle", "wb")
+        f = open("{}{}label.pickle".format(modelOutput,os.sep), "wb")
         f.write(pickle.dumps(le))
         f.close()

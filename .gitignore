@@ -5,6 +5,7 @@ __pycache__/
 dataset
 embeddings.pickle
 *.mp4
+input 
 
 *.zip 
 *.rar

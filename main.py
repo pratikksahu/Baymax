@@ -6,7 +6,7 @@ import cv2
 from time import sleep
 from helper.CountsPerSec import CountsPerSec
 from videoProcessing.VideoGet import VideoGet
-from videoProcessing.GetFace import GetFace
+from videoProcessing.GetFace import GetFaceCamera, GetFaceImage
 from videoProcessing.GetEmbedded import GetEmbedded
 from videoProcessing.TrainModel import TrainModel
 
@@ -14,11 +14,14 @@ from datetime import date, datetime
 
 # Argument parser
 ap = argparse.ArgumentParser()
-ap.add_argument("--person", "-p", default='ExtractedFace',
+ap.add_argument("--person", "-p", default='unknown',
                 help="Debug mode"
                 + " (default ExtractedFace).")
-ap.add_argument("--extractFace", "-efa", default=False,
+ap.add_argument("--fromCamera", "-fcam", default=False,
                 help="Step 1 To extract face using webcamera"
+                + " (default False).")
+ap.add_argument("--fromImage", "-fimg", default=False,
+                help="Step 1 To extract face using image set"
                 + " (default False).")
 ap.add_argument("--extractEmbedding", "-eem", default=False,
                 help="Step 2 To extract embeddings from face exxtracted"
@@ -26,9 +29,12 @@ ap.add_argument("--extractEmbedding", "-eem", default=False,
 ap.add_argument("--trainModel", "-tm", default=False,
                 help="Step 3 To train mode after extracting embeddings"
                 + " (default False).")
-ap.add_argument("--datasetFolder", "-df", default="dataset",
-                help="Debug mode"
+ap.add_argument("--datasetOutput", "-o", default="dataset",
+                help="Dataset output folder"
                 + " (default dataset).")
+ap.add_argument("--datasetInput", "-i", default="input",
+                help="Dataset input folder"
+                + " (default input).")
 args = vars(ap.parse_args())
 ###################################################
 
@@ -42,15 +48,15 @@ def putIterationsPerSec(frame, iteration_per_sec):
     return frame
 
 
-def ExtractFace(source=0):
+def ExtractFaceCamera(source=0):
 
     global video_getter, get_face
 
     # Get video feed from camera or video file
     video_getter = VideoGet(source).start()
     # Show processed video frame
-    get_face = GetFace(
-        "{}/{}".format(args["datasetFolder"], args["person"]), video_getter.frame).start()
+    get_face = GetFaceCamera(
+        "{}/{}".format(args["datasetOutput"], args["person"]), video_getter.frame).start()
 
     # FPS Counter
     cps = CountsPerSec().start()
@@ -71,22 +77,29 @@ def ExtractFace(source=0):
 
 def main():
 
-
-    if(bool(args["extractFace"])):
+    if(bool(args["fromCamera"])):
         if(not os.path.isdir(args["person"])):
             os.makedirs(
-                "{}/{}".format(args["datasetFolder"], args["person"]), exist_ok=True)
+                "{}/{}".format(args["datasetOutput"], args["person"]), exist_ok=True)
         print(
             "OUTPUT IMAGES WILL BE STORED INSIDE {}/{}".format(args["datasetFolder"], args["person"]))
         ExtractFace()
 
-    if(bool(args["extractEmbedding"])):
-        if(os.path.isdir(args["datasetFolder"])):
-            GetEmbedded(args["datasetFolder"]).start()
+    if(bool(args["fromImage"])):
+        if(os.path.isdir(args["datasetInput"])):
+            print(
+                "OUTPUT IMAGES WILL BE STORED INSIDE {}/{}".format(args["datasetOutput"], args["person"]))
+            GetFaceImage(args["datasetInput"],
+                         args["datasetOutput"]).start()
+        else:
+            print('Dataset folder does not exists')
 
+    if(bool(args["extractEmbedding"])):
+        if(os.path.isdir(args["datasetOutput"])):
+            GetEmbedded(args["datasetOutput"]).start()
 
     if(bool(args["trainModel"])):
-        TrainModel()
+        TrainModel("output")
 
 
 if __name__ == "__main__":

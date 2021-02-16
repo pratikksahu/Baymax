@@ -7,6 +7,7 @@ from datetime import datetime
 import os
 import pickle
 
+
 class GetEmbedded:
     """
     Class that continuously shows a frame using a dedicated thread.
@@ -14,8 +15,9 @@ class GetEmbedded:
 
     def __init__(self, datasetFolder):
         self.net = cv2.dnn.readNetFromCaffe(
-            'videoProcessing/deploy.prototxt.txt', 'videoProcessing/res10_300x300_ssd_iter_140000.caffemodel')
-        self.embedder = cv2.dnn.readNetFromTorch('videoProcessing/openface.nn4.small2.v1.t7')
+            'videoProcessing{}deploy.prototxt.txt'.format(os.sep), 'videoProcessing{}res10_300x300_ssd_iter_140000.caffemodel'.format(os.sep))
+        self.embedder = cv2.dnn.readNetFromTorch(
+            'videoProcessing{}openface.nn4.small2.v1.t7'.format(os.sep))
         self._datasetFolder = datasetFolder
         self.stopped = False
         self.knownNames = []
@@ -28,17 +30,18 @@ class GetEmbedded:
     def show(self):
         for root, dirs, files in os.walk(self._datasetFolder):
             for dir in dirs:
-                if not os.listdir("{}/{}".format(root, dir)):
+                if not os.listdir("{}{}{}".format(root, os.sep, dir)):
                     print("Empty Directory {}".format(dir))
                 else:
                     path, dirs, files = next(
-                        os.walk("{}/{}".format(root, dir)))
+                        os.walk("{}{}{}".format(root, os.sep, dir)))
                     file_count = len(files)
                     print("Total files in directory {} is {}".format(
                         dir, file_count))
-                    t=0
+                    t = 0
                     for fileName in files:
-                        image = cv2.imread("{}/{}/{}".format(root,dir, fileName))
+                        image = cv2.imread("{}{}{}{}{}".format(
+                            root, os.sep, dir, os.sep, fileName))
                         (h, w) = image.shape[:2]
                         blob = cv2.dnn.blobFromImage(
                             image, 1.0, (300, 300),
@@ -83,7 +86,8 @@ class GetEmbedded:
                                 print(t)
                                 t = t+1
         if len(self.knownEmbeddings) > 0 and len(self.knownNames) > 0:
-            data = {"embeddings": self.knownEmbeddings, "names": self.knownNames}
+            data = {"embeddings": self.knownEmbeddings,
+                    "names": self.knownNames}
             f = open("embeddings.pickle", "wb")
             f.write(pickle.dumps(data))
             f.close()
