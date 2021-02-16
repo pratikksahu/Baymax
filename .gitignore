@@ -10,3 +10,6 @@ output
 
 *.zip 
 *.rar
+*.jpeg
+*.jpg
+*.png
