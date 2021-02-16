@@ -82,8 +82,8 @@ def main():
             os.makedirs(
                 "{}/{}".format(args["datasetOutput"], args["person"]), exist_ok=True)
         print(
-            "OUTPUT IMAGES WILL BE STORED INSIDE {}/{}".format(args["datasetFolder"], args["person"]))
-        ExtractFace()
+            "OUTPUT IMAGES WILL BE STORED INSIDE {}/{}".format(args["datasetOutput"], args["person"]))
+        ExtractFaceCamera()
 
     if(bool(args["fromImage"])):
         if(os.path.isdir(args["datasetInput"])):
