@@ -48,7 +48,7 @@ class GetEmbedded:
                         name = 'unknown'
                     if(dir == '00000') or (dir == 'ankit') or (dir == 'pratik'):
                         for fileName in files:
-                            if t == 30:
+                            if t == 50:
                                 break
                             image = cv2.imread("{}{}{}{}{}".format(
                                 root, os.sep, dir, os.sep, fileName))

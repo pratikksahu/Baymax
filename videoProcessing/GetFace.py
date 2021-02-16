@@ -25,7 +25,7 @@ class GetFaceCamera:
 
     def show(self):
         while not self.stopped:
-            timestr =datetime.now().strftime("%Y%m%d-%H%M%S%f")
+            total = 0
             (h, w) = self.frame.shape[:2]
             blob = cv2.dnn.blobFromImage(
                 self.frame, 1.0, (300, 300), (104.0, 177.0, 123.0))
@@ -52,8 +52,8 @@ class GetFaceCamera:
                     faceimg = self.frame[(
                         Y - 50):(Y + 20) + H, (X - 40):X + W + 50]
                     cv2.imwrite(
-                        "{}{}{}.jpg".format(self._folderName, os.sep, timestr), faceimg)
-
+                        "{}{}{}.jpg".format(self._folderName, os.sep, total), faceimg)
+                    total = total + 1
             cv2.imshow("Video", self.frame)
             # cv2.imshow("Gray" , gray)
             if cv2.waitKey(1) == ord("q"):
@@ -80,7 +80,7 @@ class GetFaceImage:
 
     def show(self):
         for root, dirs, files in os.walk(self._inputFolder):
-            timestr = datetime.now().strftime("%Y%m%d-%H%M%S%f")
+            total = 0
             for dir in dirs:
                 if not os.listdir("{}{}{}".format(root, os.sep, dir)):
                     print("Empty Directory {}".format(dir))
@@ -108,7 +108,8 @@ class GetFaceImage:
                             # filter out weak detections by ensuring the `confidence` is
                             # greater than the minimum confidence
 
-                            if confidence > 0.5:
+                            if confidence > 0.4:
+                                print("found")
                                 # compute the (x, y)-coordinates of the bounding box for the
                                 # object
                                 box = detections[0, 0, i, 3:7] * \
@@ -118,12 +119,13 @@ class GetFaceImage:
                                 Y = int(startY)
                                 W = int(endX - startX)
                                 H = int(endY - startY)
-                                # faceimg = image[Y:Y + H, X:X + W]
+                                faceimg = image[Y:Y + H, X:X + W]
 
-                                faceimg = image[(
-                                    Y - 50):(Y + 20) + H, (X - 40):X + W + 50]
+                                # faceimg = image[(
+                                #     Y - 20):(Y + 20) + H, (X - 20):X + W + 20]
 
                                 os.makedirs("{}{}{}".format(
                                     self._outputFolder, os.sep, dir), exist_ok=True)
                                 cv2.imwrite(
-                                    "{}{}{}{}{}.jpg".format(self._outputFolder, os.sep, dir, os.sep, timestr), faceimg)
+                                    "{}{}{}{}{}.jpg".format(self._outputFolder, os.sep, dir, os.sep, total), faceimg)
+                                total = total + 1
