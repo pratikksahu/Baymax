@@ -6,6 +6,7 @@ dataset
 embeddings.pickle
 *.mp4
 input 
+output
 
 *.zip 
 *.rar

@@ -75,7 +75,6 @@ class GetFaceImage:
             'videoProcessing{}deploy.prototxt.txt'.format(os.sep), 'videoProcessing{}res10_300x300_ssd_iter_140000.caffemodel'.format(os.sep))
         self._inputFolder = inputFolder
         self._outputFolder = outputFolder
-        self._total = 0
 
     def start(self):
         threading.Thread(name='show', target=self.show).start()
@@ -92,7 +91,7 @@ class GetFaceImage:
                     file_count = len(files)
                     print("Total files in directory {} is {}".format(
                         dir, file_count))
-                    outputFileAppend = 0
+                    outputFileAppend = 40
                     for fileName in files:
                         image = cv2.imread("{}{}{}{}{}".format(
                             root, os.sep, dir, os.sep, fileName))
