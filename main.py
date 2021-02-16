@@ -87,8 +87,6 @@ def main():
 
     if(bool(args["fromImage"])):
         if(os.path.isdir(args["datasetInput"])):
-            print(
-                "OUTPUT IMAGES WILL BE STORED INSIDE {}".format(args["datasetOutput"]))
             GetFaceImage(args["datasetInput"],
                          args["datasetOutput"]).start()
         else:

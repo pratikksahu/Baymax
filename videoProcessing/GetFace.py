@@ -6,7 +6,6 @@ import cv2
 from datetime import datetime
 import os
 import imutils
-import time
 
 class GetFaceCamera:
     """
@@ -26,7 +25,7 @@ class GetFaceCamera:
 
     def show(self):
         while not self.stopped:
-            timestr = time.strftime("%Y%m%d-%H%M%S")
+            timestr =datetime.now().strftime("%Y%m%d-%H%M%S%f")
             (h, w) = self.frame.shape[:2]
             blob = cv2.dnn.blobFromImage(
                 self.frame, 1.0, (300, 300), (104.0, 177.0, 123.0))
@@ -81,7 +80,7 @@ class GetFaceImage:
 
     def show(self):
         for root, dirs, files in os.walk(self._inputFolder):
-            timestr = time.strftime("%Y%m%d-%H%M%S")
+            timestr = datetime.now().strftime("%Y%m%d-%H%M%S%f")
             for dir in dirs:
                 if not os.listdir("{}{}{}".format(root, os.sep, dir)):
                     print("Empty Directory {}".format(dir))
@@ -92,7 +91,7 @@ class GetFaceImage:
                     print("Total files in directory {} is {}".format(
                         dir, file_count))
                     for fileName in files:
-                        
+
                         image = cv2.imread("{}{}{}{}{}".format(
                             root, os.sep, dir, os.sep, fileName))
                         image = imutils.resize(image, width=600)
