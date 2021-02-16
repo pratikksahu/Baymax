@@ -77,7 +77,7 @@ class VideoShow:
                     j = np.argmax(preds)
                     proba = preds[j]
                     name = self.label.classes_[j]
-                    if proba < .8 :
+                    if proba < .4 or name == 'unknown' :
                         continue
                     text = "{}: {:.2f}%".format(name, proba * 100)
 
