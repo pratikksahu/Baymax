@@ -1,8 +1,13 @@
 #Cached 
 __pycache__/
 
-#Test file
-video
+#Files exclusive to training 
+dataset
+videoProcessing/GetEmbedded.py
+videoProcessing/GetFace.py
+videoProcessing/TrainModel.py
+embeddings.pickle
+
 
 *.mp4
 

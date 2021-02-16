@@ -1,5 +1,3 @@
-from Controller.Movement import Movement
-from Controller.Raspberry import Raspberry
 import argparse
 from dataClass.FrameInfo import FrameInfo
 from dataClass.FacePoint import FacePoint
@@ -8,27 +6,34 @@ import cv2
 from time import sleep
 from helper.CountsPerSec import CountsPerSec
 from videoProcessing.VideoGet import VideoGet
-from videoProcessing.VideoShow import VideoShow
+from videoProcessing.GetFace import GetFace
+from videoProcessing.GetEmbedded import GetEmbedded
+from videoProcessing.TrainModel import TrainModel
+
 from datetime import date, datetime
 
 # Argument parser
 ap = argparse.ArgumentParser()
-ap.add_argument("--source", "-s", default=0,
-                help="Path to video file or integer representing webcam index"
-                + " (default 0).")
-ap.add_argument("--debug", "-d", default='false',
+ap.add_argument("--person", "-p", default='ExtractedFace',
                 help="Debug mode"
-                + " (default false).")
+                + " (default ExtractedFace).")
+ap.add_argument("--extractFace", "-efa", default=False,
+                help="Step 1 To extract face using webcamera"
+                + " (default False).")
+ap.add_argument("--extractEmbedding", "-eem", default=False,
+                help="Step 2 To extract embeddings from face exxtracted"
+                + " (default False).")
+ap.add_argument("--trainModel", "-tm", default=False,
+                help="Step 3 To train mode after extracting embeddings"
+                + " (default False).")
+ap.add_argument("--datasetFolder", "-df", default="dataset",
+                help="Debug mode"
+                + " (default dataset).")
 args = vars(ap.parse_args())
 ###################################################
 
-frameInfo = FrameInfo()
-facePoint = FacePoint()
 video_getter = None
-video_shower = None
-facePointTemp = FacePoint()
-currentTime = 0
-startTime = datetime.now()
+get_face = None
 
 
 def putIterationsPerSec(frame, iteration_per_sec):
@@ -36,85 +41,52 @@ def putIterationsPerSec(frame, iteration_per_sec):
                 (10, 450), cv2.FONT_HERSHEY_COMPLEX, 0.6, (255, 255, 255))
     return frame
 
-#FrameInfo(frameWidth=640, frameWidthLimitR=576, frameWidthLimitL=64, frameHeight=480, frameHeightLimitB=432, frameHeightLimitT=48)
 
+def ExtractFace(source=0):
 
-def start(source=0):
-    global video_getter, video_shower, frameInfo, facePoint, moveDirection, facePointTemp, startTime, currentTime
-    isSaving = True
-    isFaceDetected = True
+    global video_getter, get_face
+
     # Get video feed from camera or video file
     video_getter = VideoGet(source).start()
-    frameInfo = video_getter.frameInfo
-
     # Show processed video frame
-    video_shower = VideoShow(
-        video_getter.frame, video_getter.frameInfo).start()
-    facePoint = video_shower.facePoint
+    get_face = GetFace(
+        "{}/{}".format(args["datasetFolder"], args["person"]), video_getter.frame).start()
 
-    # To Get moving commands
-    movement = Movement(frameInfo=frameInfo).start()
-
-    # To Send moving commands to raspberryq
-    raspberry = Raspberry().start()
     # FPS Counter
     cps = CountsPerSec().start()
+
     while True:
-        sleep(0.001)
-        facePoint = video_shower.facePoint
+        sleep(0.01)
 
-        # TODO Dont send any command when face goes out of visible screen while it is out of safe area
-        currentTime = (datetime.now() - startTime).seconds
-        if (currentTime % 2 == 0)  and (currentTime != 0):
-            if isSaving:
-                isSaving = False
-                facePointTemp = facePoint
-
-        if (currentTime % 2 != 0) and (currentTime != 0):
-            if not isSaving:
-                if facePointTemp == facePoint:
-                    isFaceDetected = False
-                else:
-                    isFaceDetected = True
-            isSaving = True
-
-        movement.setFaceDetected(isFaceDetected)
-        raspberry.setFaceDetected(isFaceDetected)
-        # Calculate directions only when face is in view
-        movement.setFacePoint(facePoint)
-        # Sending commands to raspberry
-        raspberry.setWheelCamera(
-            movement.adjustWheels(), movement.adjustCamera())
-
-        
-        raspberry.moveCamera()
-        raspberry.moveWheel()
-
-        if video_getter.stopped or video_shower.stopped or movement.stopped:
-            video_shower.stop()
+        if video_getter.stopped or get_face.stopped:
+            get_face.stop()
             video_getter.stop()
-            movement.stop()
-            raspberry.stop()
             break
 
         frame = video_getter.frame
         frame = putIterationsPerSec(frame, cps.countsPerSec())
-        video_shower.frame = frame
+        get_face.frame = frame
         cps.increment()
 
 
 def main():
 
-    # If source is a string consisting only of integers, check that it doesn't
-    # refer to a file. If it doesn't, assume it's an integer camera ID and
-    # convert to int.
-    if (
-        isinstance(args["source"], str)
-        and args["source"].isdigit()
-        and not os.path.isfile(args["source"])
-    ):
-        args["source"] = int(args["source"])
-    start(args["source"])
+
+    if(bool(args["extractFace"])):
+        if(not os.path.isdir(args["person"])):
+            os.makedirs(
+                "{}/{}".format(args["datasetFolder"], args["person"]), exist_ok=True)
+        print(
+            "OUTPUT IMAGES WILL BE STORED INSIDE {}/{}".format(args["datasetFolder"], args["person"]))
+        ExtractFace()
+
+    if(bool(args["extractEmbedding"])):
+        if(os.path.isdir(args["datasetFolder"])):
+            GetEmbedded(args["datasetFolder"]).start()
+
+
+    if(bool(args["trainModel"])):
+        TrainModel()
 
 
 if __name__ == "__main__":
