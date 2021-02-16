@@ -1,10 +1,12 @@
 #Cached 
 __pycache__/
 
-#Test file
-video
 
+#Dataset
 *.mp4
+dataset
+embeddings.pickle
+
 
 *.zip 
 *.rar
