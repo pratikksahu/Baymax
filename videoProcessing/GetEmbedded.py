@@ -40,16 +40,14 @@ class GetEmbedded:
                     file_count = len(files)
                     print("Total files in directory {} is {}".format(
                         dir, file_count))
-                    if(dir == 'ankit') or (dir == 'pratik'):
+                    if(dir == 'pratik') or (dir == 'indian'):
                         name = dir
                         print('T RESET')
                         t = 0
                     else:
                         name = 'unknown'
-                    if(dir == '00000') or (dir == 'ankit') or (dir == 'pratik'):
+                    if(dir == '00000') or (dir == 'pratik') or (dir == 'indian'):
                         for fileName in files:
-                            if t == 50:
-                                break
                             image = cv2.imread("{}{}{}{}{}".format(
                                 root, os.sep, dir, os.sep, fileName))
                             (h, w) = image.shape[:2]

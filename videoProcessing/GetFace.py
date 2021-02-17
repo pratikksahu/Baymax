@@ -18,6 +18,7 @@ class GetFaceCamera:
         self.frame = frame
         self._folderName = folderName
         self.stopped = False
+        self._total = 0
 
     def start(self):
         threading.Thread(name='show', target=self.show).start()
@@ -25,7 +26,7 @@ class GetFaceCamera:
 
     def show(self):
         while not self.stopped:
-            total = 0
+
             (h, w) = self.frame.shape[:2]
             blob = cv2.dnn.blobFromImage(
                 self.frame, 1.0, (300, 300), (104.0, 177.0, 123.0))
@@ -52,8 +53,8 @@ class GetFaceCamera:
                     faceimg = self.frame[(
                         Y - 50):(Y + 20) + H, (X - 40):X + W + 50]
                     cv2.imwrite(
-                        "{}{}{}.jpg".format(self._folderName, os.sep, total), faceimg)
-                    total = total + 1
+                        "{}{}{}.jpg".format(self._folderName, os.sep, self._total), faceimg)
+                    self._total = self._total + 1
             cv2.imshow("Video", self.frame)
             # cv2.imshow("Gray" , gray)
             if cv2.waitKey(1) == ord("q"):
