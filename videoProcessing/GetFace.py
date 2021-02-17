@@ -74,6 +74,7 @@ class GetFaceImage:
             'videoProcessing{}deploy.prototxt.txt'.format(os.sep), 'videoProcessing{}res10_300x300_ssd_iter_140000.caffemodel'.format(os.sep))
         self._inputFolder = inputFolder
         self._outputFolder = outputFolder
+        self._error = 0
 
     def start(self):
         threading.Thread(name='show', target=self.show).start()
@@ -92,7 +93,7 @@ class GetFaceImage:
                     print("Total files in directory {} is {}".format(
                         dir, file_count))
                     for fileName in files:
-
+                        # print(fileName)
                         image = cv2.imread("{}{}{}{}{}".format(
                             root, os.sep, dir, os.sep, fileName))
                         image = imutils.resize(image, width=600)
@@ -109,8 +110,7 @@ class GetFaceImage:
                             # filter out weak detections by ensuring the `confidence` is
                             # greater than the minimum confidence
 
-                            if confidence > 0.4:
-                                print("found")
+                            if confidence > 0.8:
                                 # compute the (x, y)-coordinates of the bounding box for the
                                 # object
                                 box = detections[0, 0, i, 3:7] * \
@@ -122,11 +122,11 @@ class GetFaceImage:
                                 H = int(endY - startY)
                                 faceimg = image[Y:Y + H, X:X + W]
 
-                                # faceimg = image[(
-                                #     Y - 20):(Y + 20) + H, (X - 20):X + W + 20]
-
                                 os.makedirs("{}{}{}".format(
                                     self._outputFolder, os.sep, dir), exist_ok=True)
-                                cv2.imwrite(
-                                    "{}{}{}{}{}.jpg".format(self._outputFolder, os.sep, dir, os.sep, total), faceimg)
+                                try:
+                                    cv2.imwrite(
+                                        "{}{}{}{}{}.jpg".format(self._outputFolder, os.sep, dir, os.sep, total), faceimg)
+                                except:
+                                    print("Error in file {} . Remove the image".format(fileName))
                                 total = total + 1

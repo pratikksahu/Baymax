@@ -6,6 +6,7 @@ import cv2
 from datetime import datetime
 import os
 import pickle
+import imutils
 
 
 class GetEmbedded:
@@ -46,13 +47,14 @@ class GetEmbedded:
                         t = 0
                     else:
                         name = 'unknown'
-                    if(dir == '00000') or (dir == 'pratik') or (dir == 'indian'):
+                    if(dir == '00000') or (dir == '65000') or(dir == '69000') or (dir == 'pratik') or (dir == 'indian'):
                         for fileName in files:
                             image = cv2.imread("{}{}{}{}{}".format(
                                 root, os.sep, dir, os.sep, fileName))
+                            image = imutils.resize(image, width=600)
                             (h, w) = image.shape[:2]
                             blob = cv2.dnn.blobFromImage(
-                                image, 1.0, (300, 300),
+                                 cv2.resize(image, (300, 300)), 1.0, (300, 300),
                                 (104.0, 177.0, 123.0), swapRB=False, crop=False)
                             self.net.setInput(blob)
                             detections = self.net.forward()
@@ -64,7 +66,7 @@ class GetEmbedded:
                                 confidence = detections[0, 0, i, 2]
 
                                 # ensure that the detection with the 50% probabilty thus helping filter out weak detections
-                                if confidence > 0.5:
+                                if confidence > 0.8:
                                     # compute the (x, y)-coordinates of the bounding box for
                                     # the face
                                     box = detections[0, 0, i, 3:7] * \
