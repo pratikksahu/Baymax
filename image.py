@@ -24,7 +24,7 @@ le = pickle.loads(
     open("output{}label.pickle".format(os.sep), "rb").read())
 
 image = cv2.imread(args["image"])
-image = imutils.resize(image, width=1080)
+image = imutils.resize(image, width=720)
 (h, w) = image.shape[:2]
 # construct a blob from the image
 imageBlob = cv2.dnn.blobFromImage(
@@ -60,6 +60,7 @@ for i in range(0, detections.shape[2]):
         j = np.argmax(preds)
         proba = preds[j]
         name = le.classes_[j]
+        print(proba)
         text = "{}: {:.2f}%".format(name, proba * 100)
         y = startY - 10 if startY - 10 > 10 else startY + 10
         cv2.rectangle(image, (startX, startY), (endX, endY),

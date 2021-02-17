@@ -7,7 +7,7 @@ __pycache__/
 dataset
 embeddings.pickle
 output
-
+output.old
 *.zip 
 *.rar
 *.jpg

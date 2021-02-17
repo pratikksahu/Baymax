@@ -73,12 +73,10 @@ class VideoShow:
                     vec = self.embedder.forward()
 
                     # perform classification to recognize the face
-                    preds = self.recognizer.predict_proba(vec)[0]
+                    preds = self.recognizer.predict_proba(vec)[0]            
                     j = np.argmax(preds)
                     proba = preds[j]
                     name = self.label.classes_[j]
-                    if proba < .4 and name == 'pratik':
-                        continue
                     text = "{}: {:.2f}%".format(name, proba * 100)
 
                     self.facePoint = FacePoint(X, Y, W, H)
