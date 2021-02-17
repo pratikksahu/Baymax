@@ -24,7 +24,7 @@ le = pickle.loads(
     open("output{}label.pickle".format(os.sep), "rb").read())
 
 image = cv2.imread(args["image"])
-image = imutils.resize(image, width=600)
+image = imutils.resize(image, width=1080)
 (h, w) = image.shape[:2]
 # construct a blob from the image
 imageBlob = cv2.dnn.blobFromImage(
@@ -40,7 +40,7 @@ for i in range(0, detections.shape[2]):
     # prediction
     confidence = detections[0, 0, i, 2]
     # filter out weak detections
-    if confidence > 0.6:
+    if confidence > 0.5:
         # compute the (x, y)-coordinates of the bounding box for the
         # face
         box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])

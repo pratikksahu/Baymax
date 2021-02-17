@@ -50,7 +50,7 @@ class VideoShow:
                 # filter out weak detections by ensuring the `confidence` is
                 # greater than the minimum confidence
 
-                if confidence > 0.3:
+                if confidence > 0.5:
                     # compute the (x, y)-coordinates of the bounding box for the
                     # object
                     box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
@@ -77,7 +77,7 @@ class VideoShow:
                     j = np.argmax(preds)
                     proba = preds[j]
                     name = self.label.classes_[j]
-                    if proba < .4 or name == 'unknown' :
+                    if proba < .4 and name == 'pratik':
                         continue
                     text = "{}: {:.2f}%".format(name, proba * 100)
 
