@@ -47,7 +47,7 @@ class GetEmbedded:
                         t = 0
                     else:
                         name = 'unknown'
-                    if(dir == '00000') or (dir == '69000') or (dir == 'pratik') or (dir == 'indian'):
+                    if(dir == '00000') or (dir == 'pratik') or (dir == 'indian'):
                         for fileName in files:
                             image = cv2.imread("{}{}{}{}{}".format(
                                 root, os.sep, dir, os.sep, fileName))
