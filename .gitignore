@@ -1,16 +1,3 @@
-#Cached 
-__pycache__/
+/*
 
-
-#Dataset
-*.mp4
-dataset
-embeddings.pickle
-output
-output.old
-test_img
-*.zip 
-*.rar
-*.jpg
-*.jpeg
-*.png
+!output
