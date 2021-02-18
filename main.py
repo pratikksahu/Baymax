@@ -1,3 +1,5 @@
+import logging
+import os
 from Controller.Movement import Movement
 from Controller.Raspberry import Raspberry
 import argparse
@@ -10,22 +12,17 @@ from helper.CountsPerSec import CountsPerSec
 from videoProcessing.VideoGet import VideoGet
 from videoProcessing.VideoShow import VideoShow
 from datetime import date, datetime
+from threading import Thread
+import re
 
-# Argument parser
-ap = argparse.ArgumentParser()
-ap.add_argument("--source", "-s", default=0,
-                help="Path to video file or integer representing webcam index"
-                + " (default 0).")
-args = vars(ap.parse_args())
-###################################################
 
-frameInfo = FrameInfo()
-facePoint = FacePoint()
-video_getter = None
-video_shower = None
-facePointTemp = FacePoint()
-currentTime = 0
-startTime = datetime.now()
+from flask import Flask
+from flask_ask import Ask, request, session, question, statement
+
+
+app = Flask(__name__)
+ask = Ask(app, "/")
+logging.getLogger('flask_ask').setLevel(logging.DEBUG)
 
 
 def putIterationsPerSec(frame, iteration_per_sec):
@@ -33,11 +30,16 @@ def putIterationsPerSec(frame, iteration_per_sec):
                 (10, 450), cv2.FONT_HERSHEY_COMPLEX, 0.6, (255, 255, 255))
     return frame
 
-#FrameInfo(frameWidth=640, frameWidthLimitR=576, frameWidthLimitL=64, frameHeight=480, frameHeightLimitB=432, frameHeightLimitT=48)
 
-
-def start(source=0):
-    global video_getter, video_shower, frameInfo, facePoint, moveDirection, facePointTemp, startTime, currentTime
+def follow_face(source=0 , dur = 30):
+    print('Started for {} seconds'.format(dur))
+    video_getter = None
+    video_shower = None
+    frameInfo = FrameInfo()
+    facePoint = FacePoint()
+    facePointTemp = FacePoint()
+    startTime =  datetime.now()
+    currentTime = 0
     isSaving = True
     isFaceDetected = True
     # Get video feed from camera or video file
@@ -57,12 +59,20 @@ def start(source=0):
     # FPS Counter
     cps = CountsPerSec().start()
     while True:
-        sleep(0.001)
+        sleep(0.01)
         facePoint = video_shower.facePoint
 
-        # TODO Dont send any command when face goes out of visible screen while it is out of safe area
         currentTime = (datetime.now() - startTime).seconds
-        if (currentTime % 2 == 0)  and (currentTime != 0):
+
+        if(currentTime % dur == 0) and (currentTime != 0):
+            print('Stopped')
+            video_shower.stop()
+            video_getter.stop()
+            movement.stop()
+            raspberry.stop()
+            break
+
+        if (currentTime % 2 == 0) and (currentTime != 0):
             if isSaving:
                 isSaving = False
                 facePointTemp = facePoint
@@ -83,16 +93,8 @@ def start(source=0):
         raspberry.setWheelCamera(
             movement.adjustWheels(), movement.adjustCamera())
 
-        
         raspberry.moveCamera()
         raspberry.moveWheel()
-
-        if video_getter.stopped or video_shower.stopped or movement.stopped:
-            video_shower.stop()
-            video_getter.stop()
-            movement.stop()
-            raspberry.stop()
-            break
 
         frame = video_getter.frame
         frame = putIterationsPerSec(frame, cps.countsPerSec())
@@ -100,19 +102,45 @@ def start(source=0):
         cps.increment()
 
 
-def main():
-
-    # If source is a string consisting only of integers, check that it doesn't
-    # refer to a file. If it doesn't, assume it's an integer camera ID and
-    # convert to int.
-    if (
-        isinstance(args["source"], str)
-        and args["source"].isdigit()
-        and not os.path.isfile(args["source"])
-    ):
-        args["source"] = int(args["source"])
-    start(args["source"])
+@ask.launch
+def launch():
+    speech_text = 'Welcome to Raspberry Pi Automation.'
+    return question(speech_text).reprompt(speech_text).simple_card(speech_text)
 
 
-if __name__ == "__main__":
-    main()
+@ask.intent('GpioIntent', mapping={'status': 'status'})
+def Gpio_Intent(status, room):
+    return question('Lights turned {}'.format(status))
+
+@ask.intent('followDuration', mapping={'duration': 'duration'})
+def followDurationIntent(duration, room):
+    regex = re.compile('[0-9]{1,}[HSM]{1}')
+    res = re.search(regex,str(duration))
+    dur = ''
+    if(res != None):
+        res = res.group()
+        unit = res[len(res) - 1]
+        for i in range(len(res) - 1):
+            dur+=res[i]
+
+        if(unit == 'M' or unit == 'H'):
+            dur = int(dur)*60
+        dur = int(dur)
+        unit = 'S'
+    Thread(target=follow_face , args=[0,dur]).start()
+    unit = 'Seconds'
+    return question("Started following for {} {}".format(dur,unit))
+
+
+@ask.intent('AMAZON.FallbackIntent')
+def fallback():
+    speech_text = 'You can say hello to me!'
+    return question(speech_text).reprompt(speech_text).simple_card('HelloWorld', speech_text)
+
+
+if __name__ == '__main__':
+    if 'ASK_VERIFY_REQUESTS' in os.environ:
+        verify = str(os.environ.get('ASK_VERIFY_REQUESTS', '')).lower()
+        if verify == 'false':
+            app.config['ASK_VERIFY_REQUESTS'] = False
+    app.run(debug=True)

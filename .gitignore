@@ -1,15 +1,9 @@
 #Cached 
 __pycache__/
+/*
 
-
-*.mp4
-dataset
-embeddings.pickle
-output
-output.old
-test_img
-*.zip 
-*.rar
-*.jpg
-*.jpeg
-*.png
+!Controller
+!videoProcessing
+!main.py
+!LICENSE
+!pagekite.py
