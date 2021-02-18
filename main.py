@@ -6,7 +6,7 @@ import cv2
 from time import sleep
 from helper.CountsPerSec import CountsPerSec
 from videoProcessing.VideoGet import VideoGet
-from videoProcessing.GetFace import GetFaceCamera, GetFaceImage
+from videoProcessing.GetFace import GetFaceCamera, GetFaceImage, GetFaceImageWithOldModel
 from videoProcessing.GetEmbedded import GetEmbedded
 from videoProcessing.TrainModel import TrainModel
 
@@ -14,14 +14,17 @@ from datetime import date, datetime
 import argparse
 
 # For parsing text in -h flag
+
+
 class SmartFormatter(argparse.HelpFormatter):
 
     def _split_lines(self, text, width):
         if text.startswith('R|'):
-            return text[2:].splitlines()  
+            return text[2:].splitlines()
         return argparse.HelpFormatter._split_lines(self, text, width)
 
-### Steps to follow
+
+# Steps to follow
 steps = "R|Step 1 \n\
             If you dont have image with single face\n\
             If you have , Go to step 2 \n\
@@ -44,8 +47,8 @@ steps = "R|Step 1 \n\
 
 
 # Argument parser
-ap = argparse.ArgumentParser(add_help=False , formatter_class=SmartFormatter)
-ap.add_argument("-h", "--help", action="help" , help=steps , )
+ap = argparse.ArgumentParser(add_help=False, formatter_class=SmartFormatter)
+ap.add_argument("-h", "--help", action="help", help=steps, )
 ap.add_argument("-p", "--person", default='unknown',
                 help="Set person name"
                 + " (default name 'unknown').")
@@ -106,7 +109,7 @@ def ExtractFaceCamera(source=0):
 
 
 def main():
-    
+
     # To get face from camera
     # Output folder tree  ----> "outputfolder"/"name of person"/[images]
     # python main.py -cam true -person "name_here"
@@ -131,6 +134,8 @@ def main():
         if(os.path.isdir(args["datasetInput"])):
             GetFaceImage(args["datasetInput"],
                          args["datasetOutput"]).start()
+            # GetFaceImageWithOldModel(args["datasetInput"],
+            #                     args["datasetOutput"]).start()
         else:
             print('Dataset folder does not exists')
 
