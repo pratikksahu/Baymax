@@ -68,15 +68,24 @@ class VideoShow:
                         continue
 
                     blob = cv2.dnn.blobFromImage(face, 1.0 / 255,
-                                                     (96, 96), (0, 0, 0), swapRB=True, crop=False)
+                                                 (96, 96), (0, 0, 0), swapRB=True, crop=False)
                     self.embedder.setInput(blob)
                     vec = self.embedder.forward()
 
                     # perform classification to recognize the face
-                    preds = self.recognizer.predict_proba(vec)[0]            
-                    j = np.argmax(preds)
-                    proba = preds[j]
-                    name = self.label.classes_[j]
+                    proba = 0.0
+                    name = ''
+                    preds = self.recognizer.predict_proba(vec)[0]
+                    for me in range(len(preds)):
+                        if (preds[me] > 0.5) and (self.label.classes_[me] == 'pratik'):
+                            proba = preds[me]
+                            name = self.label.classes_[me]
+
+                    if (proba == 0.0) and (name == ''):
+                        j = np.argmax(preds)
+                        proba = preds[j]
+                        name = self.label.classes_[j]
+
                     text = "{}: {:.2f}%".format(name, proba * 100)
 
                     self.facePoint = FacePoint(X, Y, W, H)
