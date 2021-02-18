@@ -1,10 +1,8 @@
 #Cached 
 __pycache__/
 
-#Test file
-video
-
-*.mp4
-
-*.zip 
-*.rar
+!Controller
+!videoProcessing
+!alexa.py
+!LICENSE
+!pagekite.py
