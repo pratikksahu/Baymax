@@ -12,7 +12,7 @@ class Movement:
         self.frameInfo = frameInfo
         self._isFaceDetected = False
         self.stopped = False
-        self._forwardLimit = 9000
+        self._forwardLimit = 15000
         self._backwardLimit = 35000
 
     def start(self):
@@ -29,7 +29,7 @@ class Movement:
                 return 'LEFT'
             if faceArea < self._forwardLimit:
                 return 'FORWARD'
-            elif faceArea >self._backwardLimit:
+            elif faceArea >self._backwardLimit and faceArea < self._backwardLimit + 5000:
                 return 'BACKWARD'
             return 'NOMOV'
 
