@@ -24,8 +24,6 @@ app = Flask(__name__)
 ask = Ask(app, "/")
 logging.getLogger('flask_ask').setLevel(logging.DEBUG)
 
-
-
 def putIterationsPerSec(frame, iteration_per_sec):
     cv2.putText(frame, '{:0.0f}'.format(iteration_per_sec),
                 (10, 450), cv2.FONT_HERSHEY_COMPLEX, 0.6, (255, 255, 255))
