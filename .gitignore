@@ -4,6 +4,6 @@ __pycache__/
 
 !Controller
 !videoProcessing
-!alexa.py
+!main.py
 !LICENSE
 !pagekite.py
