@@ -47,15 +47,20 @@ class GetEmbedded:
                         t = 0
                     else:
                         name = 'unknown'
-                    if(dir == '00000') or (dir == '65000') or(dir == '69000') or (dir == 'pratik') or (dir == 'indian'):
+                    if(dir == '00000') or (dir == '69000') or (dir == 'pratik') or (dir == 'indian'):
                         for fileName in files:
                             image = cv2.imread("{}{}{}{}{}".format(
                                 root, os.sep, dir, os.sep, fileName))
-                            image = imutils.resize(image, width=600)
+                            height, width, channels = image.shape
+
+                            if height > width:
+                                image = imutils.resize(image, height=int(height * .4), inter=cv2.INTER_AREA)
+                            else:
+                                image = imutils.resize(image, width=int(width * .8) , inter=cv2.INTER_AREA)
+
                             (h, w) = image.shape[:2]
                             blob = cv2.dnn.blobFromImage(
-                                 cv2.resize(image, (300, 300)), 1.0, (300, 300),
-                                (104.0, 177.0, 123.0), swapRB=False, crop=False)
+                            cv2.resize(image, (300, 300)), 1.0, (300, 300), (104.0, 177.0, 123.0) , swapRB=False , crop=False)
                             self.net.setInput(blob)
                             detections = self.net.forward()
 
