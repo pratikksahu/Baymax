@@ -7,7 +7,8 @@ embeddings.pickle
 *.mp4
 input 
 output
-output.old
+test_img
+Controller
 
 *.zip 
 *.rar
