@@ -3,6 +3,10 @@ __pycache__/
 
 #Test file
 video
+dataset
+output
+input
+test_img
 
 *.mp4
 
