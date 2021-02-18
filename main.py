@@ -16,9 +16,6 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--source", "-s", default=0,
                 help="Path to video file or integer representing webcam index"
                 + " (default 0).")
-ap.add_argument("--debug", "-d", default='false',
-                help="Debug mode"
-                + " (default false).")
 args = vars(ap.parse_args())
 ###################################################
 
