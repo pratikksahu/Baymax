@@ -8,6 +8,7 @@ dataset
 embeddings.pickle
 output
 output.old
+test_img
 *.zip 
 *.rar
 *.jpg

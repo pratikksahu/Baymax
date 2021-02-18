@@ -56,12 +56,23 @@ for i in range(0, detections.shape[2]):
         embedder.setInput(faceBlob)
         vec = embedder.forward()
         # perform classification to recognize the face
+        proba = 0.0
+        name = ''
         preds = recognizer.predict_proba(vec)[0]
-        j = np.argmax(preds)
-        proba = preds[j]
-        name = le.classes_[j]
-        print(proba)
-        print(name)
+        for me in range(len(preds)):
+            print(preds[me])
+            print(le.classes_[me])
+            if (preds[me] > 0.5) and (le.classes_[me] == 'pratik'):
+                proba = preds[me]
+                name = le.classes_[me]
+
+        #If couldn't find 'pratik'
+        if (proba == 0.0) and (name == ''):
+            j = np.argmax(preds)
+            proba = preds[j]
+            name = le.classes_[j]
+        # print(proba)
+        # print(name)
         text = "{}: {:.2f}%".format(name, proba * 100)
         y = startY - 10 if startY - 10 > 10 else startY + 10
         cv2.rectangle(image, (startX, startY), (endX, endY),
