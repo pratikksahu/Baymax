@@ -19,7 +19,7 @@ class TrainModel:
         # train the model used to accept the 128-d embeddings of the face and
         # then produce the actual face recognition
         print("Training the model usng SVM...")
-        recognizer = SVC(C=1.0, kernel="linear", probability=True)
+        recognizer = SVC(C=2.0, kernel="poly", probability=True)
         recognizer.fit(data["embeddings"], labels)
         
         if(os.path.isdir(modelOutput)):
