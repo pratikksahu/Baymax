@@ -57,10 +57,10 @@ def start(source=0):
     # FPS Counter
     cps = CountsPerSec().start()
     while True:
-        sleep(0.001)
+        sleep(0.1)
         facePoint = video_shower.facePoint
 
-        # TODO Dont send any command when face goes out of visible screen while it is out of safe area
+        
         currentTime = (datetime.now() - startTime).seconds
         if (currentTime % 2 == 0)  and (currentTime != 0):
             if isSaving:
