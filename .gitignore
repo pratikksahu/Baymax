@@ -7,7 +7,7 @@ dataset
 embeddings.pickle
 output
 output.old
-test_img
+testData
 *.zip 
 *.rar
 *.jpg
