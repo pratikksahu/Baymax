@@ -41,8 +41,7 @@ steps = "R|Step 1 \n\
             python main.py -embed true\n\
             python main.py -embed true -o 'location of images'\n\
         Step 3 \n\
-           python main.py -tm true -mo 'model output folder'\n\
-           -mo is optional . by default it is set to folder 'output' "
+           python main.py -tm true -mo 'model output folder'"
 ###
 
 
@@ -70,9 +69,6 @@ ap.add_argument("-o", "--datasetOutput", default="dataset",
 ap.add_argument("-i", "--datasetInput",  default="input",
                 help="Dataset input folder"
                 + " (default folder 'input').")
-ap.add_argument("-mo", "--modelOutput", default="output",
-                help="Recgonizer model output folder"
-                + " (default folder 'output').")
 args = vars(ap.parse_args())
 ###################################################
 
@@ -147,10 +143,9 @@ def main():
             GetEmbedded(args["datasetOutput"]).start()
 
     # To train model using embedding
-    # python main.py -tm true -mo "model output folder"
-    # -mo is optional . by default it is set to folder "output"
+    # python main.py -tm true
     elif(bool(args["trainModel"])):
-        TrainModel(args["modelOutput"])
+        TrainModel('classifier')
     else:
         os.system('python main.py -h')
 

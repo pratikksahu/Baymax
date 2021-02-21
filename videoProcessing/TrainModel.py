@@ -18,21 +18,20 @@ class TrainModel:
         labels = le.fit_transform(data["names"])
         # train the model used to accept the 128-d embeddings of the face and
         # then produce the actual face recognition
-        os.makedirs('classifier',exist_ok=True)
+        os.makedirs(modelOutput,exist_ok=True)
         print("Training the model usng SVM...")
         for i in (range(4,10)):
+            print(i)
             recognizer = SVC(C=float(i), kernel="poly", probability=True)
             recognizer.fit(data["embeddings"], labels)
 
-            if(os.path.isdir(modelOutput)):
-                shutil.rmtree(modelOutput)
-            os.makedirs('classifier{}{}_C{}'.format(os.sep,modelOutput,i+1),exist_ok=True)
+            os.makedirs('{}{}C{}'.format(modelOutput,os.sep,i+1),exist_ok=True)
             # write the actual face recognition model to disk
-            f = open("classifier{}{}_C{}{}recognizer.pickle".format(os.sep,modelOutput,i+1,os.sep), "wb")
+            f = open("{}{}C{}{}recognizer.pickle".format(modelOutput,os.sep,i+1,os.sep), "wb")
             f.write(pickle.dumps(recognizer))
             f.close()
 
             # write the label encoder to disk
-            f = open("classifier{}{}_C{}{}label.pickle".format(os.sep,modelOutput,i+1,os.sep), "wb")
+            f = open("{}{}C{}{}label.pickle".format(modelOutput,os.sep,i+1,os.sep), "wb")
             f.write(pickle.dumps(le))
             f.close()
