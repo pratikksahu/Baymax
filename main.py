@@ -35,7 +35,6 @@ def putIterationsPerSec(frame, iteration_per_sec):
                 (10, 450), cv2.FONT_HERSHEY_COMPLEX, 0.6, (255, 255, 255))
     return frame
 
-#FrameInfo(frameWidth=640, frameWidthLimitR=576, frameWidthLimitL=64, frameHeight=480, frameHeightLimitB=432, frameHeightLimitT=48)
 
 
 def start(source=0):

@@ -8,6 +8,8 @@ import os
 ap = argparse.ArgumentParser()
 ap.add_argument("-f", "--folder", required=True,
                 help="path to input folder")
+ap.add_argument("-c", "--classifier", required=True,
+                help="path to classifier")
 args = vars(ap.parse_args())
 
 print("[INFO] loading face detector...")
@@ -19,9 +21,9 @@ embedder = cv2.dnn.readNetFromTorch(
     'videoProcessing{}openface.nn4.small2.v1.t7'.format(os.sep))
 # load the actual face recognition model along with the label encoder
 recognizer = pickle.loads(
-    open("output{}recognizer.pickle".format(os.sep), "rb").read())
+    open("{}{}recognizer.pickle".format(args['classifier'],os.sep), "rb").read())
 le = pickle.loads(
-    open("output{}label.pickle".format(os.sep), "rb").read())
+    open("{}{}label.pickle".format(args['classifier'],os.sep), "rb").read())
 
 conf = 0.6
 for root, dirs, files in os.walk(args["folder"]):
