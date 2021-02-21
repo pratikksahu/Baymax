@@ -16,6 +16,8 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--source", "-s", default=0,
                 help="Path to video file or integer representing webcam index"
                 + " (default 0).")
+ap.add_argument("--classifier", "-c", required=True,
+                help="Path to classifier")
 args = vars(ap.parse_args())
 ###################################################
 
@@ -46,7 +48,7 @@ def start(source=0):
 
     # Show processed video frame
     video_shower = VideoShow(
-        video_getter.frame, video_getter.frameInfo).start()
+        video_getter.frame, video_getter.frameInfo , args['classifier']).start()
     facePoint = video_shower.facePoint
 
     # To Get moving commands

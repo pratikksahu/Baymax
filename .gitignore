@@ -5,8 +5,7 @@ __pycache__/
 *.mp4
 dataset
 embeddings.pickle
-output
-output.old
+classifier
 testData
 *.zip 
 *.rar
