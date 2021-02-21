@@ -103,7 +103,7 @@ class VideoShow:
             cv2.rectangle(self.frame, (self.frameInfo.frameWidthLimitL, self.frameInfo.frameHeightLimitT),
                           (self.frameInfo.frameWidthLimitR, self.frameInfo.frameHeightLimitB), (255, 0, 0), 2)
 
-            # cv2.imshow("Video", self.frame)
+            cv2.imshow("Video", self.frame)
             # cv2.imshow("Gray" , gray)
             if cv2.waitKey(1) == ord("q"):
                 self.stopped = True

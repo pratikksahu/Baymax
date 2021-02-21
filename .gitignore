@@ -5,7 +5,6 @@ __pycache__/
 video
 dataset
 input
-test_img
 *.pickle
 testData
 classifier
