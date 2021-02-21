@@ -47,7 +47,7 @@ def follow_face(source=0 , dur = 30):
 
     # Show processed video frame
     video_shower = VideoShow(
-        video_getter.frame, video_getter.frameInfo).start()
+        video_getter.frame, video_getter.frameInfo,'classifier/C10').start()
     facePoint = video_shower.facePoint
 
     # To Get moving commands
