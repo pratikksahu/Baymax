@@ -6,4 +6,6 @@ video
 dataset
 input
 output
-test_img
+testData
+classifier
+*.pickle
