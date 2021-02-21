@@ -7,6 +7,7 @@ from datetime import datetime
 import os
 import imutils
 import pickle
+import time
 
 class GetFaceCamera:
     """
@@ -52,8 +53,11 @@ class GetFaceCamera:
                     H = int(endY - startY)
                     faceimg = self.frame[(
                         Y - 50):(Y + 20) + H, (X - 40):X + W + 50]
-                    cv2.imwrite(
-                        "{}{}{}.jpg".format(self._folderName, os.sep, self._total), faceimg)
+                    if cv2.waitKey(1) == ord("s"):
+                        timestr = time.strftime("%Y%m%d-%H%M%S")
+                        cv2.imwrite(
+                            "{}{}{}.jpg".format(self._folderName, os.sep, timestr), self.frame)
+                    cv2.rectangle(self.frame , (X , Y) , (endX , endY) ,(255,0,0), 2)
                     self._total = self._total + 1
             cv2.imshow("Video", self.frame)
             # cv2.imshow("Gray" , gray)
@@ -99,9 +103,11 @@ class GetFaceImage:
                         height, width, channels = image.shape
 
                         if height > width:
-                            image = imutils.resize(image, height=int(height * .4), inter=cv2.INTER_AREA)
+                            image = imutils.resize(image, height=int(
+                                height * .4), inter=cv2.INTER_AREA)
                         else:
-                            image = imutils.resize(image, width=int(width * .8) , inter=cv2.INTER_AREA)
+                            image = imutils.resize(image, width=int(
+                                width * .8), inter=cv2.INTER_AREA)
 
                         (h, w) = image.shape[:2]
                         blob = cv2.dnn.blobFromImage(
@@ -134,7 +140,8 @@ class GetFaceImage:
                                     cv2.imwrite(
                                         "{}{}{}{}{}.jpg".format(self._outputFolder, os.sep, dir, os.sep, total), faceimg)
                                 except:
-                                    print("Error in file {} . Remove the image".format(fileName))
+                                    print(
+                                        "Error in file {} . Remove the image".format(fileName))
                                 total = total + 1
 
 
@@ -182,9 +189,11 @@ class GetFaceImageWithOldModel:
                         height, width, channels = image.shape
 
                         if height > width:
-                            image = imutils.resize(image, height=int(height * .4), inter=cv2.INTER_AREA)
+                            image = imutils.resize(image, height=int(
+                                height * .4), inter=cv2.INTER_AREA)
                         else:
-                            image = imutils.resize(image, width=int(width * .8) , inter=cv2.INTER_AREA)
+                            image = imutils.resize(image, width=int(
+                                width * .8), inter=cv2.INTER_AREA)
 
                         (h, w) = image.shape[:2]
                         blob = cv2.dnn.blobFromImage(
@@ -215,14 +224,14 @@ class GetFaceImageWithOldModel:
                                 # ensure the face width and height are sufficiently large
                                 if fW < 20 or fH < 20:
                                     continue
-                                
+
                                 blob = cv2.dnn.blobFromImage(face, 1.0 / 255,
-                                                                 (96, 96), (0, 0, 0), swapRB=True, crop=False)
+                                                             (96, 96), (0, 0, 0), swapRB=True, crop=False)
                                 self.embedder.setInput(blob)
                                 vec = self.embedder.forward()
 
                                 # perform classification to recognize the face
-                                preds = self.recognizer.predict_proba(vec)[0]            
+                                preds = self.recognizer.predict_proba(vec)[0]
                                 j = np.argmax(preds)
                                 proba = preds[j]
                                 name = self.label.classes_[j]
@@ -235,4 +244,5 @@ class GetFaceImageWithOldModel:
                                             "{}{}{}{}{}.jpg".format(self._outputFolder, os.sep, dir, os.sep, total), image)
                                         total = total + 1
                                 except:
-                                    print("Error in file {} . Remove the image".format(fileName))
+                                    print(
+                                        "Error in file {} . Remove the image".format(fileName))
