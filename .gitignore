@@ -9,6 +9,7 @@ input
 output
 test_img
 Controller
+classifier
 
 *.zip 
 *.rar
