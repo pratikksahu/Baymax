@@ -1,12 +1,13 @@
 #Cached 
 __pycache__/
 
-#Test file
+
 video
 dataset
-output
 input
 test_img
-
+.pickle
+testData
+classifier
 *.mp4
 

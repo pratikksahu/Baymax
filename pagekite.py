@@ -18,6 +18,10 @@
 #
 ##[ Combined with Breeder: http://pagekite.net/wiki/Floss/PyBreeder/ ]#########
 
+
+#Execute below
+#python pagekite.py 5000 walle.pagekite.me
+
 import base64, os, sys, zlib
 try:
   import io as StringIO
