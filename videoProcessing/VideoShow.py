@@ -13,7 +13,7 @@ class VideoShow:
     Class that continuously shows a frame using a dedicated thread.
     """
 
-    def __init__(self, frame=None, frameInfo=FrameInfo()):
+    def __init__(self, frame=None, frameInfo=FrameInfo() , classifier = None):
         self.net = cv2.dnn.readNetFromCaffe(
             'videoProcessing{}deploy.prototxt.txt'.format(os.sep), 'videoProcessing{}res10_300x300_ssd_iter_140000.caffemodel'.format(os.sep))
         self.embedder = cv2.dnn.readNetFromTorch(
@@ -21,9 +21,9 @@ class VideoShow:
 
         # load the actual face recognition model along with the label encoder
         self.recognizer = pickle.loads(
-            open("output{}recognizer.pickle".format(os.sep), "rb").read())
+            open("{}{}recognizer.pickle".format(classifier,os.sep), "rb").read())
         self.label = pickle.loads(
-            open("output{}label.pickle".format(os.sep), "rb").read())
+            open("{}{}label.pickle".format(classifier,os.sep), "rb").read())
 
         self.facePoint = FacePoint()
         self.frameInfo = frameInfo
@@ -68,15 +68,24 @@ class VideoShow:
                         continue
 
                     blob = cv2.dnn.blobFromImage(face, 1.0 / 255,
-                                                     (96, 96), (0, 0, 0), swapRB=True, crop=False)
+                                                 (96, 96), (0, 0, 0), swapRB=True, crop=False)
                     self.embedder.setInput(blob)
                     vec = self.embedder.forward()
 
                     # perform classification to recognize the face
-                    preds = self.recognizer.predict_proba(vec)[0]            
-                    j = np.argmax(preds)
-                    proba = preds[j]
-                    name = self.label.classes_[j]
+                    proba = 0.0
+                    name = ''
+                    preds = self.recognizer.predict_proba(vec)[0]
+                    for me in range(len(preds)):
+                        if (preds[me] > 0.5) and (self.label.classes_[me] == 'pratik'):
+                            proba = preds[me]
+                            name = self.label.classes_[me]
+
+                    if (proba == 0.0) and (name == ''):
+                        j = np.argmax(preds)
+                        proba = preds[j]
+                        name = self.label.classes_[j]
+
                     text = "{}: {:.2f}%".format(name, proba * 100)
 
                     self.facePoint = FacePoint(X, Y, W, H)
