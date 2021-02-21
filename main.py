@@ -57,7 +57,7 @@ def start(source=0):
     # FPS Counter
     cps = CountsPerSec().start()
     while True:
-        sleep(0.1)
+        sleep(0.01)
         facePoint = video_shower.facePoint
 
         
