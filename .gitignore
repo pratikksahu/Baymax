@@ -6,7 +6,6 @@ dataset
 embeddings.pickle
 *.mp4
 input 
-output
 test_img
 Controller
 classifier
