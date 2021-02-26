@@ -20,9 +20,9 @@ class TrainModel:
         # then produce the actual face recognition
         os.makedirs(modelOutput,exist_ok=True)
         print("Training the model usng SVM...")
-        for i in (range(4,10)):
+        for i in (range(4,20)):
             print('C = ',i)
-            recognizer = SVC(C=float(i), kernel="linear", probability=True)
+            recognizer = SVC(C=float(i), kernel="poly", probability=True)
             recognizer.fit(data["embeddings"], labels)
 
             os.makedirs('{}{}C{}'.format(modelOutput,os.sep,i+1),exist_ok=True)
