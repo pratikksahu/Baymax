@@ -1,5 +1,6 @@
 from sklearn.preprocessing import LabelEncoder
-from sklearn.svm import SVC
+from sklearn.svm import *
+from sklearn.linear_model import *
 import argparse
 import pickle
 import numpy as np
@@ -20,9 +21,10 @@ class TrainModel:
         # then produce the actual face recognition
         os.makedirs(modelOutput,exist_ok=True)
         print("Training the model usng SVM...")
-        for i in (range(4,20)):
+        for i in (range(21,22)):
             print('C = ',i)
-            recognizer = SVC(C=float(i), kernel="poly", probability=True)
+            # recognizer = SVC(C=float(i), kernel="poly", probability=True)
+            recognizer = SGDClassifier(loss="log", penalty="l1", max_iter=10000)
             recognizer.fit(data["embeddings"], labels)
 
             os.makedirs('{}{}C{}'.format(modelOutput,os.sep,i+1),exist_ok=True)
