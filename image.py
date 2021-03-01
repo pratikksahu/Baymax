@@ -68,7 +68,9 @@ for root, dirs, files in os.walk(args["folder"]):
                     name = ''
                     preds = recognizer.predict_proba(vec)[0]
                     for me in range(len(preds)):
-                        if (preds[me] > 0.5) and (le.classes_[me] == 'pratik'):
+                        # if (le.classes_[me] == 'pratik'):
+                        #     print(preds[me] , '----------')
+                        if (preds[me] > 0.4) and (le.classes_[me] == 'pratik'):
                             print(preds[me])
                             print(le.classes_[me])
                             proba = preds[me]
