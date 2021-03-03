@@ -53,8 +53,9 @@ class GetEmbedded:
                                 t = 0
                                 break
                                 
-                            image = cv2.imread("{}{}{}{}{}".format(
+                            image_color = cv2.imread("{}{}{}{}{}".format(
                                 root, os.sep, dir, os.sep, fileName))
+                            image = cv2.cvtColor(image_color, cv2.COLOR_BGR2GRAY)                                                        
                             height, width, channels = image.shape
 
                             if height > width:
