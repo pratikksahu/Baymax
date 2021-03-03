@@ -65,7 +65,7 @@ class GetEmbedded:
 
                             (h, w) = image.shape[:2]
                             blob = cv2.dnn.blobFromImage(
-                            cv2.resize(image, (300, 300)), 1.0, (300, 300), (104.0, 177.0, 123.0) , swapRB=False , crop=False)
+                            cv2.resize(image, (300, 300),interpolation = cv2.INTER_AREA), 1.0, (300, 300), (104.0, 177.0, 123.0) , swapRB=False , crop=False)
                             self.net.setInput(blob)
                             detections = self.net.forward()
 
