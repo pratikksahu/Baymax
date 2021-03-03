@@ -26,6 +26,7 @@ ask = Ask(app, "/")
 logging.getLogger('flask_ask').setLevel(logging.DEBUG)
 
 
+
 def putIterationsPerSec(frame, iteration_per_sec):
     cv2.putText(frame, '{:0.0f}'.format(iteration_per_sec),
                 (10, 450), cv2.FONT_HERSHEY_COMPLEX, 0.6, (255, 255, 255))
@@ -62,7 +63,6 @@ def follow_face(source=0 , dur = 30):
     while True:
         sleep(0.01)
         facePoint = video_shower.facePoint
-
         currentTime = (datetime.now() - startTime).seconds
 
         if(currentTime % dur == 0) and (currentTime != 0):
@@ -86,16 +86,18 @@ def follow_face(source=0 , dur = 30):
                     isFaceDetected = True
             isSaving = True
 
-        movement.setFaceDetected(isFaceDetected)
-        raspberry.setFaceDetected(isFaceDetected)
-        # Calculate directions only when face is in view
-        movement.setFacePoint(facePoint)
-        # Sending commands to raspberry
-        raspberry.setWheelCamera(
-            movement.adjustWheels(), movement.adjustCamera())
-
-        raspberry.moveCamera()
-        raspberry.moveWheel()
+        if facePoint != FacePoint():
+            movement.setFaceDetected(isFaceDetected)
+            raspberry.setFaceDetected(isFaceDetected)
+            # Calculate directions only when face is in view
+            movement.setFacePoint(facePoint)
+            # Sending commands to raspberry
+            raspberry.setWheelCamera(
+                movement.adjustWheels(), movement.adjustCamera())
+    
+            
+            raspberry.moveCamera()
+            raspberry.moveWheel()
 
         frame = video_getter.frame
         frame = putIterationsPerSec(frame, cps.countsPerSec())

@@ -77,7 +77,7 @@ class VideoShow:
                     name = ''
                     preds = self.recognizer.predict_proba(vec)[0]
                     for me in range(len(preds)):
-                        if (preds[me] > 0.5) and (self.label.classes_[me] == 'pratik'):
+                        if (preds[me] > 0.4) and (self.label.classes_[me] == 'pratik'):
                             proba = preds[me]
                             name = self.label.classes_[me]
 
