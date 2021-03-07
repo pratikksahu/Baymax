@@ -8,7 +8,6 @@ class Movement:
 
     def __init__(self, frameInfo=FrameInfo()):
         self.facePoint = FacePoint()
-        self._facePointTemp = FacePoint()
         self.frameInfo = frameInfo
         self._isFaceDetected = False
         self.stopped = False

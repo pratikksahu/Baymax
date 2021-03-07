@@ -58,6 +58,7 @@ def start(source=0):
     raspberry = Raspberry().start()
     # FPS Counter
     cps = CountsPerSec().start()
+    
     while True:
         sleep(0.01)
         facePoint = video_shower.facePoint
@@ -76,7 +77,7 @@ def start(source=0):
                     isFaceDetected = True
             isSaving = True
 
-        if facePoint != FacePoint():
+        if facePoint != FacePoint(): #Initial startup when facepoint is (0,0,0,0)
             movement.setFaceDetected(isFaceDetected)
             raspberry.setFaceDetected(isFaceDetected)
             # Calculate directions only when face is in view
@@ -85,9 +86,6 @@ def start(source=0):
             raspberry.setWheelCamera(
                 movement.adjustWheels(), movement.adjustCamera())
     
-            
-            raspberry.moveCamera()
-            raspberry.moveWheel()
 
         if video_getter.stopped or video_shower.stopped or movement.stopped:
             video_shower.stop()
