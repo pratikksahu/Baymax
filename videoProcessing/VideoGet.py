@@ -2,7 +2,7 @@ import threading
 import cv2
 from dataClass.FrameInfo import FrameInfo
 from dataClass.FacePoint import FacePoint
-
+from time import sleep
 
 class VideoGet:
     """
@@ -23,7 +23,9 @@ class VideoGet:
         self.camera.framerate = 32
         self.rawCapture = PiRGBArray(camera, size=(640, 480))
         
-
+        #camera initialize
+        sleep(0.1)
+        
         self._width = 640
         self._height = 480
         self.frameInfo = FrameInfo(frameWidth=int(self._width),
