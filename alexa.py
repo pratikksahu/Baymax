@@ -15,6 +15,8 @@ from datetime import date, datetime
 from threading import Thread
 import re
 import math
+from picamera.array import PiRGBArray
+from picamera import PiCamera
 
 
 from flask import Flask
@@ -45,14 +47,14 @@ def follow_face(source=0 , dur = 30):
     isSaving = True
     isFaceDetected = True
     # Get video feed from camera or video file
-    video_getter = VideoGet("videoProcessing/meloop.mp4").start()
+    video_getter = VideoGet().start()
     frameInfo = video_getter.frameInfo
 
     # Show processed video frame
     video_shower = VideoShow(
         video_getter.frame, video_getter.frameInfo , 'classifier/C10').start()
     facePoint = video_shower.facePoint
-
+    
     # To Get moving commands
     movement = Movement(frameInfo=frameInfo).start()
 

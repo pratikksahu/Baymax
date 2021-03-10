@@ -10,21 +10,22 @@ class VideoGet:
     with a dedicated thread.
     """
 
-    def __init__(self, src=0):
+    def __init__(self):
 
         #To change vertical margins
         self.verticalFactor = .2
 
         #To change horizontal margins
         self.horizontalFactor = .1
-        if(src == 0):
-            self.stream = cv2.VideoCapture(src, cv2.CAP_DSHOW)
-        else:
-            self.stream = cv2.VideoCapture(src)
+        
+        self.camera = PiCamera()
+        self.camera.resolution = (640, 480)
+        self.camera.framerate = 32
+        self.rawCapture = PiRGBArray(camera, size=(640, 480))
+        
 
-        (self.grabbed, self.frame) = self.stream.read()
-        self._width = self.stream.get(3) 
-        self._height = self.stream.get(4)
+        self._width = 640
+        self._height = 480
         self.frameInfo = FrameInfo(frameWidth=int(self._width),
                                    frameWidthLimitR=int(self._width - self.horizontalFactor*self._width),
                                    frameWidthLimitL=int(self._width*self.horizontalFactor),
@@ -39,11 +40,11 @@ class VideoGet:
         return self
 
     def get(self):
-        while not self.stopped:
-            if not self.grabbed:
-                self.stop()
-            else:
-                (self.grabbed, self.frame) = self.stream.read()
+        for frame in self.camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
+            if self.stopped:
+                break
+        self.frame = frame.array
+        self.rawCapture.truncate(0)
 
     def stop(self):
         self.stopped = True
