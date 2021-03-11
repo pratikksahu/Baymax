@@ -3,6 +3,8 @@ import cv2
 from dataClass.FrameInfo import FrameInfo
 from dataClass.FacePoint import FacePoint
 from time import sleep
+from picamera.array import PiRGBArray
+from picamera import PiCamera
 
 class VideoGet:
     """
@@ -17,15 +19,15 @@ class VideoGet:
 
         #To change horizontal margins
         self.horizontalFactor = .1
-        
+
         self.camera = PiCamera()
         self.camera.resolution = (640, 480)
         self.camera.framerate = 32
         self.rawCapture = PiRGBArray(camera, size=(640, 480))
-        
+
         #camera initialize
         sleep(0.1)
-        
+
         self._width = 640
         self._height = 480
         self.frameInfo = FrameInfo(frameWidth=int(self._width),
@@ -37,9 +39,11 @@ class VideoGet:
                                    )
         self.stopped = False
 
+
     def start(self):
         threading.Thread(name='get', target=self.get).start()
         return self
+
 
     def get(self):
         for frame in self.camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
@@ -47,6 +51,7 @@ class VideoGet:
                 break
             self.frame = frame.array
             self.rawCapture.truncate(0)
+
 
     def stop(self):
         self.stopped = True
