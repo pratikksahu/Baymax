@@ -46,7 +46,7 @@ class VideoGet:
 
 
     def get(self):
-        for frame in self.camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
+        for frame in self.camera.capture_continuous(self.rawCapture, format="bgr", use_video_port=True):
             if self.stopped:
                 break
             self.frame = frame.array
