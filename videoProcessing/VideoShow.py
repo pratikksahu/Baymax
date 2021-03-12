@@ -105,8 +105,6 @@ class VideoShow:
 
             # cv2.imshow("Video", self.frame)
             # cv2.imshow("Gray" , gray)
-            if cv2.waitKey(1) == ord("q"):
-                self.stopped = True
 
     def stop(self):
         self.stopped = True
