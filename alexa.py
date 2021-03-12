@@ -12,9 +12,11 @@ from helper.CountsPerSec import CountsPerSec
 from videoProcessing.VideoGet import VideoGet
 from videoProcessing.VideoShow import VideoShow
 from datetime import date, datetime
+import threading
 from threading import Thread
 import re
-
+from flask import Response
+from flask import render_template
 from flask import Flask
 from flask_ask import Ask, request, session, question, statement
 
@@ -22,6 +24,8 @@ from flask_ask import Ask, request, session, question, statement
 app = Flask(__name__)
 ask = Ask(app, "/")
 logging.getLogger('flask_ask').setLevel(logging.DEBUG)
+lock = threading.Lock()
+outputFrame = None
 
 
 def generate():
