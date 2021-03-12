@@ -22,6 +22,7 @@ from flask_ask import Ask, request, session, question, statement
 
 
 app = Flask(__name__)
+app_video = Flask("video_feed_display")
 ask = Ask(app, "/")
 logging.getLogger('flask_ask').setLevel(logging.DEBUG)
 lock = threading.Lock()
@@ -49,7 +50,7 @@ def generate():
         yield(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + bytearray(encodedImage) + b'\r\n')
 
 
-@app.route("/video_feed")
+@app_video.route("/video_feed")
 def video_feed():
     # return the response generated along with the specific media
     # type (mime type)
@@ -58,7 +59,7 @@ def video_feed():
 
 
 def start_flask():
-    app.run(host="192.168.29.53" , port = 8000 ,debug=True,
+    app.run(debug=True,
             threaded=True, use_reloader=False)
     
 
@@ -174,5 +175,7 @@ if __name__ == '__main__':
         verify = str(os.environ.get('ASK_VERIFY_REQUESTS', '')).lower()
         if verify == 'false':
             app.config['ASK_VERIFY_REQUESTS'] = False
-    Thread(target=start_flask).start()
+    f = Thread(target=start_flask)
+    f.start()
+    f.join()
     # app.run(debug=True)
