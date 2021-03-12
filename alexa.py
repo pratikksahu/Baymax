@@ -1,4 +1,5 @@
 import logging
+import socket
 import os
 from Controller.Movement import Movement
 from Controller.Raspberry import Raspberry
@@ -20,13 +21,18 @@ from flask import render_template
 from flask import Flask
 from flask_ask import Ask, request, session, question, statement
 
-
 app = Flask(__name__)
 app_video = Flask("video_feed_display")
 ask = Ask(app, "/")
 logging.getLogger('flask_ask').setLevel(logging.DEBUG)
 lock = threading.Lock()
 outputFrame = None
+
+
+@app_video.route("/")
+def index():
+    # return the rendered template
+    return render_template("index.html")
 
 
 def generate():
@@ -61,21 +67,32 @@ def video_feed():
 def start_flask():
     app.run(debug=True,
             threaded=True, use_reloader=False)
-    
+
+
+def start_flask_video(ipa):
+    app_video.run(host=ipa, port=8000, debug=True,
+                  threaded=True, use_reloader=False)
+
 
 def on_press(key):
     global terminate
     if(key == Key.enter):
         terminate = True
 
-def follow_face(source=0 , dur = 30):
+def getIp():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    return s.getsockname()[0]
+
+def follow_face(source=0, dur=30):
+    global lock, outputFrame
     print('Started for {} seconds'.format(dur))
     video_getter = None
     video_shower = None
     frameInfo = FrameInfo()
     facePoint = FacePoint()
     facePointTemp = FacePoint()
-    startTime =  datetime.now()
+    startTime = datetime.now()
     currentTime = 0
     isSaving = True
     isFaceDetected = True
@@ -84,7 +101,8 @@ def follow_face(source=0 , dur = 30):
     frameInfo = video_getter.frameInfo
 
     # Show processed video frame
-    video_shower = VideoShow(video_getter.frame, video_getter.frameInfo,'classifier/C10').start()
+    video_shower = VideoShow(
+        video_getter.frame, video_getter.frameInfo, 'classifier/C10').start()
 
     facePoint = video_shower.facePoint
 
@@ -100,7 +118,7 @@ def follow_face(source=0 , dur = 30):
         currentTime = (datetime.now() - startTime).seconds
 
         if(currentTime % dur == 0) and (currentTime != 0):
-            print('Stopped')
+            print('Time up , Stopped')
             video_shower.stop()
             video_getter.stop()
             movement.stop()
@@ -118,7 +136,7 @@ def follow_face(source=0 , dur = 30):
                 else:
                     isFaceDetected = True
             isSaving = True
-        if facePoint != FacePoint(): #Initial startup when facepoint is (0,0,0,0)
+        if facePoint != FacePoint():  # Initial startup when facepoint is (0,0,0,0)
             movement.setFaceDetected(isFaceDetected)
             raspberry.setFaceDetected(isFaceDetected)
             # Calculate directions only when face is in view
@@ -144,24 +162,25 @@ def launch():
 def Gpio_Intent(status, room):
     return question('Lights turned {}'.format(status))
 
+
 @ask.intent('followDuration', mapping={'duration': 'duration'})
 def followDurationIntent(duration, room):
     regex = re.compile('[0-9]{1,}[HSM]{1}')
-    res = re.search(regex,str(duration))
+    res = re.search(regex, str(duration))
     dur = ''
     if(res != None):
         res = res.group()
         unit = res[len(res) - 1]
         for i in range(len(res) - 1):
-            dur+=res[i]
+            dur += res[i]
 
         if(unit == 'M' or unit == 'H'):
             dur = int(dur)*60
         dur = int(dur)
         unit = 'S'
-    Thread(target=follow_face , args=[0,dur]).start()
+    Thread(target=follow_face, args=[0, dur]).start()
     unit = 'Seconds'
-    return question("Started following for {} {}".format(dur,unit))
+    return question("Started following for {} {}".format(dur, unit))
 
 
 @ask.intent('AMAZON.FallbackIntent')
@@ -175,7 +194,11 @@ if __name__ == '__main__':
         verify = str(os.environ.get('ASK_VERIFY_REQUESTS', '')).lower()
         if verify == 'false':
             app.config['ASK_VERIFY_REQUESTS'] = False
-    f = Thread(target=start_flask)
-    f.start()
-    f.join()
-    # app.run(debug=True)
+            app_video.config['ASK_VERIFY_REQUESTS'] = False
+    server_flask = Thread(target=start_flask)
+    video_flask = Thread(target=start_flask_video , args = (getIp() ,))
+
+    server_flask.start()
+    video_flask.start()
+    server_flask.join()
+    video_flask.join()
