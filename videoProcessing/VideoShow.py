@@ -7,23 +7,23 @@ from datetime import datetime
 import os
 import pickle
 
-    
+
 class VideoShow:
     """
     Class that continuously shows a frame using a dedicated thread.
     """
 
-    def __init__(self, frame=None, frameInfo=FrameInfo() , classifier = None):
+    def __init__(self, frame=None, frameInfo=FrameInfo(), classifier=None):
         self.net = cv2.dnn.readNetFromCaffe(
             'videoProcessing{}deploy.prototxt.txt'.format(os.sep), 'videoProcessing{}res10_300x300_ssd_iter_140000.caffemodel'.format(os.sep))
         self.embedder = cv2.dnn.readNetFromTorch(
             'videoProcessing{}openface.nn4.small2.v1.t7'.format(os.sep))
 
-        load the actual face recognition model along with the label encoder
+        # load the actual face recognition model along with the label encoder
         self.recognizer = pickle.loads(
-            open("{}{}recognizer.pickle".format(classifier,os.sep), "rb").read())
+            open("{}{}recognizer.pickle".format(classifier, os.sep), "rb").read())
         self.label = pickle.loads(
-            open("{}{}label.pickle".format(classifier,os.sep), "rb").read())
+            open("{}{}label.pickle".format(classifier, os.sep), "rb").read())
 
         self.facePoint = FacePoint()
         self.frameInfo = frameInfo
@@ -108,4 +108,3 @@ class VideoShow:
 
     def stop(self):
         self.stopped = True
-

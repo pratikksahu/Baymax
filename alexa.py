@@ -83,11 +83,13 @@ def on_press(key):
     if(key == Key.enter):
         terminate = True
 
+
 def getIp():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
     print("VIDEO FEED LINK - {}:8000".format(s.getsockname()[0]))
     return s.getsockname()[0]
+
 
 def follow_face(source=0, dur=30):
     global lock, outputFrame
@@ -105,14 +107,14 @@ def follow_face(source=0, dur=30):
     video_getter = VideoGet().start()
     frameInfo = video_getter.frameInfo
 
-    #camera initialize
+    # camera initialize
     sleep(0.5)
-    
+
     # Show processed video frame
     video_shower = VideoShow(
-        video_getter.frame, video_getter.frameInfo , 'classifier/C10').start()
+        video_getter.frame, video_getter.frameInfo, 'classifier/C10').start()
     facePoint = video_shower.facePoint
-    
+
     # To Get moving commands
     movement = Movement(frameInfo=frameInfo).start()
 
@@ -144,7 +146,7 @@ def follow_face(source=0, dur=30):
                     isFaceDetected = True
             isSaving = True
 
-        if facePoint != FacePoint(): #Initial startup when facepoint is (0,0,0,0)
+        if facePoint != FacePoint():  # Initial startup when facepoint is (0,0,0,0)
             movement.setFaceDetected(isFaceDetected)
             raspberry.setFaceDetected(isFaceDetected)
             # Calculate directions only when face is in view
@@ -152,7 +154,6 @@ def follow_face(source=0, dur=30):
             # Sending commands to raspberry
             raspberry.setWheelCamera(
                 movement.adjustWheels(), movement.adjustCamera())
-    
 
         frame = video_getter.frame
         video_shower.frame = frame
@@ -175,14 +176,14 @@ def Gpio_Intent(status, room):
 @ask.intent('followDuration', mapping={'duration': 'duration'})
 def followDurationIntent(duration, room):
     regex = re.compile('[0-9]{1,}[HSM]{1}')
-    res = re.search(regex,str(duration))
+    res = re.search(regex, str(duration))
     dur = 0
     if(res != None):
         res = res.group()
         unit = res[len(res) - 1]
         j = len(res) - 2
         for i in range(len(res) - 1):
-            dur+=int(int(res[i]) * math.pow(10,j))
+            dur += int(int(res[i]) * math.pow(10, j))
             j = j - 1
 
         if(unit == 'M' or unit == 'H'):
@@ -206,7 +207,7 @@ if __name__ == '__main__':
             app.config['ASK_VERIFY_REQUESTS'] = False
             app_video.config['ASK_VERIFY_REQUESTS'] = False
     server_flask = Thread(target=start_flask)
-    video_flask = Thread(target=start_flask_video , args = (getIp() ,))
+    video_flask = Thread(target=start_flask_video, args=(getIp(),))
 
     server_flask.start()
     video_flask.start()
