@@ -24,11 +24,44 @@ ask = Ask(app, "/")
 logging.getLogger('flask_ask').setLevel(logging.DEBUG)
 
 
-def putIterationsPerSec(frame, iteration_per_sec):
-    cv2.putText(frame, '{:0.0f}'.format(iteration_per_sec),
-                (10, 450), cv2.FONT_HERSHEY_COMPLEX, 0.6, (255, 255, 255))
-    return frame
+def generate():
+    # grab global references to the output frame and lock variables
+    global outputFrame, lock
+    # loop over frames from the output stream
+    while True:
+        sleep(0.01)
+        # wait until the lock is acquired
+        with lock:
+            # check if the output frame is available, otherwise skip
+            # the iteration of the loop
+            if outputFrame is None:
+                continue
+            # encode the frame in JPEG format
+            (flag, encodedImage) = cv2.imencode(".jpg", outputFrame)
+            # ensure the frame was successfully encoded
+            if not flag:
+                continue
+        # yield the output frame in the byte format
+        yield(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + bytearray(encodedImage) + b'\r\n')
 
+
+@app.route("/video_feed")
+def video_feed():
+    # return the response generated along with the specific media
+    # type (mime type)
+    return Response(generate(),
+                    mimetype="multipart/x-mixed-replace; boundary=frame")
+
+
+def start_flask():
+    app.run(debug=True,
+            threaded=True, use_reloader=False)
+    
+
+def on_press(key):
+    global terminate
+    if(key == Key.enter):
+        terminate = True
 
 def follow_face(source=0 , dur = 30):
     print('Started for {} seconds'.format(dur))
@@ -46,22 +79,18 @@ def follow_face(source=0 , dur = 30):
     frameInfo = video_getter.frameInfo
 
     # Show processed video frame
-    video_shower = VideoShow(
-
-        video_getter.frame, video_getter.frameInfo,'classifier/C10').start()
+    video_shower = VideoShow(video_getter.frame, video_getter.frameInfo,'classifier/C10').start()
 
     facePoint = video_shower.facePoint
 
     # To Get moving commands
     movement = Movement(frameInfo=frameInfo).start()
 
-    # To Send moving commands to raspberryq
+    # To Send moving commands to raspberry
     raspberry = Raspberry().start()
-    # FPS Counter
-    cps = CountsPerSec().start()
-    
+
     while True:
-        sleep(0.01)
+        sleep(0.1)
         facePoint = video_shower.facePoint
         currentTime = (datetime.now() - startTime).seconds
 
@@ -77,7 +106,6 @@ def follow_face(source=0 , dur = 30):
             if isSaving:
                 isSaving = False
                 facePointTemp = facePoint
-
         if (currentTime % 2 != 0) and (currentTime != 0):
             if not isSaving:
                 if facePointTemp == facePoint:
@@ -85,7 +113,6 @@ def follow_face(source=0 , dur = 30):
                 else:
                     isFaceDetected = True
             isSaving = True
-
         if facePoint != FacePoint(): #Initial startup when facepoint is (0,0,0,0)
             movement.setFaceDetected(isFaceDetected)
             raspberry.setFaceDetected(isFaceDetected)
@@ -94,12 +121,12 @@ def follow_face(source=0 , dur = 30):
             # Sending commands to raspberry
             raspberry.setWheelCamera(
                 movement.adjustWheels(), movement.adjustCamera())
-    
 
         frame = video_getter.frame
-        frame = putIterationsPerSec(frame, cps.countsPerSec())
         video_shower.frame = frame
-        cps.increment()
+
+        with lock:
+            outputFrame = video_shower.frame
 
 
 @ask.launch
