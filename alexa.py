@@ -1,4 +1,5 @@
 import logging
+import socket
 import os
 from Controller.Movement import Movement
 from Controller.Raspberry import Raspberry
@@ -12,37 +13,91 @@ from helper.CountsPerSec import CountsPerSec
 from videoProcessing.VideoGet import VideoGet
 from videoProcessing.VideoShow import VideoShow
 from datetime import date, datetime
+import threading
 from threading import Thread
 import re
 import math
 from picamera.array import PiRGBArray
 from picamera import PiCamera
 
-
+from flask import Response
+from flask import render_template
 from flask import Flask
 from flask_ask import Ask, request, session, question, statement
 
-
 app = Flask(__name__)
+app_video = Flask("video_feed_display")
 ask = Ask(app, "/")
 logging.getLogger('flask_ask').setLevel(logging.DEBUG)
+lock = threading.Lock()
+outputFrame = None
 
 
+@app_video.route("/")
+def index():
+    # return the rendered template
+    return render_template("index.html")
 
-def putIterationsPerSec(frame, iteration_per_sec):
-    cv2.putText(frame, '{:0.0f}'.format(iteration_per_sec),
-                (10, 450), cv2.FONT_HERSHEY_COMPLEX, 0.6, (255, 255, 255))
-    return frame
+
+def generate():
+    # grab global references to the output frame and lock variables
+    global outputFrame, lock
+    # loop over frames from the output stream
+    while True:
+        sleep(0.01)
+        # wait until the lock is acquired
+        with lock:
+            # check if the output frame is available, otherwise skip
+            # the iteration of the loop
+            if outputFrame is None:
+                continue
+            # encode the frame in JPEG format
+            (flag, encodedImage) = cv2.imencode(".jpg", outputFrame)
+            # ensure the frame was successfully encoded
+            if not flag:
+                continue
+        # yield the output frame in the byte format
+        yield(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + bytearray(encodedImage) + b'\r\n')
 
 
-def follow_face(source=0 , dur = 30):
+@app_video.route("/video_feed")
+def video_feed():
+    # return the response generated along with the specific media
+    # type (mime type)
+    return Response(generate(),
+                    mimetype="multipart/x-mixed-replace; boundary=frame")
+
+
+def start_flask():
+    app.run(debug=True,
+            threaded=True, use_reloader=False)
+
+
+def start_flask_video(ipa):
+    app_video.run(host=ipa, port=8000, debug=True,
+                  threaded=True, use_reloader=False)
+
+
+def on_press(key):
+    global terminate
+    if(key == Key.enter):
+        terminate = True
+
+def getIp():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    print("VIDEO FEED LINK - {}:8000".format(s.getsockname()[0]))
+    return s.getsockname()[0]
+
+def follow_face(source=0, dur=30):
+    global lock, outputFrame
     print('Started for {} seconds'.format(dur))
     video_getter = None
     video_shower = None
     frameInfo = FrameInfo()
     facePoint = FacePoint()
     facePointTemp = FacePoint()
-    startTime =  datetime.now()
+    startTime = datetime.now()
     currentTime = 0
     isSaving = True
     isFaceDetected = True
@@ -61,18 +116,16 @@ def follow_face(source=0 , dur = 30):
     # To Get moving commands
     movement = Movement(frameInfo=frameInfo).start()
 
-    # To Send moving commands to raspberryq
+    # To Send moving commands to raspberry
     raspberry = Raspberry().start()
-    # FPS Counter
-    cps = CountsPerSec().start()
-    
+
     while True:
-        sleep(0.01)
+        sleep(0.1)
         facePoint = video_shower.facePoint
         currentTime = (datetime.now() - startTime).seconds
 
         if(currentTime % dur == 0) and (currentTime != 0):
-            print('Stopped')
+            print('Time up , Stopped')
             video_shower.stop()
             video_getter.stop()
             movement.stop()
@@ -83,7 +136,6 @@ def follow_face(source=0 , dur = 30):
             if isSaving:
                 isSaving = False
                 facePointTemp = facePoint
-
         if (currentTime % 2 != 0) and (currentTime != 0):
             if not isSaving:
                 if facePointTemp == facePoint:
@@ -103,9 +155,10 @@ def follow_face(source=0 , dur = 30):
     
 
         frame = video_getter.frame
-        frame = putIterationsPerSec(frame, cps.countsPerSec())
         video_shower.frame = frame
-        cps.increment()
+
+        with lock:
+            outputFrame = video_shower.frame
 
 
 @ask.launch
@@ -117,6 +170,7 @@ def launch():
 @ask.intent('GpioIntent', mapping={'status': 'status'})
 def Gpio_Intent(status, room):
     return question('Lights turned {}'.format(status))
+
 
 @ask.intent('followDuration', mapping={'duration': 'duration'})
 def followDurationIntent(duration, room):
@@ -134,9 +188,9 @@ def followDurationIntent(duration, room):
         if(unit == 'M' or unit == 'H'):
             dur = dur*60
         unit = 'S'
-    Thread(target=follow_face , args=[0,dur]).start()
+    Thread(target=follow_face, args=[0, dur]).start()
     unit = 'Seconds'
-    return question("Started following for {} {}".format(dur,unit))
+    return question("Started following for {} {}".format(dur, unit))
 
 
 @ask.intent('AMAZON.FallbackIntent')
@@ -150,4 +204,11 @@ if __name__ == '__main__':
         verify = str(os.environ.get('ASK_VERIFY_REQUESTS', '')).lower()
         if verify == 'false':
             app.config['ASK_VERIFY_REQUESTS'] = False
-    app.run(debug=True)
+            app_video.config['ASK_VERIFY_REQUESTS'] = False
+    server_flask = Thread(target=start_flask)
+    video_flask = Thread(target=start_flask_video , args = (getIp() ,))
+
+    server_flask.start()
+    video_flask.start()
+    server_flask.join()
+    video_flask.join()
