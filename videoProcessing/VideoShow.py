@@ -7,7 +7,7 @@ from datetime import datetime
 import os
 import pickle
 
-
+    
 class VideoShow:
     """
     Class that continuously shows a frame using a dedicated thread.
@@ -103,10 +103,11 @@ class VideoShow:
             cv2.rectangle(self.frame, (self.frameInfo.frameWidthLimitL, self.frameInfo.frameHeightLimitT),
                           (self.frameInfo.frameWidthLimitR, self.frameInfo.frameHeightLimitB), (255, 0, 0), 2)
 
-            cv2.imshow("Video", self.frame)
+            # cv2.imshow("Video", self.frame)
             # cv2.imshow("Gray" , gray)
             if cv2.waitKey(1) == ord("q"):
                 self.stopped = True
 
     def stop(self):
         self.stopped = True
+
