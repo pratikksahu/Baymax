@@ -82,6 +82,7 @@ def on_press(key):
 def getIp():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
+    print("VIDEO FEED LINK - {}:8000".format(s.getsockname()[0]))
     return s.getsockname()[0]
 
 def follow_face(source=0, dur=30):
