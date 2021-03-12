@@ -54,7 +54,7 @@ def video_feed():
 
 
 def start_flask():
-    app.run(debug=True,
+    app.run(host="192.168.29.53" , port = 8000 ,debug=True,
             threaded=True, use_reloader=False)
     
 
@@ -170,4 +170,5 @@ if __name__ == '__main__':
         verify = str(os.environ.get('ASK_VERIFY_REQUESTS', '')).lower()
         if verify == 'false':
             app.config['ASK_VERIFY_REQUESTS'] = False
-    app.run(debug=True)
+    Thread(target=start_flask).start()
+    # app.run(debug=True)
