@@ -25,8 +25,6 @@ class VideoGet:
         self.camera.framerate = 32
         self.rawCapture = PiRGBArray(self.camera, size=(640, 480))
 
-        #camera initialize
-        sleep(0.1)
 
         self._width = 640
         self._height = 480
