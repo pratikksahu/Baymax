@@ -44,7 +44,7 @@ def generate():
     global outputFrame, lock
     # loop over frames from the output stream
     while True:
-        sleep(0.01)
+        # sleep(0.01)
         # wait until the lock is acquired
         with lock:
             # check if the output frame is available, otherwise skip
@@ -108,7 +108,7 @@ def follow_face(source=0, dur=30):
     frameInfo = video_getter.frameInfo
 
     # camera initialize
-    sleep(0.5)
+    sleep(0.3)
 
     # Show processed video frame
     video_shower = VideoShow(
@@ -122,7 +122,7 @@ def follow_face(source=0, dur=30):
     raspberry = Raspberry().start()
 
     while True:
-        sleep(0.1)
+        # sleep(0.1)
         facePoint = video_shower.facePoint
         currentTime = (datetime.now() - startTime).seconds
 

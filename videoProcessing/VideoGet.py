@@ -49,6 +49,7 @@ class VideoGet:
                 break
             self.frame = frame.array
             self.rawCapture.truncate(0)
+            self.rawCapture.seek(0)
 
 
     def stop(self):
