@@ -47,6 +47,7 @@ class VideoGet:
             if self.stopped:
                 self.rawCapture.truncate(0)
                 self.camera.close()
+                del self.camera
                 break
             self.frame = frame.array
             self.rawCapture.truncate(0)
