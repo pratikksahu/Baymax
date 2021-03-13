@@ -19,10 +19,6 @@ class VideoGet:
 
         #To change horizontal margins
         self.horizontalFactor = .1
-        # self.camera = PiCamera()
-        # self.camera.resolution = (640, 480)
-        # self.camera.framerate = 90
-        # self.rawCapture = PiRGBArray(self.camera, size=(640, 480))
 
 
         self._width = 640

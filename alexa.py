@@ -127,11 +127,11 @@ def follow_face(source=0, dur=30):
         currentTime = (datetime.now() - startTime).seconds
 
         if(currentTime % dur == 0) and (currentTime != 0):
-            print('Time up , Stopped')
+            raspberry.stop()
+            movement.stop()
             video_shower.stop()
             video_getter.stop()
-            movement.stop()
-            raspberry.stop()
+            print('Time up , Stopped')
             break
 
         if (currentTime % 2 == 0) and (currentTime != 0):
