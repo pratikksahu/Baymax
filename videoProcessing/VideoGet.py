@@ -19,7 +19,6 @@ class VideoGet:
 
         #To change horizontal margins
         self.horizontalFactor = .1
-
         self.camera = PiCamera()
         self.camera.resolution = (640, 480)
         self.camera.framerate = 32
@@ -46,12 +45,11 @@ class VideoGet:
     def get(self):
         for frame in self.camera.capture_continuous(self.rawCapture, format="bgr", use_video_port=True):
             if self.stopped:
+                self.rawCapture.truncate(0)
                 break
             self.frame = frame.array
             self.rawCapture.truncate(0)
-            self.rawCapture.seek(0)
 
 
     def stop(self):
         self.stopped = True
-        self.camera.close()
