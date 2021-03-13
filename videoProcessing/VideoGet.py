@@ -46,8 +46,6 @@ class VideoGet:
         for frame in self.camera.capture_continuous(self.rawCapture, format="bgr", use_video_port=True):
             if self.stopped:
                 self.rawCapture.truncate(0)
-                self.camera.close()
-                del self.camera
                 break
             self.frame = frame.array
             self.rawCapture.truncate(0)
