@@ -1,4 +1,9 @@
 Path to service = /etc/systemd/system/
+
+Copy service file
+sudo cp startalexa.service /etc/systemd/system/
+sudo cp startpagekite.service /etc/systemd/system/
+
 Execute below commands 
 1. Reload daemon
 sudo systemctl daemon-reload 
