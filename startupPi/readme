@@ -1,0 +1,25 @@
+Path to service = /etc/systemd/system/
+Execute below commands 
+1. Reload daemon
+sudo systemctl daemon-reload 
+
+2.Start service manually for checking
+sudo systemctl start startalexa.service
+sudo systemctl start startpagekite.service
+
+3.Check if services have started
+sudo ps -ax | grep python
+
+4. if started
+sudo systemctl stop startalexa.service
+sudo systemctl stop startpagekite.service
+
+5. Enable ctl to start on bootup
+sudo systemctl enable startalexa.service
+sudo systemctl enable startpagekite.service
+
+6.To check if services have started after bootup
+sudo ps -ax | grep python
+
+7. Debug 
+systemctl | grep start
