@@ -23,3 +23,7 @@ sudo ps -ax | grep python
 
 7. Debug 
 systemctl | grep start
+
+8.Restart service explicitly
+sudo ps -ax | grep python  //Returns id of processes
+sudo kill <pid> <pid>
