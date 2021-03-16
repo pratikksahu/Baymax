@@ -20,10 +20,10 @@ class VideoShow:
             'videoProcessing{}openface.nn4.small2.v1.t7'.format(os.sep))
 
         # load the actual face recognition model along with the label encoder
-        # self.recognizer = pickle.loads(
-        #     open("{}{}recognizer.pickle".format(classifier, os.sep), "rb").read())
-        # self.label = pickle.loads(
-        #     open("{}{}label.pickle".format(classifier, os.sep), "rb").read())
+        self.recognizer = pickle.loads(
+            open("{}{}recognizer.pickle".format(classifier, os.sep), "rb").read())
+        self.label = pickle.loads(
+            open("{}{}label.pickle".format(classifier, os.sep), "rb").read())
 
         self.facePoint = FacePoint()
         self.frameInfo = frameInfo
@@ -67,26 +67,26 @@ class VideoShow:
                     if fW < 20 or fH < 20:
                         continue
 
-                    # blob = cv2.dnn.blobFromImage(face, 1.0 / 255,
-                    #                              (96, 96), (0, 0, 0), swapRB=True, crop=False)
-                    # self.embedder.setInput(blob)
-                    # vec = self.embedder.forward()
+                    blob = cv2.dnn.blobFromImage(face, 1.0 / 255,
+                                                 (96, 96), (0, 0, 0), swapRB=True, crop=False)
+                    self.embedder.setInput(blob)
+                    vec = self.embedder.forward()
 
-                    # # perform classification to recognize the face
-                    # proba = 0.0
-                    # name = ''
-                    # preds = self.recognizer.predict_proba(vec)[0]
-                    # for me in range(len(preds)):
-                    #     if (preds[me] > 0.4) and (self.label.classes_[me] == 'pratik'):
-                    #         proba = preds[me]
-                    #         name = self.label.classes_[me]
+                    # perform classification to recognize the face
+                    proba = 0.0
+                    name = ''
+                    preds = self.recognizer.predict_proba(vec)[0]
+                    for me in range(len(preds)):
+                        if (preds[me] > 0.4) and (self.label.classes_[me] == 'pratik'):
+                            proba = preds[me]
+                            name = self.label.classes_[me]
 
-                    # if (proba == 0.0) and (name == ''):
-                    #     j = np.argmax(preds)
-                    #     proba = preds[j]
-                    #     name = self.label.classes_[j]
+                    if (proba == 0.0) and (name == ''):
+                        j = np.argmax(preds)
+                        proba = preds[j]
+                        name = self.label.classes_[j]
 
-                    # text = "{}: {:.2f}%".format(name, proba * 100)
+                    text = "{}: {:.2f}%".format(name, proba * 100)
 
                     self.facePoint = FacePoint(X, Y, W, H)
                     # draw the bounding box of the face along with the associated
