@@ -158,13 +158,17 @@ def follow_face(source=0, dur=30):
 
 @ask.launch
 def launch():
-    speech_text = 'Welcome to Raspberry Pi Automation.'
+    speech_text = 'Hello , My name is baymax.'
     return question(speech_text).reprompt(speech_text).simple_card(speech_text)
 
 
 @ask.intent('GpioIntent', mapping={'status': 'status'})
 def Gpio_Intent(status, room):
     return question('Lights turned {}'.format(status))
+
+@ask.intent('alarm', mapping={'time': 'time'})
+def Gpio_Intent(time, room):
+    return question('Alarm set for {}'.format(time))
 
 
 @ask.intent('followDuration', mapping={'duration': 'duration'})
