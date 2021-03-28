@@ -166,6 +166,10 @@ def launch():
 def Gpio_Intent(status, room):
     return question('Lights turned {}'.format(status))
 
+@ask.intent('alarm', mapping={'time': 'time'})
+def Gpio_Intent(time, room):
+    return question('Alarm set for {}'.format(time))
+
 
 @ask.intent('followDuration', mapping={'duration': 'duration'})
 def followDurationIntent(duration, room):
