@@ -158,7 +158,7 @@ def follow_face(source=0, dur=30):
 
 @ask.launch
 def launch():
-    speech_text = 'Welcome to Raspberry Pi Automation.'
+    speech_text = 'Hello , My name is baymax.'
     return question(speech_text).reprompt(speech_text).simple_card(speech_text)
 
 
