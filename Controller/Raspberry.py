@@ -1,6 +1,6 @@
 from threading import Thread
 from time import sleep
-from WheelMotor import WheelMotor
+from Controller.moduleWheel import Wheel
 
 class Raspberry:
     def __init__(self):
