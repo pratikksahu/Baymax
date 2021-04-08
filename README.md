@@ -11,6 +11,9 @@ Personal Assistant on Wheels
 - Install Virtual Env package  
    - py -m pip install --user virtualenv
 - Initialize Virtual Env 
-   - py -m venv env
-   - <b> Add env to .gitignore </b>     
+   - <b>Create Virutal Env</b> py -m venv env 
+   - <b>Activate Virtual Env </b> .\env\Scripts\activate
+   - <b> Add env folder to .gitignore if using git </b>     
+- Install required dependencies
+   - pip install -r req.txt
       
