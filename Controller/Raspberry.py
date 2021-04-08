@@ -45,5 +45,6 @@ class Raspberry:
     def stop(self):
         self.wheel.stop()
         self.stopped = True     
+
     def cleanup(self):
         self.wheel.cleanup()       
