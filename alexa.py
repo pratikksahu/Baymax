@@ -19,6 +19,7 @@ import re
 import math
 from picamera.array import PiRGBArray
 from picamera import PiCamera
+from Controller.moduleWheel import Wheel
 
 from flask import Response
 from flask import render_template
@@ -113,7 +114,8 @@ def follow_face(source=0, dur=30):
     movement = Movement(frameInfo=frameInfo).start()
 
     # To Send moving commands to raspberry
-    raspberry = Raspberry().start()
+    moduleWheel = Wheel().start()
+    raspberry = Raspberry(moduleWheel).start()
     try:        
         while True:
             
@@ -123,6 +125,7 @@ def follow_face(source=0, dur=30):
             if(currentTime % dur == 0) and (currentTime != 0):
                 raspberry.stop()
                 movement.stop()
+                moduleWheel.stop()
                 video_shower.stop()
                 video_getter.stop()
                 print('Time up , Stopped')
@@ -157,6 +160,7 @@ def follow_face(source=0, dur=30):
     except KeyboardInterrupt:
         raspberry.stop()
         movement.stop()
+        moduleWheel.stop()
         video_shower.stop()
         video_getter.stop()
 

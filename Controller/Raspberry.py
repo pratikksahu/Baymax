@@ -3,14 +3,14 @@ from time import sleep
 from Controller.moduleWheel import Wheel
 
 class Raspberry:
-    def __init__(self):
+    def __init__(self , moduleWheel):
         self._adjustWheel = 'NOMOV'
         self._adjustCamera = 'NOMOV'
         self._isFaceDetected = False
         self.stopped = False
-        self.wheel = Wheel().start()
+        self.moduleWheel = moduleWheel
 
-    def start(self):
+    def start(self , ):
         Thread(name='moveCamera' , target=self.moveCamera).start()
         Thread(name='moveWheel' , target=self.moveWheel).start()
         return self
@@ -20,10 +20,9 @@ class Raspberry:
             sleep(0.5)
             if self._isFaceDetected:
                 print(self._adjustWheel)
-                self.wheel.move(self._adjustWheel)
-                # if self._adjustWheel != 'NOMOV' :
+                self.moduleWheel.move(self._adjustWheel)                
             else:
-                self.wheel.move('NOMOV')
+                self.moduleWheel.move('NOMOV')
                 print('Stopped')
 
     def moveCamera(self):
