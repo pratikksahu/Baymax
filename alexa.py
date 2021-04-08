@@ -116,7 +116,7 @@ def follow_face(source=0, dur=30):
     raspberry = Raspberry().start()
 
     while True:
-        sleep(0.5)
+        # sleep(0.5)
         facePoint = video_shower.facePoint
         currentTime = (datetime.now() - startTime).seconds
 
