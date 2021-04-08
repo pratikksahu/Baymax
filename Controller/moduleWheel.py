@@ -16,7 +16,7 @@ class Wheel:
         
         print('Initializing Wheels')
         GPIO.setmode(GPIO.BCM)
-        GPIO.setwarnings(True)
+        GPIO.setwarnings(False)
         GPIO.setup(17,GPIO.OUT)
         GPIO.setup(18,GPIO.OUT)
         GPIO.setup(23,GPIO.OUT)
@@ -69,4 +69,4 @@ class Wheel:
         GPIO.output(18, False)
         GPIO.output(23, False)
         GPIO.output(24, False)
-        quit()
+        GPIO.cleanup()
