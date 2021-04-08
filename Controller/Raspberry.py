@@ -1,5 +1,6 @@
 from threading import Thread
 from time import sleep
+from WheelMotor import WheelMotor
 
 class Raspberry:
     def __init__(self):

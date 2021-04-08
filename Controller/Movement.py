@@ -2,7 +2,7 @@ from dataClass.FrameInfo import FrameInfo
 from dataClass.FacePoint import FacePoint
 from datetime import datetime
 from threading import Thread
-#Used to get movements for camera and
+
 
 class Movement:
 
