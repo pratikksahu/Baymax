@@ -8,7 +8,7 @@ Personal Assistant on Wheels
 
 ## Installation
 <b> Setting up python virtual environment </b>
-- Install Virtual Env package:
+- Install Virtual Env package      
       - py -m pip install --user virtualenv
 - Initialize Virtual Env:
       - py -m venv env
