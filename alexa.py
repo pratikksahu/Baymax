@@ -107,46 +107,50 @@ def follow_face(source=0, dur=30):
 
     # To Send moving commands to raspberry
     raspberry = Raspberry().start()
+    try:
+        while True:
+            sleep(0.1)
+            facePoint = video_shower.facePoint
+            currentTime = (datetime.now() - startTime).seconds
 
-    while True:
-        sleep(0.1)
-        facePoint = video_shower.facePoint
-        currentTime = (datetime.now() - startTime).seconds
+            if(currentTime % dur == 0) and (currentTime != 0):
+                print('Time up , Stopped')
+                video_shower.stop()
+                video_getter.stop()
+                movement.stop()
+                raspberry.stop()
+                break
 
-        if(currentTime % dur == 0) and (currentTime != 0):
-            print('Time up , Stopped')
-            video_shower.stop()
-            video_getter.stop()
-            movement.stop()
-            raspberry.stop()
-            break
+            if (currentTime % 2 == 0) and (currentTime != 0):
+                if isSaving:
+                    isSaving = False
+                    facePointTemp = facePoint
+            if (currentTime % 2 != 0) and (currentTime != 0):
+                if not isSaving:
+                    if facePointTemp == facePoint:
+                        isFaceDetected = False
+                    else:
+                        isFaceDetected = True
+                isSaving = True
+            if facePoint != FacePoint():  # Initial startup when facepoint is (0,0,0,0)
+                movement.setFaceDetected(isFaceDetected)
+                raspberry.setFaceDetected(isFaceDetected)
+                # Calculate directions only when face is in view
+                movement.setFacePoint(facePoint)
+                # Sending commands to raspberry
+                raspberry.setWheelCamera(
+                    movement.adjustWheels(), movement.adjustCamera())
 
-        if (currentTime % 2 == 0) and (currentTime != 0):
-            if isSaving:
-                isSaving = False
-                facePointTemp = facePoint
-        if (currentTime % 2 != 0) and (currentTime != 0):
-            if not isSaving:
-                if facePointTemp == facePoint:
-                    isFaceDetected = False
-                else:
-                    isFaceDetected = True
-            isSaving = True
-        if facePoint != FacePoint():  # Initial startup when facepoint is (0,0,0,0)
-            movement.setFaceDetected(isFaceDetected)
-            raspberry.setFaceDetected(isFaceDetected)
-            # Calculate directions only when face is in view
-            movement.setFacePoint(facePoint)
-            # Sending commands to raspberry
-            raspberry.setWheelCamera(
-                movement.adjustWheels(), movement.adjustCamera())
+            frame = video_getter.frame
+            video_shower.frame = frame
 
-        frame = video_getter.frame
-        video_shower.frame = frame
-
-        with lock:
-            outputFrame = video_shower.frame
-
+            with lock:
+                outputFrame = video_shower.frame
+    except KeyboardInterrupt:
+        video_shower.stop()
+        video_getter.stop()
+        movement.stop()
+        raspberry.stop()
 
 @ask.launch
 def launch():
