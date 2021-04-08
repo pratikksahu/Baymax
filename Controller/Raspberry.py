@@ -21,7 +21,7 @@ class Raspberry:
             if self._isFaceDetected:
                 if self._adjustWheel != 'NOMOV' :
                     print(self._adjustWheel)
-                    self.wheel(self._adjustWheel)
+                    self.wheel().move(self._adjustWheel)
             else:
                 print('Stopped')
 
