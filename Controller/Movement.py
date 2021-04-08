@@ -2,7 +2,7 @@ from dataClass.FrameInfo import FrameInfo
 from dataClass.FacePoint import FacePoint
 from datetime import datetime
 from threading import Thread
-#Used to get movements for camera and
+
 
 class Movement:
 
@@ -11,8 +11,8 @@ class Movement:
         self.frameInfo = frameInfo
         self._isFaceDetected = False
         self.stopped = False
-        self._forwardLimit = 9000
-        self._backwardLimit = 35000
+        self._forwardLimit = 13000
+        self._backwardLimit = 19000
 
     def start(self):
         print('Started')
@@ -26,9 +26,9 @@ class Movement:
                 return 'RIGHT'
             elif self.facePoint.x < self.frameInfo.frameWidthLimitL:  # Left Screen Margin
                 return 'LEFT'
-            if faceArea < self._forwardLimit:
+            if faceArea < self._forwardLimit:                             
                 return 'FORWARD'
-            elif faceArea >self._backwardLimit:
+            elif faceArea >self._backwardLimit:                      
                 return 'BACKWARD'
             return 'NOMOV'
 

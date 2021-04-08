@@ -31,6 +31,7 @@ class VideoGet:
                                    frameHeightLimitT=int(self.verticalFactor*self._height)
                                    )
         self.stopped = False
+        self.frame = None
 
 
     def start(self):
