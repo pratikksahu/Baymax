@@ -22,8 +22,8 @@ class Raspberry:
                 print(self._adjustWheel)
                 self.moduleWheel.move(self._adjustWheel)                
             else:
-                self.moduleWheel.move('NOMOV')
                 print('Stopped')
+                self.moduleWheel.move('NOMOV')
 
     def moveCamera(self):
         while not self.stopped:

@@ -27,10 +27,8 @@ class Movement:
             elif self.facePoint.x < self.frameInfo.frameWidthLimitL:  # Left Screen Margin
                 return 'LEFT'
             if faceArea < self._forwardLimit:     
-                print('F {}'.format(faceArea))           
                 return 'FORWARD'
-            elif faceArea >self._backwardLimit:
-                print('B {}'.format(faceArea))           
+            elif faceArea >self._backwardLimit:                    
                 return 'BACKWARD'
             return 'NOMOV'
 
