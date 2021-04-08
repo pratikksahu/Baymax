@@ -32,11 +32,11 @@ class Wheel:
     def move(self , direction):
         if direction == 'FORWARD':
             self.forward()
-        elif: direction == 'RIGHT':
+        elif direction == 'RIGHT':
             self.right()
-        elif: direction == 'LEFT':
+        elif direction == 'LEFT':
             self.left()
-        else: direction == 'REVERSE':
+        else direction == 'REVERSE':
             self.reverse()
 
 
@@ -70,6 +70,6 @@ class Wheel:
         GPIO.output(18, False)
         GPIO.output(23, False)
         GPIO.output(24, False)
-        
+
     def cleanup(self):
         GPIO.cleanup()
