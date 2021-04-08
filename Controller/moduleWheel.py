@@ -36,7 +36,7 @@ class Wheel:
             self.right()
         elif direction == 'LEFT':
             self.left()
-        elif direction == 'REVERSE':
+        elif direction == 'BACKWARD':
             self.reverse()
 
 
