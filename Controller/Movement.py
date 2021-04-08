@@ -12,7 +12,7 @@ class Movement:
         self._isFaceDetected = False
         self.stopped = False
         self._forwardLimit = 13000
-        self._backwardLimit = 25000
+        self._backwardLimit = 19000
 
     def start(self):
         print('Started')
