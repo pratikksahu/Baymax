@@ -10,7 +10,6 @@ from threading import Thread
 #24 Left Reverse
 
 
-
 class Wheel:
     def __init__(self):
         
@@ -43,14 +42,14 @@ class Wheel:
 
     def forward(self):
         GPIO.output(24, False)
-        GPIO.output(18, False)
-        GPIO.output(17, True)
+        GPIO.output(17, False)
+        GPIO.output(18, True)
         GPIO.output(23, True)
 
     def reverse(self):
-        GPIO.output(17, False)
+        GPIO.output(18, False)
         GPIO.output(23, False)
-        GPIO.output(18, True)
+        GPIO.output(17, True)
         GPIO.output(24, True)
 
     def right(self):
