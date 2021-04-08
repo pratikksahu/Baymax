@@ -14,6 +14,5 @@ Personal Assistant on Wheels
    - <b>Create Virutal Env</b> py -m venv env 
    - <b>Activate Virtual Env </b> .\env\Scripts\activate
    - <b> Add env folder to .gitignore if using git </b>     
-- Install required dependencies
-   - pip install -r req.txt
-      
+   - <b> Install required dependencies </b> pip install -r req.txt  
+   
