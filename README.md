@@ -8,8 +8,8 @@ Personal Assistant on Wheels
 
 ## Installation
 <b> Setting up python virtual environment </b>
-- Install Virtual Env package      
-      - py -m pip install --user virtualenv
+- Install Virtual Env package    
+   - py -m pip install --user virtualenv
 - Initialize Virtual Env:
       - py -m venv env
 <b> Add env to .gitignore </b>     
