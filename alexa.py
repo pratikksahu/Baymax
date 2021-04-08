@@ -74,11 +74,6 @@ def start_flask_video(ipa):
                   threaded=True, use_reloader=False)
 
 
-def on_press(key):
-    global terminate
-    if(key == Key.enter):
-        terminate = True
-
 def getIp():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
