@@ -8,7 +8,7 @@ class Raspberry:
         self._adjustCamera = 'NOMOV'
         self._isFaceDetected = False
         self.stopped = False
-        self.wheel = Wheel()
+        self.wheel = Wheel().start()
 
     def start(self):
         Thread(name='moveCamera' , target=self.moveCamera).start()

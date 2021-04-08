@@ -27,7 +27,9 @@ class Wheel:
         GPIO.output(23, False)
         GPIO.output(24, False)
 
-
+    def start(self):
+        return self
+        
     def move(self , direction):
         if direction == 'FORWARD':
             self.forward()
