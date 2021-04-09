@@ -30,7 +30,8 @@ Personal Assistant on Wheels
    ```
    pip install -r req.txt  
    ```
-* <b> Load face recognition model and label encoder </b>
+* <b>Get face recognition model and label encoder </b>
    - [Pretrained Model](https://github.com/pratikksahu/walle/tree/recognizer)
    - [Train Yourself](https://github.com/pratikksahu/walle/tree/train_model)
+   - Copy "classifier" to ./walle/
    
