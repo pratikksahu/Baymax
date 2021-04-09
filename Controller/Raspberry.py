@@ -7,6 +7,7 @@ class Raspberry:
         self._adjustCamera = 'NOMOV'
         self._isFaceDetected = False
         self.stopped = False
+        self.delay = 0.002
 
     def start(self):
         Thread(name='moveCamera' , target=self.moveCamera).start()
@@ -15,21 +16,17 @@ class Raspberry:
 
     def moveWheel(self):
         while not self.stopped:
-            sleep(0.05)
+            sleep(self.delay)
             if self._isFaceDetected:
-                if self._adjustWheel != 'NOMOV' :                    
+                if self._adjustWheel != None:                    
                     print(self._adjustWheel)
-            else:
-                print('Stopped')
 
     def moveCamera(self):
         while not self.stopped:
-            sleep(0.05)
+            sleep(self.delay)
             if self._isFaceDetected:
-                if self._adjustCamera != 'NOMOV':
+                if  self._adjustCamera != None:
                     print(self._adjustCamera)
-            else:
-                print('Stopped')
 
     def setWheelCamera(self , wheel , camera):
         self._adjustCamera = camera

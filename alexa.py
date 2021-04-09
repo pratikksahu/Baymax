@@ -107,17 +107,16 @@ def follow_face(source=0, dur=30):
     # To Send moving commands to raspberry
     raspberry = Raspberry().start()
     try:
-        while True:
-            # sleep(0.1)
+        while True:            
             facePoint = video_shower.facePoint
             currentTime = (datetime.now() - startTime).seconds
 
             if(currentTime % dur == 0) and (currentTime != 0):
-                print('Time up , Stopped')
+                raspberry.stop()
+                movement.stop()
                 video_shower.stop()
                 video_getter.stop()
-                movement.stop()
-                raspberry.stop()
+                print('Time up , Stopped')            
                 break         
 
             if video_shower.confidence > 0.5:
@@ -205,7 +204,7 @@ if __name__ == '__main__':
         verify = str(os.environ.get('ASK_VERIFY_REQUESTS', '')).lower()
         if verify == 'false':
             app.config['ASK_VERIFY_REQUESTS'] = False
-            app_video.config['ASK_VERIFY_REQUESTS'] = False    
+            app_video.config['ASK_VERIFY_REQUESTS'] = False      
     server_flask = Thread(target=start_flask)
     video_flask = Thread(target=start_flask_video , args = (getIp() ,))
 

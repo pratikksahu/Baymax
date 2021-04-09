@@ -16,7 +16,7 @@ class VideoGet:
         self.verticalFactor = .2
 
         #To change horizontal margins
-        self.horizontalFactor = .1
+        self.horizontalFactor = .25
         if(src == 0):
             self.stream = cv2.VideoCapture(src, cv2.CAP_DSHOW)
         else:
