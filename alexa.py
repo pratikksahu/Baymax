@@ -44,10 +44,9 @@ def generate():
     # grab global references to the output frame and lock variables
     global outputFrame, lock
     # loop over frames from the output stream
-    while True:
-        # sleep(0.01)
+    while True:                
         # wait until the lock is acquired
-        with lock:
+        with lock:            
             # check if the output frame is available, otherwise skip
             # the iteration of the loop
             if outputFrame is None:
@@ -97,7 +96,7 @@ def follow_face(source=0, dur=30):
     startTime = datetime.now()
     currentTime = 0
     isSaving = True
-    isFaceDetected = True
+    isFaceDetected = False
     # Get video feed from camera or video file
     video_getter = VideoGet().start()
     frameInfo = video_getter.frameInfo
@@ -128,19 +127,13 @@ def follow_face(source=0, dur=30):
                 video_shower.stop()
                 video_getter.stop()
                 print('Time up , Stopped')
-                break
+                break      
 
-            if (currentTime % 2 == 0) and (currentTime != 0):
-                if isSaving:
-                    isSaving = False
-                    facePointTemp = facePoint
-            if (currentTime % 2 != 0) and (currentTime != 0):
-                if not isSaving:
-                    if facePointTemp == facePoint:
-                        isFaceDetected = False
-                    else:
-                        isFaceDetected = True
-                isSaving = True
+            if video_shower.confidence > 0.5:
+                isFaceDetected = True
+            else:
+                isFaceDetected = False
+                
 
             if facePoint != FacePoint():  # Initial startup when facepoint is (0,0,0,0)
                 movement.setFaceDetected(isFaceDetected)
@@ -155,7 +148,7 @@ def follow_face(source=0, dur=30):
             video_shower.frame = frame
 
             with lock:
-                outputFrame = video_shower.frame
+                outputFrame = video_shower.newFrame
     except KeyboardInterrupt:
         raspberry.stop()
         movement.stop()
@@ -213,7 +206,7 @@ if __name__ == '__main__':
         verify = str(os.environ.get('ASK_VERIFY_REQUESTS', '')).lower()
         if verify == 'false':
             app.config['ASK_VERIFY_REQUESTS'] = False
-            app_video.config['ASK_VERIFY_REQUESTS'] = False
+            app_video.config['ASK_VERIFY_REQUESTS'] = False    
     server_flask = Thread(target=start_flask)
     video_flask = Thread(target=start_flask_video, args=(getIp(),))
 

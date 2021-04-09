@@ -7,7 +7,6 @@ from datetime import datetime
 import os
 import pickle
 
-
 class VideoShow:
     """
     Class that continuously shows a frame using a dedicated thread.
@@ -19,38 +18,37 @@ class VideoShow:
         self.embedder = cv2.dnn.readNetFromTorch(
             'videoProcessing{}openface.nn4.small2.v1.t7'.format(os.sep))
 
-        # load the actual face recognition model along with the label encoder
-        # self.recognizer = pickle.loads(
-        #     open("{}{}recognizer.pickle".format(classifier, os.sep), "rb").read())
-        # self.label = pickle.loads(
-        #     open("{}{}label.pickle".format(classifier, os.sep), "rb").read())
 
         self.facePoint = FacePoint()
         self.frameInfo = frameInfo
         self.frame = frame
+        self.newFrame = frame
         self.stopped = False
+        self.confidence = 0.0
 
     def start(self):
         threading.Thread(name='show', target=self.show).start()
         return self
 
-    def show(self):
+    def show(self):        
         while not self.stopped:
-
+            
             (h, w) = self.frame.shape[:2]
             blob = cv2.dnn.blobFromImage(
                 self.frame, 1.0, (300, 300), (104.0, 177.0, 123.0))
             self.net.setInput(blob)
             detections = self.net.forward()
             for i in range(0, detections.shape[2]):
+                
                 # extract the confidence (i.e., probability) associated with the
                 # prediction
-                confidence = detections[0, 0, i, 2]
+                self.confidence = detections[0, 0, i, 2]
 
                 # filter out weak detections by ensuring the `confidence` is
                 # greater than the minimum confidence
 
-                if confidence > 0.5:
+                if self.confidence > 0.5:
+                    
                     # compute the (x, y)-coordinates of the bounding box for the
                     # object
                     box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
@@ -67,26 +65,6 @@ class VideoShow:
                     if fW < 20 or fH < 20:
                         continue
 
-                    # blob = cv2.dnn.blobFromImage(face, 1.0 / 255,
-                    #                              (96, 96), (0, 0, 0), swapRB=True, crop=False)
-                    # self.embedder.setInput(blob)
-                    # vec = self.embedder.forward()
-
-                    # # perform classification to recognize the face
-                    # proba = 0.0
-                    # name = ''
-                    # preds = self.recognizer.predict_proba(vec)[0]
-                    # for me in range(len(preds)):
-                    #     if (preds[me] > 0.4) and (self.label.classes_[me] == 'pratik'):
-                    #         proba = preds[me]
-                    #         name = self.label.classes_[me]
-
-                    # if (proba == 0.0) and (name == ''):
-                    #     j = np.argmax(preds)
-                    #     proba = preds[j]
-                    #     name = self.label.classes_[j]
-
-                    # text = "{}: {:.2f}%".format(name, proba * 100)
 
                     self.facePoint = FacePoint(X, Y, W, H)
                     # draw the bounding box of the face along with the associated
@@ -96,13 +74,13 @@ class VideoShow:
                     # cv2.putText(self.frame, ("{}".format(
                     #     text)), (startX, startY - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255))
                     cv2.putText(self.frame, ("X:{} Y:{} W:{} H:{}".format(
-                        X, Y, W, H)), (startX, startY-5), cv2.FONT_HERSHEY_SIMPLEX, 0.3, (0, 0, 255))
+                        X, Y, W, H)), (startX, startY-5), cv2.FONT_HERSHEY_SIMPLEX, 0.3, (0, 0, 255))          
             # Draw Constraints in every frame irrespective of whether face has been detected or not
             cv2.putText(self.frame, ("Safe Area Line"), (self.frameInfo.frameWidthLimitL,
                                                          self.frameInfo.frameHeightLimitT - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255))
             cv2.rectangle(self.frame, (self.frameInfo.frameWidthLimitL, self.frameInfo.frameHeightLimitT),
-                          (self.frameInfo.frameWidthLimitR, self.frameInfo.frameHeightLimitB), (255, 0, 0), 2)
-
+                          (self.frameInfo.frameWidthLimitR, self.frameInfo.frameHeightLimitB), (255, 0, 0), 2)     
+            self.newFrame = self.frame   
             # cv2.imshow("Video", self.frame)
             # cv2.imshow("Gray" , gray)
 
