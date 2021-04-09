@@ -1,6 +1,12 @@
 ## Baymax
 Personal Assistant on Wheels
 
+## Table of contents
+-[Tech/framework used](#Tech/framework used)
+-[Prerequisites](#Prerequisites)
+-[Installation](#Installation)
+   -[Windows](#Windows)
+
 ## Tech/framework used
 <b>Built With</b>
 * [PageKite](http://pagekite.net/)
@@ -34,4 +40,6 @@ Personal Assistant on Wheels
    - [Pretrained Model](https://github.com/pratikksahu/walle/tree/recognizer)
    - [Train Yourself](https://github.com/pratikksahu/walle/tree/train_model)
    - Copy "classifier" to .\walle\
+
+##
    
