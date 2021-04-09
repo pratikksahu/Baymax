@@ -25,14 +25,31 @@ from flask import Response
 from flask import render_template
 from flask import Flask
 from flask_ask import Ask, request, session, question, statement
+import click
+
 
 app = Flask(__name__)
 app_video = Flask("video_feed_display")
 ask = Ask(app, "/")
-logging.getLogger('flask_ask').setLevel(logging.DEBUG)
-lock = threading.Lock()
-outputFrame = None
 
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
+
+def secho(text, file=None, nl=None, err=None, color=None, **styles):
+    pass
+
+def echo(text, file=None, nl=None, err=None, color=None, **styles):
+    pass
+
+click.echo = echo
+click.secho = secho
+
+lock = threading.Lock()
+lockDirection = threading.Lock()
+outputFrame = None
+camDirectionHTML = "Waiting for face"
+wheelDirectionHTML = "Waiting for face"
+facePointHTML = FacePoint()
 
 @app_video.route("/")
 def index():
@@ -44,9 +61,9 @@ def generate():
     # grab global references to the output frame and lock variables
     global outputFrame, lock
     # loop over frames from the output stream
-    while True:                
+    while True:
         # wait until the lock is acquired
-        with lock:            
+        with lock:
             # check if the output frame is available, otherwise skip
             # the iteration of the loop
             if outputFrame is None:
@@ -68,14 +85,29 @@ def video_feed():
                     mimetype="multipart/x-mixed-replace; boundary=frame")
 
 
+@app_video.route("/information")
+def image_information():
+
+    def yieldInformation():
+
+        global wheelDirectionHTML , camDirectionHTML , facePointHTML
+        
+        with lockDirection:
+            
+            yield '<b> <br> FacePoint: {}<br> Camera: {} <br> Wheel: {}</b>'.format(facePointHTML,camDirectionHTML,wheelDirectionHTML)
+        
+
+    return Response(yieldInformation(), mimetype="text/event-stream")
+
+
 def start_flask():
-    app.run(debug=True,
+    app.run(debug=False,
             threaded=True, use_reloader=False)
 
 
-def start_flask_video(ipa):
-    app_video.run(host=ipa, port=8000, debug=True,
-                  threaded=True, use_reloader=False)
+def start_flask_video(ipa):    
+    app_video.run(host=ipa, port=8000,
+                  threaded=True)
 
 
 def getIp():
@@ -88,16 +120,14 @@ def getIp():
 moduleWheel = Wheel().start()
 
 def follow_face(source=0, dur=30):
-    global lock, outputFrame , moduleWheel
+    global lock, outputFrame, lockDirection, camDirectionHTML , wheelDirectionHTML , facePointHTML
     print('Started for {} seconds'.format(dur - 2))
     video_getter = None
     video_shower = None
     frameInfo = FrameInfo()
-    facePoint = FacePoint()
-    facePointTemp = FacePoint()
+    facePoint = FacePoint()    
     startTime = datetime.now()
-    currentTime = 0
-    isSaving = True
+    currentTime = 0    
     isFaceDetected = False
     # Get video feed from camera or video file
     video_getter = VideoGet().start()
@@ -134,16 +164,22 @@ def follow_face(source=0, dur=30):
                 isFaceDetected = True
             else:
                 isFaceDetected = False
-                
-
-            if facePoint != FacePoint():  # Initial startup when facepoint is (0,0,0,0)
-                movement.setFaceDetected(isFaceDetected)
-                raspberry.setFaceDetected(isFaceDetected)
-                # Calculate directions only when face is in view
-                movement.setFacePoint(facePoint)
-                # Sending commands to raspberry
-                raspberry.setWheelCamera(
-                    movement.adjustWheels(), movement.adjustCamera())
+            
+            movement.setFaceDetected(isFaceDetected)
+            raspberry.setFaceDetected(isFaceDetected)
+            # Calculate directions only when face is in view
+            movement.setFacePoint(facePoint)
+            # Sending commands to raspberry
+            raspberry.setWheelCamera(
+                movement.adjustWheels(), movement.adjustCamera())
+            with lockDirection:
+                c = movement.adjustCamera()
+                w = movement.adjustWheels()
+                if c != None:
+                    camDirectionHTML = c
+                if w != None:
+                    wheelDirectionHTML = w
+                facePointHTML = facePoint
 
             frame = video_getter.frame
             video_shower.frame = frame
@@ -167,6 +203,7 @@ def launch():
 @ask.intent('GpioIntent', mapping={'status': 'status'})
 def Gpio_Intent(status, room):
     return question('Lights turned {}'.format(status))
+
 
 @ask.intent('alarm', mapping={'time': 'time'})
 def Gpio_Intent(time, room):
@@ -207,7 +244,8 @@ if __name__ == '__main__':
         verify = str(os.environ.get('ASK_VERIFY_REQUESTS', '')).lower()
         if verify == 'false':
             app.config['ASK_VERIFY_REQUESTS'] = False
-            app_video.config['ASK_VERIFY_REQUESTS'] = False      
+            app_video.config['ASK_VERIFY_REQUESTS'] = False
+    
     server_flask = Thread(target=start_flask)
     video_flask = Thread(target=start_flask_video, args=(getIp(),))
 
