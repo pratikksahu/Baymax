@@ -30,9 +30,11 @@ class Raspberry:
             sleep(self.delay)
             if self._isFaceDetected:
                 if  self._adjustCamera != None:
-                    print(self._adjustCamera)
+                    pass
+                    # print(self._adjustCamera)
             else:
-                print('NOMOV')
+                pass
+                # print('NOMOV')
 
     def setWheelCamera(self , wheel , camera):
         self._adjustCamera = camera
