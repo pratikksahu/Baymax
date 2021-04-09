@@ -17,7 +17,7 @@ Personal Assistant on Wheels
 
 ## Installation
 ### Windows
-* <b> Install Virtual Env package </b>
+* <b> Install Virtual Env package </b> [Optional]
    ```
    py -m pip install --user virtualenv
    ```
