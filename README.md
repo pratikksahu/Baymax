@@ -7,6 +7,9 @@ Personal Assistant on Wheels
 - [Installation](#Installation)
    - [Windows](#Windows)
       - [Setting Up Virtual Environment](#Setting-Up-Virtual-Environment) <b>Optional</b>
+      - [Install required dependencies](#Install-required-dependencies)
+      - [Get Trained model](#Get-face-recognition-model-and-label-encoder)
+      - [Run](#Run)
 
 ## Tech/framework used
 <b>Built With</b>
@@ -33,16 +36,16 @@ Personal Assistant on Wheels
          .\"environment name"\Scripts\activate
          ```
       *  Add env folder to .gitignore if using git
-* <b>Install required dependencies</b>
+* ### Install required dependencies
    ```
    pip install -r req.txt  
    ```
-* <b>Get face recognition model and label encoder </b>
+* ### Get face recognition model and label encoder
    - [Pretrained Model](https://github.com/pratikksahu/walle/tree/recognizer)
    - [Train Yourself](https://github.com/pratikksahu/walle/tree/train_model)
    - Copy "classifier" to .\walle\
 
-* <b>Run</b>
+* ### Run
    ```
    python pagekite.py 5000 "your pagekite endpoint"
    python alexa.py
