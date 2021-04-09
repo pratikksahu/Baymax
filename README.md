@@ -9,7 +9,7 @@ Personal Assistant on Wheels
 
 ## Tech/framework used
 <b>Built With</b>
-* [PageKite](http://pagekite.net/)
+* [Signup PageKite](http://pagekite.net/)
 * [Alexa Custom Skill](https://developer.amazon.com/en-US/alexa)
 
 ## Prerequisites
@@ -17,7 +17,6 @@ Personal Assistant on Wheels
 
 ## Installation
 ### Windows
-<b> Setting up python virtual environment </b>
 * <b> Install Virtual Env package </b>
    ```
    py -m pip install --user virtualenv
@@ -41,5 +40,6 @@ Personal Assistant on Wheels
    - [Train Yourself](https://github.com/pratikksahu/walle/tree/train_model)
    - Copy "classifier" to .\walle\
 
-##
+
+   
    
