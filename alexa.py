@@ -84,10 +84,12 @@ def getIp():
     print("VIDEO FEED LINK - {}:8000".format(s.getsockname()[0]))
     return s.getsockname()[0]
 
+#To prevent GPIO setup everytime
+moduleWheel = Wheel().start()
 
 def follow_face(source=0, dur=30):
-    global lock, outputFrame
-    print('Started for {} seconds'.format(dur))
+    global lock, outputFrame , moduleWheel
+    print('Started for {} seconds'.format(dur - 2))
     video_getter = None
     video_shower = None
     frameInfo = FrameInfo()
@@ -113,7 +115,6 @@ def follow_face(source=0, dur=30):
     movement = Movement(frameInfo=frameInfo).start()
 
     # To Send moving commands to raspberry
-    moduleWheel = Wheel().start()
     raspberry = Raspberry(moduleWheel).start()
     try:        
         while True:            
