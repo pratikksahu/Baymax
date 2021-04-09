@@ -24,13 +24,13 @@ Personal Assistant on Wheels
       ```
    * <b> Initialize Virtual Env </b>   
          * Create Virutal Env
-      ```
-      py -m venv "environment name"
-      ```
+         ```
+         py -m venv "environment name"
+         ```
          * Activate Virtual Env
-      ```
-      .\"environment name"\Scripts\activate
-      ```
+         ```
+         .\"environment name"\Scripts\activate
+         ```
          * Add env folder to .gitignore if using git
 * <b>Install required dependencies</b>
    ```
