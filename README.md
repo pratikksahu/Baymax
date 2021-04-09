@@ -40,6 +40,10 @@ Personal Assistant on Wheels
    - [Train Yourself](https://github.com/pratikksahu/walle/tree/train_model)
    - Copy "classifier" to .\walle\
 
-
+* <b>Run</b>
+   ```
+   python pagekite.py 5000 "your pagekite endpoint"
+   python alexa.py
+   ```
    
    
