@@ -10,7 +10,7 @@ Personal Assistant on Wheels
 - Python 3.x
 
 ## Installation
-### On Windows
+### Windows
 <b> Setting up python virtual environment </b>
 - Install Virtual Env package  
    - py -m pip install --user virtualenv
