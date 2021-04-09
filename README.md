@@ -3,8 +3,8 @@ Personal Assistant on Wheels
 
 ## Tech/framework used
 <b>Built With</b>
-- [PageKite](http://pagekite.net/)
-- [Alexa Custom Skill](https://developer.amazon.com/en-US/alexa)
+* [PageKite](http://pagekite.net/)
+* [Alexa Custom Skill](https://developer.amazon.com/en-US/alexa)
 
 ## Prerequisites
 - Python 3.x
@@ -12,11 +12,11 @@ Personal Assistant on Wheels
 ## Installation
 ### Windows
 <b> Setting up python virtual environment </b>
-- <b> Install Virtual Env package </b>
+* <b> Install Virtual Env package </b>
    ```
    py -m pip install --user virtualenv
    ```
-- <b> Initialize Virtual Env </b>
+* <b> Initialize Virtual Env </b>
    - Create Virutal Env
     ```
     py -m venv "environment name"
@@ -30,4 +30,7 @@ Personal Assistant on Wheels
    ```
    pip install -r req.txt  
    ```
+* <b> Load face recognition model and label encoder </b>
+   - [Pretrained Model](https://github.com/pratikksahu/walle/tree/recognizer)
+   - [Train Yourself](https://github.com/pratikksahu/walle/tree/train_model)
    
