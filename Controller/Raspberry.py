@@ -19,10 +19,10 @@ class Raspberry:
         while not self.stopped:
             sleep(0.05)
             if self._isFaceDetected:
-                print(self._adjustWheel)
+                # print(self._adjustWheel)
                 self.moduleWheel.move(self._adjustWheel)                
             else:
-                print('Stopped')
+                # print('Stopped')
                 self.moduleWheel.move('NOMOV')
 
     def moveCamera(self):
@@ -30,9 +30,10 @@ class Raspberry:
             sleep(0.05)
             if self._isFaceDetected:
                 if self._adjustCamera != 'NOMOV':
-                    print(self._adjustCamera)
+                    # print(self._adjustCamera)
             else:
-                print('Stopped')
+                pass
+                # print('Stopped')
 
     def setWheelCamera(self , wheel , camera):
         self._adjustCamera = camera
@@ -44,6 +45,4 @@ class Raspberry:
     def stop(self):
         self.wheel.stop()
         self.stopped = True     
-
-    def cleanup(self):
-        self.wheel.cleanup()       
+    
