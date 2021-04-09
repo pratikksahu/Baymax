@@ -205,6 +205,7 @@ if __name__ == '__main__':
         if verify == 'false':
             app.config['ASK_VERIFY_REQUESTS'] = False
             app_video.config['ASK_VERIFY_REQUESTS'] = False      
+    
     server_flask = Thread(target=start_flask)
     video_flask = Thread(target=start_flask_video , args = (getIp() ,))
 

@@ -20,6 +20,8 @@ class Raspberry:
             if self._isFaceDetected:
                 if self._adjustWheel != None:                    
                     print(self._adjustWheel)
+            else:
+                print('Stopped')
 
     def moveCamera(self):
         while not self.stopped:
@@ -27,7 +29,9 @@ class Raspberry:
             if self._isFaceDetected:
                 if  self._adjustCamera != None:
                     print(self._adjustCamera)
-
+            else:
+                print('Stopped')
+                
     def setWheelCamera(self , wheel , camera):
         self._adjustCamera = camera
         self._adjustWheel = wheel
