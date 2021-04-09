@@ -19,7 +19,7 @@ Personal Assistant on Wheels
 - <b> Initialize Virtual Env </b>
    - Create Virutal Env
     ```
-    py -m venv env 
+    py -m venv "environment name"
     ```
    - Activate Virtual Env
     ```
