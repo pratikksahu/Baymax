@@ -22,7 +22,7 @@ Personal Assistant on Wheels
       ```
       py -m pip install --user virtualenv
       ```
-  *<b> Initialize Virtual Env </b>   
+  * <b> Initialize Virtual Env </b>   
    * Create Virutal Env
 ```
 py -m venv "environment name"
