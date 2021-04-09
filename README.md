@@ -17,11 +17,17 @@ Personal Assistant on Wheels
    py -m pip install --user virtualenv
    ```
 - Initialize Virtual Env 
-   - <b>Create Virutal Env -> </b> 
+   - <b>Create Virutal Env </b> 
     ```
     py -m venv env 
     ```
-   - <b>Activate Virtual Env -> </b> .\env\Scripts\activate
+   - <b>Activate Virtual Env </b>
+    ```
+    .\env\Scripts\activate
+    ```
    - <b> Add env folder to .gitignore if using git </b>     
-   - <b> Install required dependencies -> </b> pip install -r req.txt  
+   - <b> Install required dependencies </b>
+   ```
+   pip install -r req.txt  
+   ```
    
