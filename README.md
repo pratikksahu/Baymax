@@ -23,7 +23,7 @@ Personal Assistant on Wheels
     ```
    - Activate Virtual Env
     ```
-    .\env\Scripts\activate
+    .\"environment name"\Scripts\activate
     ```
    -  Add env folder to .gitignore if using git
    -  Install required dependencies 
