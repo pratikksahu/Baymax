@@ -12,21 +12,21 @@ Personal Assistant on Wheels
 ## Installation
 ### Windows
 <b> Setting up python virtual environment </b>
-- Install Virtual Env package  
+- <b> Install Virtual Env package </b>
    ```
    py -m pip install --user virtualenv
    ```
-- Initialize Virtual Env 
-   - <b>Create Virutal Env </b> 
+- <b> Initialize Virtual Env </b>
+   - Create Virutal Env
     ```
     py -m venv env 
     ```
-   - <b>Activate Virtual Env </b>
+   - Activate Virtual Env
     ```
     .\env\Scripts\activate
     ```
-   - <b> Add env folder to .gitignore if using git </b>     
-   - <b> Install required dependencies </b>
+   -  Add env folder to .gitignore if using git
+   -  Install required dependencies 
    ```
    pip install -r req.txt  
    ```
