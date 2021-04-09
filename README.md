@@ -23,15 +23,15 @@ Personal Assistant on Wheels
       py -m pip install --user virtualenv
       ```
   * <b> Initialize Virtual Env </b>   
-   * Create Virutal Env
-```
-py -m venv "environment name"
-```
-   * Activate Virtual Env
-```
-.\"environment name"\Scripts\activate
-```
-   * Add env folder to .gitignore if using git
+        * Create Virutal Env
+            ```
+            py -m venv "environment name"
+            ```
+        * Activate Virtual Env
+            ```
+            .\"environment name"\Scripts\activate
+            ```
+        * Add env folder to .gitignore if using git
 * <b>Install required dependencies</b>
    ```
    pip install -r req.txt  
