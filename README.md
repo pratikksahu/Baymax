@@ -31,7 +31,7 @@ Personal Assistant on Wheels
     .\"environment name"\Scripts\activate
     ```
    -  Add env folder to .gitignore if using git
-   -  Install required dependencies 
+*<b>Install required dependencies</b>
    ```
    pip install -r req.txt  
    ```
