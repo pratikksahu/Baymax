@@ -19,12 +19,18 @@ Personal Assistant on Wheels
 ### Windows
 *  Setting Up Virtual Environment <b>[Optional]</b>
    *  <b>Install Virtual Env package </b>
-   *  ```py -m pip install --user virtualenv```
+       ```
+       py -m pip install --user virtualenv
+       ```
    *  <b>Initialize Virtual Env </b>   
       *  Create Virutal Env 
-         ```py -m venv "environment name"```
+         ```
+         py -m venv "environment name"
+         ```
       *  Activate Virtual Env 
-         ```.\"environment name"\Scripts\activate```
+         ```
+         .\"environment name"\Scripts\activate
+         ```
       *  Add env folder to .gitignore if using git
 * <b>Install required dependencies</b>
    ```
