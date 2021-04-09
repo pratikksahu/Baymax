@@ -6,6 +6,9 @@ Personal Assistant on Wheels
 - [PageKite](http://pagekite.net/)
 - [Alexa Custom Skill](https://developer.amazon.com/en-US/alexa)
 
+## Prerequisites
+- Python 3.x
+
 ## Installation
 <b> Setting up python virtual environment </b>
 - Install Virtual Env package  
