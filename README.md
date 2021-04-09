@@ -33,5 +33,5 @@ Personal Assistant on Wheels
 * <b>Get face recognition model and label encoder </b>
    - [Pretrained Model](https://github.com/pratikksahu/walle/tree/recognizer)
    - [Train Yourself](https://github.com/pratikksahu/walle/tree/train_model)
-   - Copy "classifier" to ./walle/
+   - Copy "classifier" to .\walle\
    
