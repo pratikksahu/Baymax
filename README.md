@@ -6,7 +6,7 @@ Personal Assistant on Wheels
 - [Prerequisites](#Prerequisites)
 - [Installation](#Installation)
    - [Windows](#Windows)
-      - Setting Up Virtual Environment(#Setting-Up-Virtual-Environment)
+      - [Setting Up Virtual Environment](#Setting-Up-Virtual-Environment)
 
 ## Tech/framework used
 <b>Built With</b>
