@@ -2,7 +2,7 @@
 Personal Assistant on Wheels
 
 ## Table of contents
--[Tech/framework used](#Tech/framework used)
+-[Tech/framework used](#Tech/framework-used)
 -[Prerequisites](#Prerequisites)
 -[Installation](#Installation)
    -[Windows](#Windows)
