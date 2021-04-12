@@ -123,6 +123,9 @@ def getIp():
     
 #     return Response(yieldIP() , mimetype="text/event-stream")
 
+#To prevent GPIO setup everytime
+moduleWheel = Wheel().start()
+
 def follow_face(source=0, dur=30):
     global lock, outputFrame, lockDirection, camDirectionHTML , wheelDirectionHTML , facePointHTML
     print('Started for {} seconds'.format(dur))
@@ -147,7 +150,7 @@ def follow_face(source=0, dur=30):
     movement = Movement(frameInfo=frameInfo).start()
 
     # To Send moving commands to raspberry
-    raspberry = Raspberry().start()
+    raspberry = Raspberry(moduleWheel).start()
     try:
         while True:
             facePoint = video_shower.facePoint
