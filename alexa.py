@@ -147,6 +147,7 @@ def follow_face(source=0, dur=30):
 
     facePoint = video_shower.facePoint
 
+    sleep(2)
     # To Get moving commands
     movement = Movement(frameInfo=frameInfo).start()
 
