@@ -6,7 +6,6 @@ from Controller.Raspberry import Raspberry
 import argparse
 from dataClass.FrameInfo import FrameInfo
 from dataClass.FacePoint import FacePoint
-import os
 import cv2
 from time import sleep
 from helper.CountsPerSec import CountsPerSec
@@ -56,6 +55,10 @@ def index():
     # return the rendered template
     return render_template("index.html")
 
+@app.route("/")
+def indexURL():
+    return render_template("videofeedip.html")
+
 
 def generate():
     # grab global references to the output frame and lock variables
@@ -102,19 +105,28 @@ def image_information():
 
 def start_flask():
     app.run(debug=True,
-            threaded=True, use_reloader=False)
+            threaded=True,port=5000, use_reloader=False)
 
 
 def start_flask_video(ipa):    
-    app_video.run(debug=True , host=ipa, port=8000,
-                  threaded=True)
+    app_video.run(host=ipa, port=8000,debug=True,
+                  threaded=True, use_reloader=False)
 
 
 def getIp():
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(("8.8.8.8", 80))
-    print("VIDEO FEED LINK - {}:8000".format(s.getsockname()[0]))
-    return s.getsockname()[0]
+    hostname = socket.gethostname()
+    local_ip = socket.gethostbyname(hostname)
+    # s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    # s.connect(("8.8.8.8", 80))
+    print("VIDEO FEED LINK - http://{}:8000".format(local_ip))
+    return local_ip
+
+@app.route("/videofeedip")
+def videofeedip():
+    def yieldIP():
+        yield "<h1> https://{}:8000 </h1>".format(getIp())
+    
+    return Response(yieldIP() , mimetype="text/event-stream")
 
 #To prevent GPIO setup everytime
 moduleWheel = Wheel().start()
