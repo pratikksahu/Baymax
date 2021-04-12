@@ -44,6 +44,6 @@ class Raspberry:
         self._isFaceDetected = value
 
     def stop(self):
-        self.wheel.stop()
+        self.moduleWheel.stop()
         self.stopped = True     
     
