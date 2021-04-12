@@ -3,6 +3,7 @@ import socket
 import os
 from Controller.Movement import Movement
 from Controller.Raspberry import Raspberry
+from Controller.moduleWheel import Wheel
 import argparse
 from dataClass.FrameInfo import FrameInfo
 from dataClass.FacePoint import FacePoint
