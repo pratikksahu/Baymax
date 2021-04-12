@@ -15,11 +15,6 @@ from datetime import date, datetime
 import threading
 from threading import Thread
 import re
-import math
-from picamera.array import PiRGBArray
-from picamera import PiCamera
-from Controller.moduleWheel import Wheel
-
 from flask import Response
 from flask import render_template
 from flask import Flask
@@ -114,26 +109,23 @@ def start_flask_video(ipa):
 
 
 def getIp():
-    hostname = socket.gethostname()
-    local_ip = socket.gethostbyname(hostname)
-    # s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    # s.connect(("8.8.8.8", 80))
-    print("VIDEO FEED LINK - http://{}:8000".format(local_ip))
-    return local_ip
+    # hostname = socket.gethostname()
+    # local_ip = socket.gethostbyname(hostname)
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    print("VIDEO FEED LINK - http://{}:8000".format(s.getsockname()[0]))
+    return s.getsockname()[0]
 
-@app.route("/videofeedip")
-def videofeedip():
-    def yieldIP():
-        yield "<h1> https://{}:8000 </h1>".format(getIp())
+# @app.route("/videofeedip")
+# def videofeedip():
+#     def yieldIP():
+#         yield "<h1> https://{}:8000 </h1>".format(getIp())
     
-    return Response(yieldIP() , mimetype="text/event-stream")
-
-#To prevent GPIO setup everytime
-moduleWheel = Wheel().start()
+#     return Response(yieldIP() , mimetype="text/event-stream")
 
 def follow_face(source=0, dur=30):
     global lock, outputFrame, lockDirection, camDirectionHTML , wheelDirectionHTML , facePointHTML
-    print('Started for {} seconds'.format(dur - 2))
+    print('Started for {} seconds'.format(dur))
     video_getter = None
     video_shower = None
     frameInfo = FrameInfo()
@@ -142,35 +134,32 @@ def follow_face(source=0, dur=30):
     currentTime = 0    
     isFaceDetected = False
     # Get video feed from camera or video file
-    video_getter = VideoGet().start()
+    video_getter = VideoGet(source).start()
     frameInfo = video_getter.frameInfo
-
-    # camera initialize
-    sleep(2)
 
     # Show processed video frame
     video_shower = VideoShow(
         video_getter.frame, video_getter.frameInfo, 'classifier/C10').start()
+
     facePoint = video_shower.facePoint
 
     # To Get moving commands
     movement = Movement(frameInfo=frameInfo).start()
 
     # To Send moving commands to raspberry
-    raspberry = Raspberry(moduleWheel).start()
-    try:        
-        while True:            
+    raspberry = Raspberry().start()
+    try:
+        while True:
             facePoint = video_shower.facePoint
             currentTime = (datetime.now() - startTime).seconds
 
             if(currentTime % dur == 0) and (currentTime != 0):
                 raspberry.stop()
                 movement.stop()
-                moduleWheel.stop()
                 video_shower.stop()
                 video_getter.stop()
                 print('Time up , Stopped')
-                break      
+                break
 
             if video_shower.confidence > 0.5:
                 isFaceDetected = True
@@ -199,11 +188,10 @@ def follow_face(source=0, dur=30):
             with lock:
                 outputFrame = video_shower.newFrame
     except KeyboardInterrupt:
-        raspberry.stop()
-        movement.stop()
-        moduleWheel.stop()
         video_shower.stop()
         video_getter.stop()
+        movement.stop()
+        raspberry.stop()
 
 
 @ask.launch
@@ -226,21 +214,18 @@ def Gpio_Intent(time, room):
 def followDurationIntent(duration, room):
     regex = re.compile('[0-9]{1,}[HSM]{1}')
     res = re.search(regex, str(duration))
-    dur = 0
+    dur = ''
     if(res != None):
         res = res.group()
         unit = res[len(res) - 1]
-        j = len(res) - 2
         for i in range(len(res) - 1):
-            dur += int(int(res[i]) * math.pow(10, j))
-            j = j - 1
+            dur += res[i]
 
         if(unit == 'M' or unit == 'H'):
-            dur = dur*60
-        unit = 'S'    
-
-    #Add +2 seconds to compensate camera initialisation time
-    Thread(target=follow_face, args=[0, dur+2]).start()
+            dur = int(dur)*60
+        dur = int(dur)
+        unit = 'S'
+    Thread(target=follow_face, args=[0, dur]).start()
     unit = 'Seconds'
     return question("Started following for {} {}".format(dur, unit))
 
@@ -257,7 +242,7 @@ if __name__ == '__main__':
         if verify == 'false':
             app.config['ASK_VERIFY_REQUESTS'] = False
             app_video.config['ASK_VERIFY_REQUESTS'] = False
-    
+    Thread(target=follow_face, args=[0, 40]).start()
     server_flask = Thread(target=start_flask)
     video_flask = Thread(target=start_flask_video, args=(getIp(),))
 
