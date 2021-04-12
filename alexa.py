@@ -134,7 +134,7 @@ def follow_face(source=0, dur=30):
     currentTime = 0    
     isFaceDetected = False
     # Get video feed from camera or video file
-    video_getter = VideoGet(source).start()
+    video_getter = VideoGet().start()
     frameInfo = video_getter.frameInfo
 
     # Show processed video frame
