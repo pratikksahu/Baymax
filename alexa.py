@@ -101,12 +101,12 @@ def image_information():
 
 
 def start_flask():
-    app.run(debug=False,
+    app.run(debug=True,
             threaded=True, use_reloader=False)
 
 
 def start_flask_video(ipa):    
-    app_video.run(host=ipa, port=8000,
+    app_video.run(debug=True , host=ipa, port=8000,
                   threaded=True)
 
 
