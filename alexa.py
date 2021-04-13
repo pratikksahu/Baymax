@@ -171,20 +171,19 @@ def follow_face(source=0, dur=30):
                 print('Time up , Stopped')
                 break
 
-            if video_shower.confidence > 0.5:
+            if video_shower.confidence > 0.3:
                 print('Detected')
                 isFaceDetected = True
-                moduleWheel.forward()
             else:
                 isFaceDetected = False
             
-            # movement.setFaceDetected(isFaceDetected)
-            # raspberry.setFaceDetected(isFaceDetected)
-            # # Calculate directions only when face is in view
-            # movement.setFacePoint(facePoint)
-            # # Sending commands to raspberry
-            # raspberry.setWheelCamera(
-            #     movement.adjustWheels(), movement.adjustCamera())
+            movement.setFaceDetected(isFaceDetected)
+            raspberry.setFaceDetected(isFaceDetected)
+            # Calculate directions only when face is in view
+            movement.setFacePoint(facePoint)
+            # Sending commands to raspberry
+            raspberry.setWheelCamera(
+                movement.adjustWheels(), movement.adjustCamera())
 
             with lockDirection:
                 c = movement.adjustCamera()

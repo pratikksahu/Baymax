@@ -47,7 +47,7 @@ class VideoShow:
                 # filter out weak detections by ensuring the `confidence` is
                 # greater than the minimum confidence
 
-                if self.confidence > 0.5:
+                if self.confidence > 0.3:
                     
                     # compute the (x, y)-coordinates of the bounding box for the
                     # object
@@ -80,7 +80,7 @@ class VideoShow:
                                                          self.frameInfo.frameHeightLimitT - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255))
             cv2.rectangle(self.frame, (self.frameInfo.frameWidthLimitL, self.frameInfo.frameHeightLimitT),
                           (self.frameInfo.frameWidthLimitR, self.frameInfo.frameHeightLimitB), (255, 0, 0), 2)     
-            # self.newFrame = self.frame   
+            self.newFrame = self.frame   
             # cv2.imshow("Video", self.frame)
             # cv2.imshow("Gray" , gray)
 
