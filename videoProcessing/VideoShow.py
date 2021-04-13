@@ -67,6 +67,7 @@ class VideoShow:
 
 
                     self.facePoint = FacePoint(X, Y, W, H)
+                    print(self.facePoint)
                     # draw the bounding box of the face along with the associated
                     # probability
                     cv2.rectangle(self.frame, (startX, startY),
