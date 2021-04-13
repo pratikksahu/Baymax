@@ -15,10 +15,10 @@ class VideoGet:
     def __init__(self):
 
         #To change vertical margins
-        self.verticalFactor = .22
+        self.verticalFactor = .2
 
         #To change horizontal margins
-        self.horizontalFactor = .3
+        self.horizontalFactor = .27
 
 
         self._width = 640
