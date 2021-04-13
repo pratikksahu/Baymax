@@ -128,8 +128,6 @@ def videofeedip():
     
     return Response(yieldIP() , mimetype="text/event-stream")
 
-#To prevent GPIO setup everytime
-moduleWheel = Wheel().start()
 
 def follow_face(source=0, dur=30):    
     global lock, outputFrame, lockDirection, camDirectionHTML , wheelDirectionHTML , facePointHTML
@@ -158,7 +156,9 @@ def follow_face(source=0, dur=30):
 
     # To Get moving commands
     movement = Movement(frameInfo=frameInfo).start()
-
+    
+    #To prevent GPIO setup everytime
+    moduleWheel = Wheel().start()
     # To Send moving commands to raspberry
     raspberry = Raspberry(moduleWheel).start()
     try:
