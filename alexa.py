@@ -144,7 +144,7 @@ def follow_face(source=0, dur=30):
     frameInfo = video_getter.frameInfo
 
     #Initialize camera
-    sleep(2)
+    sleep(4)
 
     # Show processed video frame
     video_shower = VideoShow(
