@@ -129,8 +129,7 @@ def videofeedip():
 #To prevent GPIO setup everytime
 moduleWheel = Wheel().start()
 
-def follow_face(source=0, dur=30):
-    moduleWheel.forward()
+def follow_face(source=0, dur=30):    
     global lock, outputFrame, lockDirection, camDirectionHTML , wheelDirectionHTML , facePointHTML
     print('Started for {} seconds'.format(dur))
     video_getter = None
@@ -146,8 +145,7 @@ def follow_face(source=0, dur=30):
 
     #Initialize camera
     sleep(2)
-    moduleWheel.stop()
-    sleep(2)
+
     # Show processed video frame
     video_shower = VideoShow(
         video_getter.frame, video_getter.frameInfo, 'classifier/C10').start()
