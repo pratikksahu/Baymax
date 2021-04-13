@@ -195,7 +195,7 @@ def follow_face(source=0, dur=30):
             video_shower.frame = frame
 
             with lock:
-                outputFrame = video_shower.newFrame
+                outputFrame = video_shower.frame
     except KeyboardInterrupt:
         video_shower.stop()
         video_getter.stop()
