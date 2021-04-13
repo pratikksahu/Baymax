@@ -166,6 +166,7 @@ def follow_face(source=0, dur=30):
             if(currentTime % dur == 0) and (currentTime != 0):
                 raspberry.stop()
                 movement.stop()
+                moduleWheel.stop()
                 video_shower.stop()
                 video_getter.stop()
                 print('Time up , Stopped')
@@ -173,30 +174,17 @@ def follow_face(source=0, dur=30):
 
             if video_shower.confidence > 0.5:
                 isFaceDetected = True
-                movement.setFaceDetected(True)
-                raspberry.setFaceDetected(True)
-                # Calculate directions only when face is in view
-                movement.setFacePoint(facePoint)
-                # Sending commands to raspberry
-                raspberry.setWheelCamera(
-                    movement.adjustWheels(), movement.adjustCamera())
             else:
                 isFaceDetected = False
-                movement.setFaceDetected(False)
-                raspberry.setFaceDetected(False)
-                # Calculate directions only when face is in view
-                movement.setFacePoint(facePoint)
-                # Sending commands to raspberry
-                raspberry.setWheelCamera(
-                    movement.adjustWheels(), movement.adjustCamera())
             
-            # movement.setFaceDetected(isFaceDetected)
-            # raspberry.setFaceDetected(isFaceDetected)
-            # # Calculate directions only when face is in view
-            # movement.setFacePoint(facePoint)
-            # # Sending commands to raspberry
-            # raspberry.setWheelCamera(
-            #     movement.adjustWheels(), movement.adjustCamera())
+            movement.setFaceDetected(isFaceDetected)
+            raspberry.setFaceDetected(isFaceDetected)
+            # Calculate directions only when face is in view
+            movement.setFacePoint(facePoint)
+            # Sending commands to raspberry
+            raspberry.setWheelCamera(
+                movement.adjustWheels(), movement.adjustCamera())
+
             with lockDirection:
                 c = movement.adjustCamera()
                 w = movement.adjustWheels()
