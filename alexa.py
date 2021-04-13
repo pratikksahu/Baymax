@@ -171,7 +171,7 @@ def follow_face(source=0, dur=30):
                 print('Time up , Stopped')
                 break
 
-            if video_shower.confidence > 0.3:                
+            if video_shower.confidence > 0.5:                
                 isFaceDetected = True
             else:
                 isFaceDetected = False

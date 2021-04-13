@@ -47,7 +47,7 @@ class VideoShow:
                 # filter out weak detections by ensuring the `confidence` is
                 # greater than the minimum confidence
 
-                if self.confidence > 0.3:
+                if self.confidence > 0.5:
                     
                     # compute the (x, y)-coordinates of the bounding box for the
                     # object
