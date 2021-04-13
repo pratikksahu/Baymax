@@ -135,10 +135,12 @@ def follow_face(source=0, dur=30):
     video_getter = None
     video_shower = None
     frameInfo = FrameInfo()
-    facePoint = FacePoint()    
+    facePoint = FacePoint()
+    facePointTemp = FacePoint()
     startTime = datetime.now()
-    currentTime = 0    
-    isFaceDetected = False
+    currentTime = 0
+    isSaving = True
+    isFaceDetected = True
     # Get video feed from camera or video file
     video_getter = VideoGet().start()
     frameInfo = video_getter.frameInfo
@@ -163,6 +165,7 @@ def follow_face(source=0, dur=30):
             currentTime = (datetime.now() - startTime).seconds
 
             if(currentTime % dur == 0) and (currentTime != 0):
+                moduleWheel.stop()
                 raspberry.stop()
                 movement.stop()
                 video_shower.stop()
@@ -170,10 +173,25 @@ def follow_face(source=0, dur=30):
                 print('Time up , Stopped')
                 break
 
-            if video_shower.confidence > 0.5:
-                isFaceDetected = True
-            else:
-                isFaceDetected = False
+            # if video_shower.confidence > 0.5:
+            #     isFaceDetected = True
+            # else:
+            #     isFaceDetected = False
+            #Save latest facepoints every 0.4 seconds
+            if round(float(currentTime) % 0.4 , 2) != 0 and round(float(currentTime) % 0.4 , 2) == 0.2:
+                if isSaving:
+                    isSaving = False
+                    facePointTemp = facePoint
+            #every 0.8 second , check whether current facepoint 
+            # matches the prev facepoint , if its same then most probably no face is detected
+            # else face is still in frame and detected
+            if round(float(currentTime) % 0.8 , 2) != 0 and round(float(currentTime) % 0.4 , 2) == 0.8:
+                if not isSaving:
+                    if facePointTemp == facePoint:
+                        isFaceDetected = False
+                    else:
+                        isFaceDetected = True
+                isSaving = True
             
             movement.setFaceDetected(isFaceDetected)
             raspberry.setFaceDetected(isFaceDetected)
@@ -195,8 +213,9 @@ def follow_face(source=0, dur=30):
             video_shower.frame = frame
 
             with lock:
-                outputFrame = video_shower.newFrame
+                outputFrame = video_shower.frame
     except KeyboardInterrupt:
+        moduleWheel.stop()
         video_shower.stop()
         video_getter.stop()
         movement.stop()
