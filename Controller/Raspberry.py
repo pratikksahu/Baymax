@@ -11,7 +11,7 @@ class Raspberry:
         self.moduleWheel = moduleWheel        
         self.delay = 0.002
 
-    def start(self , ):
+    def start(self):
         Thread(name='moveCamera' , target=self.moveCamera).start()
         Thread(name='moveWheel' , target=self.moveWheel).start()
         return self
