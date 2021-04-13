@@ -55,16 +55,16 @@ class Wheel:
         GPIO.output(24, True)
 
     def right(self):
-        GPIO.output(17, False)
+        GPIO.output(23, False)
         GPIO.output(18, False)
         GPIO.output(24, False)
-        GPIO.output(23, True)
+        GPIO.output(17, True)
 
     def left(self):
         GPIO.output(18, False)
-        GPIO.output(23, False)
+        GPIO.output(17, False)
         GPIO.output(24, False)
-        GPIO.output(17, True)
+        GPIO.output(23, True)
 
 
     def stop(self):
