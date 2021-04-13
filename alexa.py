@@ -46,6 +46,11 @@ camDirectionHTML = "Waiting for face"
 wheelDirectionHTML = "Waiting for face"
 facePointHTML = FacePoint()
 
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.connect(("8.8.8.8", 80))
+
+VIDEO_FEED_IP = s.getsockname()[0]
+
 @app_video.route("/")
 def index():
     # return the rendered template
@@ -110,19 +115,16 @@ def start_flask_video(ipa):
 
 
 def getIp():
-    # hostname = socket.gethostname()
-    # local_ip = socket.gethostbyname(hostname)
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(("8.8.8.8", 80))
-    print("VIDEO FEED LINK - http://{}:8000".format(s.getsockname()[0]))
-    return s.getsockname()[0]
+    global VIDEO_FEED_IP
+    print("VIDEO FEED LINK - http://{}:8000".format(VIDEO_FEED_IP))
+    return VIDEO_FEED_IP
 
-# @app.route("/videofeedip")
-# def videofeedip():
-#     def yieldIP():
-#         yield "<h1> https://{}:8000 </h1>".format(getIp())
+@app.route("/videofeedip")
+def videofeedip():
+    def yieldIP():
+        yield "<h1> https://{}:8000 </h1>".format(getIp())
     
-#     return Response(yieldIP() , mimetype="text/event-stream")
+    return Response(yieldIP() , mimetype="text/event-stream")
 
 #To prevent GPIO setup everytime
 moduleWheel = Wheel().start()
