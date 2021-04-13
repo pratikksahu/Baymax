@@ -173,11 +173,11 @@ def follow_face(source=0, dur=30):
                 video_getter.stop()
                 print('Time up , Stopped')
                 break
-
-            if video_shower.confidence > 0.5:         
-                isFaceDetected = True                
-            else:
-                isFaceDetected = False
+            if (datetime.now() - startTime).microseconds / 1000 < 600.00:
+                if video_shower.confidence > 0.5:         
+                    isFaceDetected = True                
+                else:
+                    isFaceDetected = False
             
             movement.setFaceDetected(isFaceDetected)
             raspberry.setFaceDetected(isFaceDetected)
