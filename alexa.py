@@ -184,14 +184,14 @@ def follow_face(source=0, dur=30):
             raspberry.setWheelCamera(
                 movement.adjustWheels(), movement.adjustCamera())
 
-            # with lockDirection:
-            #     c = movement.adjustCamera()
-            #     w = movement.adjustWheels()
-            #     if c != None:
-            #         camDirectionHTML = c
-            #     if w != None:
-            #         wheelDirectionHTML = w
-            #     facePointHTML = facePoint
+            with lockDirection:
+                c = movement.adjustCamera()
+                w = movement.adjustWheels()
+                if c != None:
+                    camDirectionHTML = c
+                if w != None:
+                    wheelDirectionHTML = w
+                facePointHTML = facePoint
 
             frame = video_getter.frame
             video_shower.frame = frame
