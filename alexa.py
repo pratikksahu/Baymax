@@ -185,7 +185,7 @@ def follow_face(source=0, dur=30):
             # Sending commands to raspberry
             raspberry.setWheelCamera(
                 movement.adjustWheels(), movement.adjustCamera())
-            sleep(0.1)
+            sleep(0.5)
             with lockDirection:
                 c = movement.adjustCamera()
                 w = movement.adjustWheels()
