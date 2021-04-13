@@ -170,8 +170,7 @@ def follow_face(source=0, dur=30):
             if(currentTime % dur == 0) and (currentTime != 0):
                 moduleWheel.stop()
                 raspberry.stop()
-                movement.stop()
-                moduleWheel.stop()
+                movement.stop()                
                 video_shower.stop()
                 video_getter.stop()
                 print('Time up , Stopped')
