@@ -46,10 +46,7 @@ camDirectionHTML = "Waiting for face"
 wheelDirectionHTML = "Waiting for face"
 facePointHTML = FacePoint()
 
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s.connect(("8.8.8.8", 80))
-
-VIDEO_FEED_IP = s.getsockname()[0]
+VIDEO_FEED_IP = ""
 
 @app_video.route("/")
 def index():
@@ -113,6 +110,11 @@ def start_flask_video(ipa):
     app_video.run(host=ipa, port=8000,debug=True,
                   threaded=True, use_reloader=False)
 
+def setIp():
+    global VIDEO_FEED_IP
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    VIDEO_FEED_IP = s.getsockname()[0]
 
 def getIp():
     global VIDEO_FEED_IP
@@ -256,6 +258,7 @@ if __name__ == '__main__':
         if verify == 'false':
             app.config['ASK_VERIFY_REQUESTS'] = False
             app_video.config['ASK_VERIFY_REQUESTS'] = False
+    setIp()
     Thread(target=follow_face, args=[0, 180]).start()
     server_flask = Thread(target=start_flask)
     video_flask = Thread(target=start_flask_video, args=(getIp(),))
