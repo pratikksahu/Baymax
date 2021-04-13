@@ -173,8 +173,8 @@ def follow_face(source=0, dur=30):
                 print('Time up , Stopped')
                 break
 
-            if video_shower.confidence > 0.5:           
-                isFaceDetected = True
+            if video_shower.confidence > 0.5:         
+                isFaceDetected = True                
             else:
                 isFaceDetected = False
             
@@ -185,7 +185,7 @@ def follow_face(source=0, dur=30):
             # Sending commands to raspberry
             raspberry.setWheelCamera(
                 movement.adjustWheels(), movement.adjustCamera())
-
+            sleep(0.1)
             with lockDirection:
                 c = movement.adjustCamera()
                 w = movement.adjustWheels()
