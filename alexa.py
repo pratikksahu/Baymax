@@ -160,11 +160,24 @@ def follow_face(source=0, dur=30):
     # To Send moving commands to raspberry
     raspberry = Raspberry(moduleWheel).start()
     try:
+        flag = True
+        def sendCommand():
+            while flag:
+                sleep(0.1)
+                movement.setFaceDetected(isFaceDetected)
+                raspberry.setFaceDetected(isFaceDetected)
+                # Calculate directions only when face is in view
+                movement.setFacePoint(facePoint)
+                # Sending commands to raspberry
+                raspberry.setWheelCamera(
+                    movement.adjustWheels(), movement.adjustCamera())
+        Thread(target=sendCommand).start()                
         while True:
             facePoint = video_shower.facePoint
             currentTime = (datetime.now() - startTime).seconds
 
             if(currentTime % dur == 0) and (currentTime != 0):
+                flag = False
                 raspberry.stop()
                 movement.stop()
                 moduleWheel.stop()
@@ -178,14 +191,13 @@ def follow_face(source=0, dur=30):
             else:
                 isFaceDetected = False
             
-            movement.setFaceDetected(isFaceDetected)
-            raspberry.setFaceDetected(isFaceDetected)
-            # Calculate directions only when face is in view
-            movement.setFacePoint(facePoint)
-            # Sending commands to raspberry
-            raspberry.setWheelCamera(
-                movement.adjustWheels(), movement.adjustCamera())
-            sleep(0.5)
+            # movement.setFaceDetected(isFaceDetected)
+            # raspberry.setFaceDetected(isFaceDetected)
+            # # Calculate directions only when face is in view
+            # movement.setFacePoint(facePoint)
+            # # Sending commands to raspberry
+            # raspberry.setWheelCamera(
+            #     movement.adjustWheels(), movement.adjustCamera())
             with lockDirection:
                 c = movement.adjustCamera()
                 w = movement.adjustWheels()
@@ -205,6 +217,7 @@ def follow_face(source=0, dur=30):
         video_getter.stop()
         movement.stop()
         raspberry.stop()
+
 
 
 @ask.launch
