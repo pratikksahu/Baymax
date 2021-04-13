@@ -3,6 +3,7 @@ import socket
 import os
 from Controller.Movement import Movement
 from Controller.Raspberry import Raspberry
+from Controller.moduleWheel import Wheel
 import argparse
 from dataClass.FrameInfo import FrameInfo
 from dataClass.FacePoint import FacePoint
@@ -15,11 +16,6 @@ from datetime import date, datetime
 import threading
 from threading import Thread
 import re
-import math
-from picamera.array import PiRGBArray
-from picamera import PiCamera
-from Controller.moduleWheel import Wheel
-
 from flask import Response
 from flask import render_template
 from flask import Flask
@@ -49,6 +45,11 @@ outputFrame = None
 camDirectionHTML = "Waiting for face"
 wheelDirectionHTML = "Waiting for face"
 facePointHTML = FacePoint()
+
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.connect(("8.8.8.8", 80))
+
+VIDEO_FEED_IP = s.getsockname()[0]
 
 @app_video.route("/")
 def index():
@@ -114,12 +115,9 @@ def start_flask_video(ipa):
 
 
 def getIp():
-    hostname = socket.gethostname()
-    local_ip = socket.gethostbyname(hostname)
-    # s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    # s.connect(("8.8.8.8", 80))
-    print("VIDEO FEED LINK - http://{}:8000".format(local_ip))
-    return local_ip
+    global VIDEO_FEED_IP
+    print("VIDEO FEED LINK - http://{}:8000".format(VIDEO_FEED_IP))
+    return VIDEO_FEED_IP
 
 @app.route("/videofeedip")
 def videofeedip():
@@ -133,7 +131,7 @@ moduleWheel = Wheel().start()
 
 def follow_face(source=0, dur=30):
     global lock, outputFrame, lockDirection, camDirectionHTML , wheelDirectionHTML , facePointHTML
-    print('Started for {} seconds'.format(dur - 2))
+    print('Started for {} seconds'.format(dur))
     video_getter = None
     video_shower = None
     frameInfo = FrameInfo()
@@ -145,12 +143,13 @@ def follow_face(source=0, dur=30):
     video_getter = VideoGet().start()
     frameInfo = video_getter.frameInfo
 
-    # camera initialize
+    #Initialize camera
     sleep(2)
 
     # Show processed video frame
     video_shower = VideoShow(
         video_getter.frame, video_getter.frameInfo, 'classifier/C10').start()
+
     facePoint = video_shower.facePoint
 
     # To Get moving commands
@@ -158,9 +157,8 @@ def follow_face(source=0, dur=30):
 
     # To Send moving commands to raspberry
     raspberry = Raspberry(moduleWheel).start()
-    try:        
+    try:
         while True:
-            
             facePoint = video_shower.facePoint
             currentTime = (datetime.now() - startTime).seconds
 
@@ -171,7 +169,7 @@ def follow_face(source=0, dur=30):
                 video_shower.stop()
                 video_getter.stop()
                 print('Time up , Stopped')
-                break      
+                break
 
             if video_shower.confidence > 0.5:
                 isFaceDetected = True
