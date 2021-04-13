@@ -172,6 +172,7 @@ def follow_face(source=0, dur=30):
                 break
 
             if video_shower.confidence > 0.5:
+                print('Detected')
                 isFaceDetected = True
             else:
                 isFaceDetected = False
@@ -197,7 +198,7 @@ def follow_face(source=0, dur=30):
             video_shower.frame = frame
 
             with lock:
-                outputFrame = video_shower.frame
+                outputFrame = frame
     except KeyboardInterrupt:
         video_shower.stop()
         video_getter.stop()
