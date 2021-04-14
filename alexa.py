@@ -184,7 +184,7 @@ def follow_face(source=0, dur=30):
                     else:
                         isFaceDetected = True
                 isSaving = True
-
+                
             movement.setFaceDetected(isFaceDetected)
             raspberry.setFaceDetected(isFaceDetected)
             # Calculate directions only when face is in view

@@ -16,7 +16,7 @@ class Raspberry:
 
     def moveWheel(self):
         while not self.stopped:
-            sleep(self.delay)
+            # sleep(self.delay)
             if self._isFaceDetected:
                 if self._adjustWheel != None:        
                     pass            
@@ -26,7 +26,7 @@ class Raspberry:
 
     def moveCamera(self):
         while not self.stopped:
-            sleep(self.delay)
+            # sleep(self.delay)
             if self._isFaceDetected:
                 if  self._adjustCamera != None:
                     pass
