@@ -30,16 +30,16 @@ class VideoShow:
         threading.Thread(name='show', target=self.show).start()
         return self
 
-    def show(self):        
+    def show(self):
         while not self.stopped:
-            
+
             (h, w) = self.frame.shape[:2]
             blob = cv2.dnn.blobFromImage(
                 self.frame, 1.0, (300, 300), (104.0, 177.0, 123.0))
             self.net.setInput(blob)
             detections = self.net.forward()
             for i in range(0, detections.shape[2]):
-                
+
                 # extract the confidence (i.e., probability) associated with the
                 # prediction
                 self.confidence = detections[0, 0, i, 2]
@@ -48,7 +48,7 @@ class VideoShow:
                 # greater than the minimum confidence
 
                 if self.confidence > 0.5:
-                    
+
                     # compute the (x, y)-coordinates of the bounding box for the
                     # object
                     box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
@@ -57,6 +57,8 @@ class VideoShow:
                     Y = int(startY)
                     W = int(endX - startX)
                     H = int(endY - startY)
+                    CX = int((startX + endX)/2)
+                    CY = int((startY + endY)/2)
 
                     face = self.frame[startY:endY, startX:endX]
                     (fH, fW) = face.shape[:2]
@@ -66,21 +68,30 @@ class VideoShow:
                         continue
 
 
-                    self.facePoint = FacePoint(X, Y, W, H)                    
+                    text = "{}: {:.2f}%".format(name, proba * 100)
+
+                    self.facePoint = FacePoint(X, Y, W, H, CX, CY)
                     # draw the bounding box of the face along with the associated
                     # probability
                     cv2.rectangle(self.frame, (startX, startY),
                                   (endX, endY), (0, 0, 255), 2)
-                    # cv2.putText(self.frame, ("{}".format(
-                    #     text)), (startX, startY - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255))
+                    #X Axis                                  
+                    cv2.line(self.frame, (int((startX + endX)/2), int((startY+endY)/2)),
+                             (0, int((startY+endY)/2) ), (0, 0, 255), 2)
+                    #Y Axis
+                    cv2.line(self.frame, (int((startX + endX)/2), int((startY+endY)/2)),
+                             (int((startX + endX)/2), 0), (0, 0, 255), 2)
+                
+                    cv2.putText(self.frame, ("{}".format(
+                        text)), (startX, startY - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255))
                     cv2.putText(self.frame, ("X:{} Y:{} W:{} H:{}".format(
-                        X, Y, W, H)), (startX, startY-5), cv2.FONT_HERSHEY_SIMPLEX, 0.3, (0, 0, 255))          
+                        X, Y, W, H)), (startX, startY-5), cv2.FONT_HERSHEY_SIMPLEX, 0.3, (0, 0, 255))
             # Draw Constraints in every frame irrespective of whether face has been detected or not
             cv2.putText(self.frame, ("Safe Area Line"), (self.frameInfo.frameWidthLimitL,
                                                          self.frameInfo.frameHeightLimitT - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255))
             cv2.rectangle(self.frame, (self.frameInfo.frameWidthLimitL, self.frameInfo.frameHeightLimitT),
-                          (self.frameInfo.frameWidthLimitR, self.frameInfo.frameHeightLimitB), (255, 0, 0), 2)     
-            self.newFrame = self.frame   
+                          (self.frameInfo.frameWidthLimitR, self.frameInfo.frameHeightLimitB), (255, 0, 0), 2)
+            self.newFrame = self.frame
             # cv2.imshow("Video", self.frame)
             # cv2.imshow("Gray" , gray)
 

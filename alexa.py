@@ -173,7 +173,7 @@ def follow_face(source=0, dur=30):
         while True:
             facePoint = video_shower.facePoint
             currentTime = (datetime.now() - startTime).seconds
-
+            # print((datetime.now() - startTime).microseconds / 1000)
             if(currentTime % dur == 0) and (currentTime != 0):
                 moduleWheel.stop()
                 raspberry.stop()

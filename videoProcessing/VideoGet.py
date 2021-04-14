@@ -15,7 +15,7 @@ class VideoGet:
     def __init__(self):
 
         #To change vertical margins
-        self.verticalFactor = .2
+        self.verticalFactor = .27
 
         #To change horizontal margins
         self.horizontalFactor = .2
