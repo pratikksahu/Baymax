@@ -41,7 +41,7 @@ class Movement:
                 return 'LEFT'
             if faceArea < self._forwardLimit:     
                 return 'FORWARD'
-            elif faceArea >self._backwardLimit:                    
+            if faceArea >self._backwardLimit:                    
                 return 'BACKWARD'
             return 'NOMOV'
 

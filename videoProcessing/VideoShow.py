@@ -91,7 +91,7 @@ class VideoShow:
                         proba = preds[j]
                         name = self.label.classes_[j]
 
-                    text = "{}: {:.2f}%".format(name, proba * 100)
+                    text = "{}: {:.2f}%".format(name, proba * 100)                    
 
                     self.facePoint = FacePoint(X, Y, W, H, CX, CY)
                     # draw the bounding box of the face along with the associated

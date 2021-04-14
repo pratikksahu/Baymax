@@ -18,7 +18,7 @@ class VideoGet:
         self.verticalFactor = .27
 
         #To change horizontal margins
-        self.horizontalFactor = .25
+        self.horizontalFactor = .2
 
 
         self._width = 640
