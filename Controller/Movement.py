@@ -19,12 +19,25 @@ class Movement:
         return self
 
 
+    # def adjustWheels(self):
+    #     faceArea = self.facePoint.w*self.facePoint.h
+    #     if self._isFaceDetected :
+    #         if self.facePoint.x+self.facePoint.w > self.frameInfo.frameWidthLimitR:  # Right Screen Margin
+    #             return 'RIGHT'
+    #         elif self.facePoint.x < self.frameInfo.frameWidthLimitL:  # Left Screen Margin
+    #             return 'LEFT'
+    #         if faceArea < self._forwardLimit:
+    #             return 'FORWARD'
+    #         elif faceArea >self._backwardLimit:
+    #             return 'BACKWARD'
+    #         return 'NOMOV'
+
     def adjustWheels(self):
         faceArea = self.facePoint.w*self.facePoint.h
         if self._isFaceDetected :
-            if self.facePoint.x+self.facePoint.w > self.frameInfo.frameWidthLimitR:  # Right Screen Margin
+            if self.facePoint.cx > self.frameInfo.frameWidthLimitR:  # Right Screen Margin
                 return 'RIGHT'
-            elif self.facePoint.x < self.frameInfo.frameWidthLimitL:  # Left Screen Margin
+            elif self.facePoint.cx < self.frameInfo.frameWidthLimitL:  # Left Screen Margin
                 return 'LEFT'
             if faceArea < self._forwardLimit:     
                 return 'FORWARD'
@@ -34,9 +47,9 @@ class Movement:
 
     def adjustCamera(self):
         if self._isFaceDetected :
-            if self.facePoint.y < self.frameInfo.frameHeightLimitT:  # Top Screen Margin
+            if self.facePoint.cy < self.frameInfo.frameHeightLimitT:  # Top Screen Margin
                 return 'DOWN'
-            elif self.facePoint.y + self.facePoint.h > self.frameInfo.frameHeightLimitB:  # Bottom Screen Margin
+            elif self.facePoint.cy + self.facePoint.h > self.frameInfo.frameHeightLimitB:  # Bottom Screen Margin
                 return 'UP'
             return 'NOMOV'
 
