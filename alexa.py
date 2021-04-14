@@ -177,24 +177,21 @@ def follow_face(source=0, dur=30):
             if(currentTime % dur == 0) and (currentTime != 0):
                 moduleWheel.stop()
                 raspberry.stop()
-                movement.stop()
-                moduleWheel.stop()
+                movement.stop()                
                 video_shower.stop()
                 video_getter.stop()
                 print('Time up , Stopped')
                 break
 
             # Save latest facepoints every odd seconds
-            if round(float(currentTime) % 1.5, 2) != 0 and
-            (round(float(currentTime) % 1.5, 2) == 1.0 or round(float(currentTime) % 1.5, 2) == 0.0):
+            if round(float(currentTime) % 1.5, 2) != 0 and (round(float(currentTime) % 1.5, 2) == 1.0 or round(float(currentTime) % 1.5, 2) == 0.0):
                 if isSaving:
                     isSaving = False
                     facePointTemp = facePoint
             # every even second , check whether current facepoint
             # matches the prev facepoint , if its same then most probably no face is detected
             # else face is still in frame and detected
-            if round(float(currentTime) % 1.5, 2) != 0 and
-            round(float(currentTime) % 1.5, 2) == 0.5:
+            if round(float(currentTime) % 1.5, 2) != 0 and round(float(currentTime) % 1.5, 2) == 0.5:
                 if not isSaving:
                     if facePointTemp == facePoint:
                         isFaceDetected = False
