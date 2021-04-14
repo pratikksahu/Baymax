@@ -160,11 +160,11 @@ def follow_face(source=0, dur=30):
                 video_getter.stop()
                 print('Time up , Stopped')
                 break
-            if (datetime.now() - startTime).microseconds / 1000 < 600.00:
-                if video_shower.confidence > 0.5:
-                    isFaceDetected = True
-                else:
-                    isFaceDetected = False
+            
+            if video_shower.confidence > 0.5:
+                isFaceDetected = True
+            else:
+                isFaceDetected = False
             
             movement.setFaceDetected(isFaceDetected)
             raspberry.setFaceDetected(isFaceDetected)
@@ -242,7 +242,7 @@ if __name__ == '__main__':
         if verify == 'false':
             app.config['ASK_VERIFY_REQUESTS'] = False
             app_video.config['ASK_VERIFY_REQUESTS'] = False
-    Thread(target=follow_face, args=[0, 1]).start()
+    Thread(target=follow_face, args=[0, 120]).start()
     server_flask = Thread(target=start_flask)
     video_flask = Thread(target=start_flask_video, args=(getIp(),))
 
