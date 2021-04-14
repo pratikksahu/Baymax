@@ -44,14 +44,16 @@ class Movement:
             if faceArea >self._backwardLimit:                    
                 return 'BACKWARD'
             return 'NOMOV'
+        return 'NOMOV'
 
     def adjustCamera(self):
         if self._isFaceDetected :
             if self.facePoint.cy < self.frameInfo.frameHeightLimitT:  # Top Screen Margin
                 return 'DOWN'
-            elif self.facePoint.cy + self.facePoint.h > self.frameInfo.frameHeightLimitB:  # Bottom Screen Margin
+            elif self.facePoint.cy > self.frameInfo.frameHeightLimitB:  # Bottom Screen Margin
                 return 'UP'
             return 'NOMOV'
+        return 'NOMOV'
 
 
     def setFaceDetected(self , value = False):
