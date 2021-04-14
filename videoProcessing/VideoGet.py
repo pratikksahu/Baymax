@@ -13,10 +13,10 @@ class VideoGet:
     def __init__(self, src=0):
 
         #To change vertical margins
-        self.verticalFactor = .27
+        self.verticalFactor = .2
 
         #To change horizontal margins
-        self.horizontalFactor = .35
+        self.horizontalFactor = .2
         if(src == 0):
             self.stream = cv2.VideoCapture(src, cv2.CAP_DSHOW)
         else:

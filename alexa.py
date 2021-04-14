@@ -29,11 +29,14 @@ ask = Ask(app, "/")
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
+
 def secho(text, file=None, nl=None, err=None, color=None, **styles):
     pass
 
+
 def echo(text, file=None, nl=None, err=None, color=None, **styles):
     pass
+
 
 click.echo = echo
 click.secho = secho
@@ -45,10 +48,12 @@ camDirectionHTML = "Waiting for face"
 wheelDirectionHTML = "Waiting for face"
 facePointHTML = FacePoint()
 
+
 @app_video.route("/")
 def index():
     # return the rendered template
     return render_template("index.html")
+
 
 @app.route("/")
 def indexURL():
@@ -88,23 +93,22 @@ def image_information():
 
     def yieldInformation():
 
-        global wheelDirectionHTML , camDirectionHTML , facePointHTML
-        
+        global wheelDirectionHTML, camDirectionHTML, facePointHTML
+
         with lockDirection:
-            
-            yield '<b> <br> FacePoint: {}<br> Camera: {} <br> Wheel: {}</b>'.format(facePointHTML,camDirectionHTML,wheelDirectionHTML)
-        
+
+            yield '<b> <br> FacePoint: {}<br> Camera: {} <br> Wheel: {}</b>'.format(facePointHTML, camDirectionHTML, wheelDirectionHTML)
 
     return Response(yieldInformation(), mimetype="text/event-stream")
 
 
 def start_flask():
     app.run(debug=True,
-            threaded=True,port=5000, use_reloader=False)
+            threaded=True, port=5000, use_reloader=False)
 
 
-def start_flask_video(ipa):    
-    app_video.run(host=ipa, port=8000,debug=True,
+def start_flask_video(ipa):
+    app_video.run(host=ipa, port=8000, debug=True,
                   threaded=True, use_reloader=False)
 
 
@@ -116,23 +120,27 @@ def getIp():
     print("VIDEO FEED LINK - http://{}:8000".format(local_ip))
     return local_ip
 
+
 @app.route("/videofeedip")
 def videofeedip():
     def yieldIP():
         yield "<h1> https://{}:8000 </h1>".format(getIp())
-    
-    return Response(yieldIP() , mimetype="text/event-stream")
+
+    return Response(yieldIP(), mimetype="text/event-stream")
+
 
 def follow_face(source=0, dur=30):
-    global lock, outputFrame, lockDirection, camDirectionHTML , wheelDirectionHTML , facePointHTML
+    global lock, outputFrame, lockDirection, camDirectionHTML, wheelDirectionHTML, facePointHTML
     print('Started for {} seconds'.format(dur))
     video_getter = None
     video_shower = None
     frameInfo = FrameInfo()
-    facePoint = FacePoint()    
+    facePoint = FacePoint()
+    facePointTemp = FacePoint()
     startTime = datetime.now()
-    currentTime = 0    
+    currentTime = 0
     isFaceDetected = False
+    isSaving = False
     # Get video feed from camera or video file
     video_getter = VideoGet(source).start()
     frameInfo = video_getter.frameInfo
@@ -160,12 +168,23 @@ def follow_face(source=0, dur=30):
                 video_getter.stop()
                 print('Time up , Stopped')
                 break
-            
-            if video_shower.confidence > 0.5:
-                isFaceDetected = True
-            else:
-                isFaceDetected = False
-            
+
+             # Save latest facepoints every odd seconds
+            if round(float(currentTime) % 1.5, 2) != 0 and (round(float(currentTime) % 1.5, 2) == 1.0 or round(float(currentTime) % 1.5, 2) == 0.0):
+                if isSaving:
+                    isSaving = False
+                    facePointTemp = facePoint
+            # every even second , check whether current facepoint
+            # matches the prev facepoint , if its same then most probably no face is detected
+            # else face is still in frame and detected
+            if round(float(currentTime) % 1.5, 2) != 0 and round(float(currentTime) % 1.5, 2) == 0.5:
+                if not isSaving:
+                    if facePointTemp == facePoint:
+                        isFaceDetected = False
+                    else:
+                        isFaceDetected = True
+                isSaving = True
+
             movement.setFaceDetected(isFaceDetected)
             raspberry.setFaceDetected(isFaceDetected)
             # Calculate directions only when face is in view
