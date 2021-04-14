@@ -93,11 +93,9 @@ def image_information():
 
     def yieldInformation():
 
-        global wheelDirectionHTML, camDirectionHTML, facePointHTML
+        global wheelDirectionHTML, camDirectionHTML, facePointHTML        
 
-        with lockDirection:
-
-            yield '<b> <br> FacePoint: {}<br> Camera: {} <br> Wheel: {}</b>'.format(facePointHTML, camDirectionHTML, wheelDirectionHTML)
+        yield '<b> <br> FacePoint: {}<br> Camera: {} <br> Wheel: {}</b>'.format(facePointHTML, camDirectionHTML, wheelDirectionHTML)
 
     return Response(yieldInformation(), mimetype="text/event-stream")
 
@@ -130,7 +128,7 @@ def videofeedip():
 
 
 def follow_face(source=0, dur=30):
-    global lock, outputFrame, lockDirection, camDirectionHTML, wheelDirectionHTML, facePointHTML
+    global lock, outputFrame, camDirectionHTML, wheelDirectionHTML, facePointHTML
     print('Started for {} seconds'.format(dur))
     video_getter = None
     video_shower = None
@@ -192,20 +190,20 @@ def follow_face(source=0, dur=30):
             # Sending commands to raspberry
             raspberry.setWheelCamera(
                 movement.adjustWheels(), movement.adjustCamera())
-            with lockDirection:
-                c = movement.adjustCamera()
-                w = movement.adjustWheels()
-                if c != None:
-                    camDirectionHTML = c
-                if w != None:
-                    wheelDirectionHTML = w
-                facePointHTML = facePoint
+            
+            c = movement.adjustCamera()
+            w = movement.adjustWheels()
+            if c != None:
+                camDirectionHTML = c
+            if w != None:
+                wheelDirectionHTML = w
+            facePointHTML = facePoint
 
             frame = video_getter.frame
             video_shower.frame = frame
 
             with lock:
-                outputFrame = video_shower.newFrame
+                outputFrame = video_shower.frame
     except KeyboardInterrupt:
         video_shower.stop()
         video_getter.stop()
