@@ -183,17 +183,13 @@ def follow_face(source=0, dur=30):
                 print('Time up , Stopped')
                 break
 
-            # if video_shower.confidence > 0.5:
-            #     isFaceDetected = True
-            # else:
-            #     isFaceDetected = False
-            # Save latest facepoints every 1.5 seconds
+            # Save latest facepoints every odd seconds
             if round(float(currentTime) % 1.5, 2) != 0 and
             (round(float(currentTime) % 1.5, 2) == 1.0 or round(float(currentTime) % 1.5, 2) == 0.0):
                 if isSaving:
                     isSaving = False
                     facePointTemp = facePoint
-            # every 1.5 second , check whether current facepoint
+            # every even second , check whether current facepoint
             # matches the prev facepoint , if its same then most probably no face is detected
             # else face is still in frame and detected
             if round(float(currentTime) % 1.5, 2) != 0 and
