@@ -62,20 +62,19 @@ def indexURL():
 
 def generate():
     # grab global references to the output frame and lock variables
-    global outputFrame, lock
+    global outputFrame
     # loop over frames from the output stream
     while True:
-        # wait until the lock is acquired
-        with lock:
-            # check if the output frame is available, otherwise skip
-            # the iteration of the loop
-            if outputFrame is None:
-                continue
-            # encode the frame in JPEG format
-            (flag, encodedImage) = cv2.imencode(".jpg", outputFrame)
-            # ensure the frame was successfully encoded
-            if not flag:
-                continue
+        # wait until the lock is acquired       
+        # check if the output frame is available, otherwise skip
+        # the iteration of the loop
+        if outputFrame is None:
+            continue
+        # encode the frame in JPEG format
+        (flag, encodedImage) = cv2.imencode(".jpg", outputFrame)
+        # ensure the frame was successfully encoded
+        if not flag:
+            continue
         # yield the output frame in the byte format
         yield(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + bytearray(encodedImage) + b'\r\n')
 
@@ -129,7 +128,7 @@ def videofeedip():
 
 
 def follow_face(source=0, dur=30):
-    global lock, outputFrame, camDirectionHTML, wheelDirectionHTML, facePointHTML,lockDirection
+    global outputFrame, camDirectionHTML, wheelDirectionHTML, facePointHTML,lockDirection
     print('Started for {} seconds'.format(dur))
     video_getter = None
     video_shower = None
@@ -167,22 +166,24 @@ def follow_face(source=0, dur=30):
                 video_getter.stop()
                 print('Time up , Stopped')
                 break
-
-             # Save latest facepoints every odd seconds
-            if round(float(currentTime) % 1.5, 2) != 0 and (round(float(currentTime) % 1.5, 2) == 1.0 or round(float(currentTime) % 1.5, 2) == 0.0):
-                if isSaving:
-                    isSaving = False
-                    facePointTemp = facePoint
-            # every even second , check whether current facepoint
-            # matches the prev facepoint , if its same then most probably no face is detected
-            # else face is still in frame and detected
-            if round(float(currentTime) % 1.5, 2) != 0 and round(float(currentTime) % 1.5, 2) == 0.5:
-                if not isSaving:
-                    if facePointTemp == facePoint:
-                        isFaceDetected = False
-                    else:
-                        isFaceDetected = True
-                isSaving = True
+            
+            isFaceDetected = video_shower.isFaceDetected
+            
+            #  # Save latest facepoints every odd seconds
+            # if round(float(currentTime) % 1.5, 2) != 0 and (round(float(currentTime) % 1.5, 2) == 1.0 or round(float(currentTime) % 1.5, 2) == 0.0):
+            #     if isSaving:
+            #         isSaving = False
+            #         facePointTemp = facePoint
+            # # every even second , check whether current facepoint
+            # # matches the prev facepoint , if its same then most probably no face is detected
+            # # else face is still in frame and detected
+            # if round(float(currentTime) % 1.5, 2) != 0 and round(float(currentTime) % 1.5, 2) == 0.5:
+            #     if not isSaving:
+            #         if facePointTemp == facePoint:
+            #             isFaceDetected = False
+            #         else:
+            #             isFaceDetected = True
+            #     isSaving = True
             
             movement.setFaceDetected(isFaceDetected)
             raspberry.setFaceDetected(isFaceDetected)
@@ -203,9 +204,7 @@ def follow_face(source=0, dur=30):
 
             frame = video_getter.frame
             video_shower.frame = frame
-
-            with lock:
-                outputFrame = video_shower.frame
+            outputFrame = video_shower.frame
     except KeyboardInterrupt:
         video_shower.stop()
         video_getter.stop()
