@@ -29,8 +29,8 @@ class VideoShow:
             gray = cv2.cvtColor(self.frame, cv2.COLOR_BGR2GRAY)            
             faces = faceCascade.detectMultiScale(
             gray,
-            scaleFactor=1.2,
-            minNeighbors=15,
+            scaleFactor=1.4,
+            minNeighbors=6,
             minSize=(30,30)
             )
 
