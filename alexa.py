@@ -93,9 +93,10 @@ def image_information():
 
     def yieldInformation():
 
-        global wheelDirectionHTML, camDirectionHTML, facePointHTML        
+        global wheelDirectionHTML, camDirectionHTML, facePointHTML , lockDirection
 
-        yield '<b> <br> FacePoint: {}<br> Camera: {} <br> Wheel: {}</b>'.format(facePointHTML, camDirectionHTML, wheelDirectionHTML)
+        with lockDirection:  
+            yield '<b> <br> FacePoint: {}<br> Camera: {} <br> Wheel: {}</b>'.format(facePointHTML, camDirectionHTML, wheelDirectionHTML)
 
     return Response(yieldInformation(), mimetype="text/event-stream")
 
@@ -128,7 +129,7 @@ def videofeedip():
 
 
 def follow_face(source=0, dur=30):
-    global lock, outputFrame, camDirectionHTML, wheelDirectionHTML, facePointHTML
+    global lock, outputFrame, camDirectionHTML, wheelDirectionHTML, facePointHTML,lockDirection
     print('Started for {} seconds'.format(dur))
     video_getter = None
     video_shower = None
@@ -182,7 +183,7 @@ def follow_face(source=0, dur=30):
                     else:
                         isFaceDetected = True
                 isSaving = True
-                
+            
             movement.setFaceDetected(isFaceDetected)
             raspberry.setFaceDetected(isFaceDetected)
             # Calculate directions only when face is in view
@@ -190,14 +191,15 @@ def follow_face(source=0, dur=30):
             # Sending commands to raspberry
             raspberry.setWheelCamera(
                 movement.adjustWheels(), movement.adjustCamera())
-            
-            c = movement.adjustCamera()
-            w = movement.adjustWheels()
-            if c != None:
-                camDirectionHTML = c
-            if w != None:
-                wheelDirectionHTML = w
-            facePointHTML = facePoint
+
+            with lockDirection:
+                c = movement.adjustCamera()
+                w = movement.adjustWheels()
+                if c != None:
+                    camDirectionHTML = c
+                if w != None:
+                    wheelDirectionHTML = w
+                facePointHTML = facePoint
 
             frame = video_getter.frame
             video_shower.frame = frame
