@@ -12,30 +12,39 @@ class Movement:
         self.frameInfo = frameInfo
         self.isFaceDetected = False
         self.stopped = False
-
+        self._forwardLimit = 9000
+        self._backwardLimit = 23000
+        self._isFaceDetected = False
     def start(self):
         print('Started')
         return self
 
 
     def adjustWheels(self):
-        if self.isFaceDetected:
-            if self.facePoint.x+self.facePoint.w > self.frameInfo.frameWidthLimitR:  # Right Screen Margin
+        faceArea = self.facePoint.w*self.facePoint.h
+        if self._isFaceDetected :
+            if self.facePoint.cx > self.frameInfo.frameWidthLimitR:  # Right Screen Margin
+                return 'RIGHT'
+            elif self.facePoint.cx < self.frameInfo.frameWidthLimitL:  # Left Screen Margin
                 return 'LEFT'
-            elif self.facePoint.x < self.frameInfo.frameWidthLimitL:  # Left Screen Margin
-                return 'RIGHT'                
+            if faceArea < self._forwardLimit:     
+                return 'FORWARD'
+            if faceArea >self._backwardLimit:                    
+                return 'BACKWARD'
+            return 'NOMOV'
         return 'NOMOV'
 
     def adjustCamera(self):
-        if self.isFaceDetected:
-            if self.facePoint.y < self.frameInfo.frameHeightLimitT:  # Top Screen Margin
+        if self._isFaceDetected :
+            if self.facePoint.cy < self.frameInfo.frameHeightLimitT:  # Top Screen Margin
                 return 'DOWN'
-            elif self.facePoint.y + self.facePoint.h > self.frameInfo.frameHeightLimitB:  # Bottom Screen Margin
+            elif self.facePoint.cy > self.frameInfo.frameHeightLimitB:  # Bottom Screen Margin
                 return 'UP'
+            return 'NOMOV'
         return 'NOMOV'
 
     def setFaceDetected(self , isFaceDetected = False):
-        self.isFaceDetected = isFaceDetected
+        self._isFaceDetected = isFaceDetected
 
     def setFacePoint(self , facePoint):
         self.facePoint = facePoint
