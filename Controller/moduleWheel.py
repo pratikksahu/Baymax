@@ -28,8 +28,10 @@ class Wheel:
 
         self.RPWM=GPIO.PWM(18,100)
         self.LPWM=GPIO.PWM(23,100)
-        self.RPWM.start(100)
-        self.LPWM.start(100)
+        # self.RPWM.start(100)
+        # self.LPWM.start(100)
+        # self.RPWM.stop()
+        # self.LPWM.stop()
 
     def start(self):
         return self
