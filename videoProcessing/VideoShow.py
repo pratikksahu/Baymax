@@ -30,7 +30,7 @@ class VideoShow:
     def show(self):
         while not self.stopped:
             gray = cv2.cvtColor(self.frame, cv2.COLOR_BGR2GRAY)  
-            faces = faceCascade.detectMultiScale(
+            faces = self.faceCascade.detectMultiScale(
             gray,
             scaleFactor=1.2,
             minNeighbors=6,
