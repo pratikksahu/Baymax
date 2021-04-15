@@ -14,21 +14,25 @@ class VideoGet:
 
     def __init__(self):
 
-        #To change vertical margins
+        # To change vertical margins
         self.verticalFactor = .2
 
         #To change horizontal margins
-        self.horizontalFactor = .27
+        self.horizontalFactor = .2
 
 
         self._width = 640
         self._height = 480
         self.frameInfo = FrameInfo(frameWidth=int(self._width),
-                                   frameWidthLimitR=int(self._width - self.horizontalFactor*self._width),
-                                   frameWidthLimitL=int(self._width*self.horizontalFactor),
+                                   frameWidthLimitR=int(
+                                       self._width - self.horizontalFactor*self._width),
+                                   frameWidthLimitL=int(
+                                       self._width*self.horizontalFactor),
                                    frameHeight=int(self._height),
-                                   frameHeightLimitB=int(self._height - self.verticalFactor*self._height),
-                                   frameHeightLimitT=int(self.verticalFactor*self._height)
+                                   frameHeightLimitB=int(
+                                       self._height - self.verticalFactor*self._height),
+                                   frameHeightLimitT=int(
+                                       self.verticalFactor*self._height)
                                    )
         self.stopped = False
         self.frame = None
