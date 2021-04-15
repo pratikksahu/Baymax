@@ -17,7 +17,7 @@ Personal Assistant on Wheels
 * [Alexa Custom Skill](https://developer.amazon.com/en-US/alexa)
 
 ## Prerequisites
-- Python 3.x
+- [Python 3.9.1](https://www.python.org/downloads/release/python-391/) <b>Not tested above 3.9.1 </b>
 
 ## Installation
 ### Windows

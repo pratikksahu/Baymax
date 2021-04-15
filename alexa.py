@@ -65,20 +65,19 @@ def indexURL():
 
 def generate():
     # grab global references to the output frame and lock variables
-    global outputFrame, lock
+    global outputFrame
     # loop over frames from the output stream
     while True:
-        # wait until the lock is acquired
-        with lock:
-            # check if the output frame is available, otherwise skip
-            # the iteration of the loop
-            if outputFrame is None:
-                continue
-            # encode the frame in JPEG format
-            (flag, encodedImage) = cv2.imencode(".jpg", outputFrame)
-            # ensure the frame was successfully encoded
-            if not flag:
-                continue
+        # wait until the lock is acquired       
+        # check if the output frame is available, otherwise skip
+        # the iteration of the loop
+        if outputFrame is None:
+            continue
+        # encode the frame in JPEG format
+        (flag, encodedImage) = cv2.imencode(".jpg", outputFrame)
+        # ensure the frame was successfully encoded
+        if not flag:
+            continue
         # yield the output frame in the byte format
         yield(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + bytearray(encodedImage) + b'\r\n')
 
@@ -96,10 +95,9 @@ def image_information():
 
     def yieldInformation():
 
-        global wheelDirectionHTML, camDirectionHTML, facePointHTML
+        global wheelDirectionHTML, camDirectionHTML, facePointHTML , lockDirection
 
-        with lockDirection:
-
+        with lockDirection:  
             yield '<b> <br> FacePoint: {}<br> Camera: {} <br> Wheel: {}</b>'.format(facePointHTML, camDirectionHTML, wheelDirectionHTML)
 
     return Response(yieldInformation(), mimetype="text/event-stream")
@@ -128,6 +126,7 @@ def getIp():
     return VIDEO_FEED_IP
 
 
+
 @app.route("/videofeedip")
 def videofeedip():
     def yieldIP():
@@ -137,7 +136,7 @@ def videofeedip():
 
 
 def follow_face(source=0, dur=30):
-    global lock, outputFrame, lockDirection, camDirectionHTML, wheelDirectionHTML, facePointHTML
+    global outputFrame, camDirectionHTML, wheelDirectionHTML, facePointHTML,lockDirection
     print('Started for {} seconds'.format(dur))
     video_getter = None
     video_shower = None
@@ -146,8 +145,8 @@ def follow_face(source=0, dur=30):
     facePointTemp = FacePoint()
     startTime = datetime.now()
     currentTime = 0
-    isSaving = True
-    isFaceDetected = True
+    isFaceDetected = False
+    isSaving = False
     # Get video feed from camera or video file
     video_getter = VideoGet().start()
     frameInfo = video_getter.frameInfo
@@ -182,45 +181,45 @@ def follow_face(source=0, dur=30):
                 video_getter.stop()
                 print('Time up , Stopped')
                 break
+            
+            isFaceDetected = video_shower.isFaceDetected
+            
+            #  # Save latest facepoints every odd seconds
+            # if round(float(currentTime) % 1.5, 2) != 0 and (round(float(currentTime) % 1.5, 2) == 1.0 or round(float(currentTime) % 1.5, 2) == 0.0):
+            #     if isSaving:
+            #         isSaving = False
+            #         facePointTemp = facePoint
+            # # every even second , check whether current facepoint
+            # # matches the prev facepoint , if its same then most probably no face is detected
+            # # else face is still in frame and detected
+            # if round(float(currentTime) % 1.5, 2) != 0 and round(float(currentTime) % 1.5, 2) == 0.5:
+            #     if not isSaving:
+            #         if facePointTemp == facePoint:
+            #             isFaceDetected = False
+            #         else:
+            #             isFaceDetected = True
+            #     isSaving = True
+            
+            movement.setFaceDetected(isFaceDetected)
+            raspberry.setFaceDetected(isFaceDetected)
+            # Calculate directions only when face is in view
+            movement.setFacePoint(facePoint)
+            # Sending commands to raspberry
+            raspberry.setWheelCamera(
+                movement.adjustWheels(), movement.adjustCamera())
 
-            # Save latest facepoints every odd seconds
-            if round(float(currentTime) % 1.5, 2) != 0 and (round(float(currentTime) % 1.5, 2) == 1.0 or round(float(currentTime) % 1.5, 2) == 0.0):
-                if isSaving:
-                    isSaving = False
-                    facePointTemp = facePoint
-            # every even second , check whether current facepoint
-            # matches the prev facepoint , if its same then most probably no face is detected
-            # else face is still in frame and detected
-            if round(float(currentTime) % 1.5, 2) != 0 and round(float(currentTime) % 1.5, 2) == 0.5:
-                if not isSaving:
-                    if facePointTemp == facePoint:
-                        isFaceDetected = False
-                    else:
-                        isFaceDetected = True
-                isSaving = True
-
-            if facePoint != FacePoint():
-                movement.setFaceDetected(isFaceDetected)
-                raspberry.setFaceDetected(isFaceDetected)
-                # Calculate directions only when face is in view
-                movement.setFacePoint(facePoint)
-                # Sending commands to raspberry
-                raspberry.setWheelCamera(
-                    movement.adjustWheels(), movement.adjustCamera())
-                with lockDirection:
-                    c = movement.adjustCamera()
-                    w = movement.adjustWheels()
-                    if c != None:
-                        camDirectionHTML = c
-                    if w != None:
-                        wheelDirectionHTML = w
-                    facePointHTML = facePoint
+            with lockDirection:
+                c = movement.adjustCamera()
+                w = movement.adjustWheels()
+                if c != None:
+                    camDirectionHTML = c
+                if w != None:
+                    wheelDirectionHTML = w
+                facePointHTML = facePoint
 
             frame = video_getter.frame
             video_shower.frame = frame
-
-            with lock:
-                outputFrame = video_shower.frame
+            outputFrame = video_shower.frame
     except KeyboardInterrupt:
         raspberry.stop()
         movement.stop()
@@ -281,7 +280,8 @@ if __name__ == '__main__':
             app.config['ASK_VERIFY_REQUESTS'] = False
             app_video.config['ASK_VERIFY_REQUESTS'] = False
     setIp()
-    Thread(target=follow_face, args=[0, 60]).start()
+    
+    
     server_flask = Thread(target=start_flask)
     video_flask = Thread(target=start_flask_video, args=(getIp(),))
 
