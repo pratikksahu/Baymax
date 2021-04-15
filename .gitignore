@@ -7,6 +7,5 @@ dataset
 input
 *.pickle
 testData
-classifier
 *.mp4
 
