@@ -41,10 +41,24 @@ class VideoShow:
             
             # Draw a rectangle around the faces
             for (x, y, w, h) in faces:
-                self.facePoint = FacePoint(x,y,w,h)
-                #Show Coordinates with width and height of face detected
-                cv2.putText(self.frame ,("X:{} Y:{} W:{} H:{}".format(x,y,w,h)) , (x , y-5) , cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255) )
+                X = int(x)
+                Y = int(y)
+                W = int(w)
+                H = int(h)
+                CX = int((x+x+w)/2)
+                CY = int((y+y+h)/2)
+
+                self.facePoint = FacePoint(X, Y, W, H, CX, CY)
+                # Show Coordinates with width and height of face detected
+                cv2.putText(self.frame, ("X:{} Y:{} W:{} H:{}".format(
+                    x, y, w, h)), (x, y-5), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255))
                 cv2.rectangle(self.frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+                # X Axis
+                cv2.line(self.frame, (int(CX), int(CY)),
+                         (0, int(CY)), (0, 0, 255), 2)
+                # Y Axis
+                cv2.line(self.frame, (int(CX), int(CY)),
+                         (int(CX), 0), (0, 0, 255), 2)      
 
 
             #Reset points to 0

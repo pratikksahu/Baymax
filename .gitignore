@@ -8,3 +8,5 @@ input
 output
 test_img
 *.mp4
+*.pickle
+testData
