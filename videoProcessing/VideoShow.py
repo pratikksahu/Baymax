@@ -64,11 +64,11 @@ class VideoShow:
                     x, y, w, h)), (x, y-5), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255))
                 cv2.rectangle(self.frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
                 # X Axis
-                cv2.line(self.frame, (int(CX/2), int(CY/2)),
-                         (0, int(CY/2)), (0, 0, 255), 2)
+                cv2.line(self.frame, (int(CX), int(CY)),
+                         (0, int(CY)), (0, 0, 255), 2)
                 # Y Axis
-                cv2.line(self.frame, (int(CX/2), int(CY/2)),
-                         (int(CX/2), 0), (0, 0, 255), 2)            
+                cv2.line(self.frame, (int(CX), int(CY)),
+                         (int(CX), 0), (0, 0, 255), 2)            
         
             # cv2.imshow("Video", self.frame)
             # cv2.imshow("Gray" , gray)
