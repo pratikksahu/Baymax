@@ -14,7 +14,7 @@ class VideoShow:
     """
 
     def __init__(self, frame=None, frameInfo=FrameInfo(), classifier=None):
-        # self.cascPath = 'haarcascade_frontalface_default.xml'
+        
         self.cascPath = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
         self.faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
