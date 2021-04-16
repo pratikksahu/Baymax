@@ -4,25 +4,25 @@ from time import sleep
 
 #Send GPIO output every 0.5 seconds
 #17 Right Reverse
-#18 Right Forward
-#23 Left Forward
+#18 Right Forward 12
+#23 Left Forward  13
 #24 Left Reverse
 
 print('Initializing Wheels')
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 GPIO.setup(17,GPIO.OUT)
-GPIO.setup(18,GPIO.OUT)
-GPIO.setup(23,GPIO.OUT)
+GPIO.setup(12,GPIO.OUT)
+GPIO.setup(13,GPIO.OUT)
 GPIO.setup(24,GPIO.OUT)
 
 GPIO.output(17, False)
-GPIO.output(18, False)
-GPIO.output(23, False)
+GPIO.output(12, False)
+GPIO.output(13, False)
 GPIO.output(24, False)
 
-RPWM=GPIO.PWM(18,100)
-LPWM=GPIO.PWM(23,100)
+RPWM=GPIO.PWM(12,100)
+LPWM=GPIO.PWM(13,100)
 
 print('Starting PWM')
 RPWM.start(100)
@@ -52,8 +52,8 @@ def forward(speed):
     LPWM.ChangeDutyCycle(speed)
     GPIO.output(24, False)
     GPIO.output(17, False)
-    GPIO.output(18, True)
-    GPIO.output(23, True)
+    GPIO.output(12, True)
+    GPIO.output(13, True)
     sleep(3)
 
 def reverse():
@@ -61,8 +61,8 @@ def reverse():
     print('Moving Backward')
     RPWM.ChangeDutyCycle(0)
     LPWM.ChangeDutyCycle(0)
-    GPIO.output(18, False)
-    GPIO.output(23, False)
+    GPIO.output(12, False)
+    GPIO.output(13, False)
     GPIO.output(17, True)
     GPIO.output(24, True)
     sleep(3)
@@ -72,9 +72,9 @@ def right(speed):
     print('Moving Right {}'.format(speed))    
     LPWM.ChangeDutyCycle(speed)
     GPIO.output(17, False)
-    GPIO.output(18, False)
+    GPIO.output(12, False)
     GPIO.output(24, False)
-    GPIO.output(23, True)
+    GPIO.output(13, True)
     sleep(3)
 
 def left(speed):
@@ -82,9 +82,9 @@ def left(speed):
     print('Moving Left {}'.format(speed))
     RPWM.ChangeDutyCycle(speed)
     GPIO.output(17, False)
-    GPIO.output(23, False)
+    GPIO.output(13, False)
     GPIO.output(24, False)
-    GPIO.output(18, True)
+    GPIO.output(12, True)
     sleep(3)    
 
 def stop():
@@ -93,8 +93,8 @@ def stop():
     RPWM.ChangeDutyCycle(0)
     LPWM.ChangeDutyCycle(0)
     GPIO.output(17, False)
-    GPIO.output(18, False)
-    GPIO.output(23, False)
+    GPIO.output(12, False)
+    GPIO.output(13, False)
     GPIO.output(24, False)
 
 
