@@ -34,7 +34,7 @@ class Wheel:
         self.LPWM.start(0)
         return self
         
-    def move(self):
+    def move(self , direction):
         if direction == 'FORWARD':
             self.forward(100)
         elif direction == 'RIGHT':
@@ -78,7 +78,7 @@ class Wheel:
         GPIO.output(12, True)
 
 
-    def stop():
+    def stop(self):
         self.RPWM.ChangeDutyCycle(0)
         self.LPWM.ChangeDutyCycle(0)
         GPIO.output(17, False)
