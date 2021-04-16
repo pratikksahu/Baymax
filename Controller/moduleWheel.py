@@ -80,5 +80,3 @@ class Wheel:
         GPIO.output(23, False)
         GPIO.output(24, False)
 
-    def cleanup(self):
-        GPIO.cleanup()
