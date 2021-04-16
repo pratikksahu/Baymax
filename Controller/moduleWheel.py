@@ -34,7 +34,7 @@ class Wheel:
         self.LPWM.start(0)
         return self
         
-    def move(self , direction):
+    def move(self):
         if direction == 'FORWARD':
             self.forward(100)
         elif direction == 'RIGHT':
