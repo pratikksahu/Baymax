@@ -21,35 +21,35 @@ GPIO.output(18, False)
 GPIO.output(23, False)
 GPIO.output(24, False)
 
-self.RPWM=GPIO.PWM(18,100)
-self.LPWM=GPIO.PWM(23,100)
+RPWM=GPIO.PWM(18,100)
+LPWM=GPIO.PWM(23,100)
 
 print('Starting PWM')
-self.RPWM.start(100)
-self.LPWM.start(100)
+RPWM.start(100)
+LPWM.start(100)
 sleep(2)
 
 print('Changing Duty cycle to 0')
-self.RPWM.ChangeDutyCycle(0)
-self.LPWM.ChangeDutyCycle(0)
+RPWM.ChangeDutyCycle(0)
+LPWM.ChangeDutyCycle(0)
 sleep(2)
 
 print('Changing Duty cycle to 20')
-self.RPWM.ChangeDutyCycle(20)
-self.LPWM.ChangeDutyCycle(20)
+RPWM.ChangeDutyCycle(20)
+LPWM.ChangeDutyCycle(20)
 sleep(2)
 
 print('Changing Duty cycle to 80')
-self.RPWM.ChangeDutyCycle(80)
-self.LPWM.ChangeDutyCycle(80)
+RPWM.ChangeDutyCycle(80)
+LPWM.ChangeDutyCycle(80)
 sleep(2)
 
 
 def forward(speed):
     #Forward
     print('Moving Forward {}'.format(speed))
-    self.RPWM.ChangeDutyCycle(speed)
-    self.LPWM.ChangeDutyCycle(speed)
+    RPWM.ChangeDutyCycle(speed)
+    LPWM.ChangeDutyCycle(speed)
     GPIO.output(24, False)
     GPIO.output(17, False)
     GPIO.output(18, True)
@@ -59,8 +59,8 @@ def forward(speed):
 def reverse():
     #Reverse
     print('Moving Backward')
-    self.RPWM.ChangeDutyCycle(0)
-    self.LPWM.ChangeDutyCycle(0)
+    RPWM.ChangeDutyCycle(0)
+    LPWM.ChangeDutyCycle(0)
     GPIO.output(18, False)
     GPIO.output(23, False)
     GPIO.output(17, True)
@@ -70,7 +70,7 @@ def reverse():
 def right(speed):
     #Right
     print('Moving Right {}'.format(speed))    
-    self.LPWM.ChangeDutyCycle(speed)
+    LPWM.ChangeDutyCycle(speed)
     GPIO.output(17, False)
     GPIO.output(18, False)
     GPIO.output(24, False)
@@ -80,7 +80,7 @@ def right(speed):
 def left(speed):
     #Left
     print('Moving Left {}'.format(speed))
-    self.RPWM.ChangeDutyCycle(speed)
+    RPWM.ChangeDutyCycle(speed)
     GPIO.output(17, False)
     GPIO.output(23, False)
     GPIO.output(24, False)
@@ -90,8 +90,8 @@ def left(speed):
 def stop():
     #Stop
     print('Stopped')
-    self.RPWM.ChangeDutyCycle(0)
-    self.LPWM.ChangeDutyCycle(0)
+    RPWM.ChangeDutyCycle(0)
+    LPWM.ChangeDutyCycle(0)
     GPIO.output(17, False)
     GPIO.output(18, False)
     GPIO.output(23, False)
