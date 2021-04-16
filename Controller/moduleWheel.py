@@ -55,7 +55,7 @@ class Wheel:
         GPIO.output(12, True)
         GPIO.output(13, True)
 
-    def reverse():
+    def reverse(self):
         self.RPWM.ChangeDutyCycle(0)
         self.LPWM.ChangeDutyCycle(0)
         GPIO.output(12, False)
