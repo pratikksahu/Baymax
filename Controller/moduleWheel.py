@@ -28,10 +28,6 @@ class Wheel:
 
         self.RPWM=GPIO.PWM(18,100)
         self.LPWM=GPIO.PWM(23,100)
-        # self.RPWM.start(100)
-        # self.LPWM.start(100)
-        # self.RPWM.stop()
-        # self.LPWM.stop()
 
     def start(self):
         return self
@@ -64,14 +60,14 @@ class Wheel:
         GPIO.output(24, True)
 
     def right(self):    
-        self.LPWM.ChangeDutyCycle(50)
+        self.LPWM.ChangeDutyCycle(10)
         GPIO.output(17, False)
         GPIO.output(18, False)
         GPIO.output(24, False)
         GPIO.output(23, True)
 
     def left(self):
-        self.RPWM.ChangeDutyCycle(50)
+        self.RPWM.ChangeDutyCycle(10)
         GPIO.output(17, False)
         GPIO.output(23, False)
         GPIO.output(24, False)
