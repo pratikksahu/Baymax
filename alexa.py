@@ -175,11 +175,12 @@ def follow_face(source=0, dur=30):
             # print((datetime.now() - startTime).microseconds / 1000)
             if(currentTime % dur == 0) and (currentTime != 0):
                 raspberry.stop()
-                movement.stop()                
-                moduleWheel.stop()
+                movement.stop()                                
                 video_shower.stop()
                 video_getter.stop()
                 print('Time up , Stopped')
+                sleep(1)
+                moduleWheel.stop()
                 break
             
             isFaceDetected = video_shower.isFaceDetected
