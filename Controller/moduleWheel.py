@@ -47,7 +47,7 @@ class Wheel:
             self.stop()
 
 
-    def forward(speed):                
+    def forward(self,speed):                
         self.RPWM.ChangeDutyCycle(speed)
         self.LPWM.ChangeDutyCycle(speed)
         GPIO.output(24, False)
@@ -63,14 +63,14 @@ class Wheel:
         GPIO.output(17, True)
         GPIO.output(24, True)
 
-    def right(speed):
+    def right(self,speed):
         self.LPWM.ChangeDutyCycle(speed)
         GPIO.output(17, False)
         GPIO.output(12, False)
         GPIO.output(24, False)
         GPIO.output(13, True)
 
-    def left(speed):
+    def left(self,speed):
         self.RPWM.ChangeDutyCycle(speed)
         GPIO.output(17, False)
         GPIO.output(13, False)
