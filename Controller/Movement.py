@@ -19,19 +19,6 @@ class Movement:
         return self
 
 
-    # def adjustWheels(self):
-    #     faceArea = self.facePoint.w*self.facePoint.h
-    #     if self._isFaceDetected :
-    #         if self.facePoint.x+self.facePoint.w > self.frameInfo.frameWidthLimitR:  # Right Screen Margin
-    #             return 'RIGHT'
-    #         elif self.facePoint.x < self.frameInfo.frameWidthLimitL:  # Left Screen Margin
-    #             return 'LEFT'
-    #         if faceArea < self._forwardLimit:
-    #             return 'FORWARD'
-    #         elif faceArea >self._backwardLimit:
-    #             return 'BACKWARD'
-    #         return 'NOMOV'
-
     def adjustWheels(self):
         faceArea = self.facePoint.w*self.facePoint.h
         if self._isFaceDetected :
