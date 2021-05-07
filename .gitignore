@@ -7,6 +7,5 @@ dataset
 input
 output
 testData
-classifier
 *.pickle
 

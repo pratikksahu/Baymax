@@ -50,8 +50,7 @@ facePointHTML = FacePoint()
 
 
 @app_video.route("/")
-def index():
-    # return the rendered template
+def index():    
     return render_template("index.html")
 
 
@@ -146,7 +145,7 @@ def follow_face(source=0, dur=30):
     sleep(2)
     # Show processed video frame
     video_shower = VideoShow(
-        video_getter.frame, video_getter.frameInfo, 'classifier/C10').start()
+        video_getter.frame, video_getter.frameInfo).start()
 
     facePoint = video_shower.facePoint
 
@@ -168,24 +167,7 @@ def follow_face(source=0, dur=30):
                 print('Time up , Stopped')
                 break
             
-            isFaceDetected = video_shower.isFaceDetected
-            if not isFaceDetected:
-                facePoint = FacePoint()
-            #  # Save latest facepoints every odd seconds
-            # if round(float(currentTime) % 1.5, 2) != 0 and (round(float(currentTime) % 1.5, 2) == 1.0 or round(float(currentTime) % 1.5, 2) == 0.0):
-            #     if isSaving:
-            #         isSaving = False
-            #         facePointTemp = facePoint
-            # # every even second , check whether current facepoint
-            # # matches the prev facepoint , if its same then most probably no face is detected
-            # # else face is still in frame and detected
-            # if round(float(currentTime) % 1.5, 2) != 0 and round(float(currentTime) % 1.5, 2) == 0.5:
-            #     if not isSaving:
-            #         if facePointTemp == facePoint:
-            #             isFaceDetected = False
-            #         else:
-            #             isFaceDetected = True
-            #     isSaving = True
+            isFaceDetected = video_shower.facePoint != FacePoint()
             
             movement.setFaceDetected(isFaceDetected)
             raspberry.setFaceDetected(isFaceDetected)
@@ -207,7 +189,7 @@ def follow_face(source=0, dur=30):
             frame = video_getter.frame
             video_shower.frame = frame
             outputFrame = video_shower.frame
-    except KeyboardInterrupt:
+    finally:
         video_shower.stop()
         video_getter.stop()
         movement.stop()
