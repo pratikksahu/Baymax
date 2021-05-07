@@ -1,14 +1,14 @@
-import time
 import RPi.GPIO as GPIO
-from threading import Thread
 
-
-#Send GPIO output every 0.5 seconds
 #17 Right Reverse
 #18 Right Forward 12
 #23 Left Forward  13
 #24 Left Reverse
 
+RR = 17
+RF = 12
+LF = 13
+LR = 24
 
 class Wheel:
     def __init__(self):
@@ -16,18 +16,18 @@ class Wheel:
         print('Initializing Wheels')
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
-        GPIO.setup(17,GPIO.OUT)
-        GPIO.setup(12,GPIO.OUT)
-        GPIO.setup(13,GPIO.OUT)
-        GPIO.setup(24,GPIO.OUT)
+        GPIO.setup(RR,GPIO.OUT)
+        GPIO.setup(RF,GPIO.OUT)
+        GPIO.setup(LF,GPIO.OUT)
+        GPIO.setup(LR,GPIO.OUT)
 
-        GPIO.output(17, False)
-        GPIO.output(12, False)
-        GPIO.output(13, False)
-        GPIO.output(24, False)
+        GPIO.output(RR, False)
+        GPIO.output(RF, False)
+        GPIO.output(LF, False)
+        GPIO.output(LR, False)
 
-        self.RPWM=GPIO.PWM(12,100)
-        self.LPWM=GPIO.PWM(13,100)
+        self.RPWM=GPIO.PWM(RF,100)
+        self.LPWM=GPIO.PWM(LF,100)
 
     def start(self):
         self.RPWM.start(0)
@@ -50,39 +50,40 @@ class Wheel:
     def forward(self,speed):                
         self.RPWM.ChangeDutyCycle(speed)
         self.LPWM.ChangeDutyCycle(speed)
-        GPIO.output(24, False)
-        GPIO.output(17, False)
-        GPIO.output(12, True)
-        GPIO.output(13, True)
+        GPIO.output(LR, False)
+        GPIO.output(RR, False)
+        GPIO.output(RF, True)
+        GPIO.output(LF, True)
 
     def reverse(self):
         self.RPWM.ChangeDutyCycle(0)
         self.LPWM.ChangeDutyCycle(0)
-        GPIO.output(12, False)
-        GPIO.output(13, False)
-        GPIO.output(17, True)
-        GPIO.output(24, True)
+        GPIO.output(RF, False)
+        GPIO.output(LF, False)
+        GPIO.output(RR, True)
+        GPIO.output(LR, True)
 
     def right(self,speed):
         self.LPWM.ChangeDutyCycle(speed)
-        GPIO.output(17, False)
-        GPIO.output(12, False)
-        GPIO.output(24, False)
-        GPIO.output(13, True)
+        GPIO.output(RR, False)
+        GPIO.output(RF, False)
+        GPIO.output(LR, False)
+        GPIO.output(LF, True)
 
     def left(self,speed):
         self.RPWM.ChangeDutyCycle(speed)
-        GPIO.output(17, False)
-        GPIO.output(13, False)
-        GPIO.output(24, False)
-        GPIO.output(12, True)
+        GPIO.output(RR, False)
+        GPIO.output(LF, False)
+        GPIO.output(LR, False)
+        GPIO.output(RF, True)
 
 
     def stop(self):
         self.RPWM.ChangeDutyCycle(0)
         self.LPWM.ChangeDutyCycle(0)
-        GPIO.output(17, False)
-        GPIO.output(12, False)
-        GPIO.output(13, False)
-        GPIO.output(24, False)
+        GPIO.output(RR, False)
+        GPIO.output(RF, False)
+        GPIO.output(LF, False)
+        GPIO.output(LR, False)
+        print('Wheel Module stopped')
 
