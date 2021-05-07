@@ -167,7 +167,9 @@ def follow_face(source=0, dur=30):
                 print('Time up , Stopped')
                 break
             
-            isFaceDetected = video_shower.facePoint != FacePoint()
+            isFaceDetected = video_shower.isFaceDetected
+            if not isFaceDetected:
+                facePoint = FacePoint()
             
             movement.setFaceDetected(isFaceDetected)
             raspberry.setFaceDetected(isFaceDetected)
