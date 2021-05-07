@@ -143,6 +143,7 @@ def follow_face(source=0, dur=30):
     video_getter = VideoGet(source).start()
     frameInfo = video_getter.frameInfo
 
+    sleep(2)
     # Show processed video frame
     video_shower = VideoShow(
         video_getter.frame, video_getter.frameInfo, 'classifier/C10').start()
