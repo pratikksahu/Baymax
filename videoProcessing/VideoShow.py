@@ -38,6 +38,9 @@ class VideoShow:
             cv2.putText(self.frame ,("Safe Area Line") , (self.frameInfo.frameWidthLimitL , self.frameInfo.frameHeightLimitT - 5) , cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255) )
             cv2.rectangle(self.frame, (self.frameInfo.frameWidthLimitL, self.frameInfo.frameHeightLimitT), (self.frameInfo.frameWidthLimitR, self.frameInfo.frameHeightLimitB), (255, 0, 0), 2)
             
+            #Center point
+            cv2.circle(self.frame,(int(self.frameInfo.frameWidth/2) , int(self.frameInfo.frameHeight/2)),6,(255,0,255),cv2.FILLED)
+
             # Draw a rectangle around the faces
             for (x, y, w, h) in faces:
                 X = int(x)
@@ -57,8 +60,7 @@ class VideoShow:
                          (0, int(CY)), (0, 0, 255), 2)
                 # Y Axis
                 cv2.line(self.frame, (int(CX), int(CY)),
-                         (int(CX), 0), (0, 0, 255), 2)      
-
+                         (int(CX), 0), (0, 0, 255), 2)                                      
 
             #Reset points to 0
             if len(faces) == 0:
