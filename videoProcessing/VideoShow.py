@@ -13,7 +13,7 @@ class VideoShow:
     Class that continuously shows a frame using a dedicated thread.
     """
 
-    def __init__(self, frame=None, frameInfo=FrameInfo(), classifier=None):
+    def __init__(self, frame=None, frameInfo=FrameInfo()):
                 
         self.faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
