@@ -5,8 +5,7 @@ from dataClass.FrameInfo import FrameInfo
 from dataClass.FacePoint import FacePoint
 import cv2
 
-cascPath = "classifier/haarcascade_frontalface_default.xml"
-faceCascade = cv2.CascadeClassifier(cascPath)
+faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
 
 class VideoShow:
