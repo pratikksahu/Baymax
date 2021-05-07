@@ -1,14 +1,16 @@
 from threading import Thread
 from time import sleep
 from Controller.moduleWheel import Wheel
+from Controller.moduleCamera import Camera
 
 class Raspberry:
-    def __init__(self , moduleWheel):
+    def __init__(self , moduleWheel , moduleCamera):
         self._adjustWheel = 'NOMOV'
         self._adjustCamera = 'NOMOV'
         self._isFaceDetected = False
         self.stopped = False
-        self.moduleWheel = moduleWheel        
+        self.moduleWheel = moduleWheel      
+        self.moduleCamera = moduleCamera  
         self.delay = 0.002
 
     def start(self):
@@ -17,8 +19,7 @@ class Raspberry:
         return self
 
     def moveWheel(self):
-        while not self.stopped:
-            # sleep(self.delay)
+        while not self.stopped:            
             if self._isFaceDetected:
                 if self._adjustWheel != None:                                        
                     self.moduleWheel.move(self._adjustWheel)      
@@ -26,15 +27,12 @@ class Raspberry:
                 self.moduleWheel.move('NOMOV')
                 
     def moveCamera(self):
-        while not self.stopped:
-            # sleep(self.delay)
+        while not self.stopped:            
             if self._isFaceDetected:
                 if  self._adjustCamera != None:
-                    pass
-                    # print(self._adjustCamera)
+                    self.moduleCamera.move(self._adjustCamera)
             else:
-                pass
-                # print('NOMOV')
+                self.moduleCamera.move('NOMOV')
 
     def setWheelCamera(self , wheel , camera):
         self._adjustCamera = camera
@@ -45,5 +43,6 @@ class Raspberry:
 
     def stop(self):
         self.moduleWheel.stop()
+        self.moduleCamera.stop()
         self.stopped = True     
     

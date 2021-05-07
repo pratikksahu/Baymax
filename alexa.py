@@ -4,6 +4,7 @@ import os
 from Controller.Movement import Movement
 from Controller.Raspberry import Raspberry
 from Controller.moduleWheel import Wheel
+from Controller.moduleCamera import Camera
 import argparse
 from dataClass.FrameInfo import FrameInfo
 from dataClass.FacePoint import FacePoint
@@ -21,6 +22,7 @@ from flask import render_template
 from flask import Flask
 from flask_ask import Ask, request, session, question, statement
 import click
+
 
 
 app = Flask(__name__)
@@ -165,8 +167,9 @@ def follow_face(source=0, dur=30):
 
     # To prevent GPIO setup everytime
     moduleWheel = Wheel().start()
+    moduleCamera = Camera().start()
     # To Send moving commands to raspberry
-    raspberry = Raspberry(moduleWheel).start()
+    raspberry = Raspberry(moduleWheel,moduleCamera).start()
     try:
 
         while True:
