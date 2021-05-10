@@ -33,8 +33,8 @@ class VideoGet:
                                        self._height - self.verticalFactor*self._height),
                                    frameHeightLimitT=int(
                                        self.verticalFactor*self.stream.get(4)),
-                                       frameCX=int(self.stream.get(3)/2),
-                                       frameCY=int(self.stream.get(4)/2)
+                                       frameCX=int(self._width/2),
+                                       frameCY=int(self._height/2)
                                    )
         self.stopped = False
         self.frame = None
