@@ -8,7 +8,7 @@ VERTICALSERVO = 18
 class Camera:
     def __init__(self):
         print('Initialising Camera')
-        GPIO.setmode(GPIO.BOARD)
+        GPIO.setmode(GPIO.BCM)
         GPIO.setup(VERTICALSERVO,GPIO.OUT)
         self.VS = GPIO.PWM(VERTICALSERVO,50)
     
