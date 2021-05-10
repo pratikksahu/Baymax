@@ -17,10 +17,10 @@ class Camera:
         return self
     
     def move(self , angle):        
-        self.setAngle(5)
+        self.setAngle(angle)
     
     def setAngle(slef,angle):
-        self.VS.ChangeDutyCycle(2+(angle/18))
+        self.VS.ChangeDutyCycle(5+(angle/18))
         time.sleep(0.5)
         self.VS.ChangeDutyCycle(0)
     
