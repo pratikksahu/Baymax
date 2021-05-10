@@ -12,7 +12,7 @@ def calculateAngle(facePoint , frameInfo):
     P = srcY - destY
     B = srcX
     rad = math.atan(P/B)
-    deg = math.degrees(rad)
+    deg = round(math.degrees(rad),1)
     return deg
 
 class Movement:
