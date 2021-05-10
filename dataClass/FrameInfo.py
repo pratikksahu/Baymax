@@ -9,3 +9,5 @@ class FrameInfo:
     frameHeight:int = 480
     frameHeightLimitB:int = 450 #Limit for bottom Side
     frameHeightLimitT:int = 60 #Limit for top Side
+    frameCX:int = 320
+    frameCY:int = 240

@@ -29,10 +29,10 @@ class Raspberry:
     def moveCamera(self):
         while not self.stopped:            
             if self._isFaceDetected:
-                if  self._adjustCamera != None:
-                    self.moduleCamera.move(self._adjustCamera)
-            else:
-                self.moduleCamera.move('NOMOV')
+                self.moduleCamera.move(self._adjustCamera)
+            #     if  self._adjustCamera != None:
+            # else:
+            #     self.moduleCamera.move('NOMOV')
 
     def setWheelCamera(self , wheel , camera):
         self._adjustCamera = camera
