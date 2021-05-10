@@ -1,9 +1,19 @@
 from dataClass.FrameInfo import FrameInfo
 from dataClass.FacePoint import FacePoint
+import math
 
 
-#Used to get movements for camera and
 
+def calculateAngle(facePoint , frameInfo):
+    srcX = frameInfo.frameCX
+    srcY = frameInfo.frameCY
+    destX = facePoint.cx
+    destY = facePoint.cy
+    P = srcY - destY
+    B = srcX
+    rad = math.atan(P/B)
+    deg = math.degrees(rad)
+    return deg
 
 class Movement:
 
@@ -36,12 +46,8 @@ class Movement:
 
     def adjustCamera(self):
         if self._isFaceDetected :
-            if self.facePoint.cy < self.frameInfo.frameHeightLimitT:  # Top Screen Margin
-                return 'DOWN'
-            elif self.facePoint.cy > self.frameInfo.frameHeightLimitB:  # Bottom Screen Margin
-                return 'UP'
-            return 'NOMOV'
-        return 'NOMOV'
+            return calculateAngle(self.facePoint , self.frameInfo)
+        return 0
 
     def setFaceDetected(self , isFaceDetected = False):
         self._isFaceDetected = isFaceDetected

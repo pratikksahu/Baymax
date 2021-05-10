@@ -4,7 +4,7 @@ from threading import Thread
 class Raspberry:
     def __init__(self):
         self._adjustWheel = 'NOMOV'
-        self._adjustCamera = 'NOMOV'
+        self._adjustCamera = 0
         self.stopped = False
 
     def start(self):
@@ -15,7 +15,7 @@ class Raspberry:
             print(self._adjustWheel)
 
     def moveCamera(self):
-        if self._adjustCamera != 'NOMOV':
+        if self._adjustCamera != 0:
             print(self._adjustCamera)    
 
     def setWheelCamera(self , wheel , camera):

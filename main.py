@@ -64,7 +64,7 @@ def start(source=0):
         #Sending commands to raspberry
         raspberry.setWheelCamera(movement.adjustWheels() ,movement.adjustCamera())
         raspberry.moveCamera()
-        raspberry.moveWheel()
+        # raspberry.moveWheel()
 
 
         if video_getter.stopped or video_shower.stopped or movement.stopped:
