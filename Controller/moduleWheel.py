@@ -84,6 +84,5 @@ class Wheel:
         GPIO.output(RR, False)
         GPIO.output(RF, False)
         GPIO.output(LF, False)
-        GPIO.output(LR, False)
-        print('Wheel Module stopped')
+        GPIO.output(LR, False)        
 
