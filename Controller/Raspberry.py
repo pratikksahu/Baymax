@@ -30,8 +30,8 @@ class Raspberry:
         while not self.stopped:            
             if self._isFaceDetected:
                 self.moduleCamera.move(self._adjustCamera)
-            else:
-                self.moduleCamera.move(0)
+            # else:
+            #     self.moduleCamera.move(0)
 
     def setWheelCamera(self , wheel , camera):
         self._adjustCamera = camera
