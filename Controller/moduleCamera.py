@@ -15,8 +15,8 @@ class Camera:
         self.angle = 0
     
     def start(self):
-        Thread(name='cameraModule' , target=self.setAngle()).start()
         self.VS.start(0)
+        Thread(name='cameraModule' , target=self.setAngle()).start()
         return self
     
     def move(self , angle):
