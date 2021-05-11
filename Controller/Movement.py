@@ -12,7 +12,7 @@ def calculateAngle(facePoint , frameInfo):
     P = srcY - destY
     B = srcX
     rad = math.atan(P/B)
-    deg = math.floor(round(math.degrees(rad),1))
+    deg = round(math.degrees(rad),1)
     return deg
 
 class Movement:
@@ -33,9 +33,9 @@ class Movement:
     def adjustWheels(self):
         faceArea = self.facePoint.w*self.facePoint.h
         if self._isFaceDetected :
-            if self.facePoint.cx > self.frameInfo.frameWidthLimitR:  # Right Screen Margin
+            if self.facePoint.cx > self.frameInfo.frameCX:  # Right Screen Margin
                 return 'RIGHT'
-            elif self.facePoint.cx < self.frameInfo.frameWidthLimitL:  # Left Screen Margin
+            elif self.facePoint.cx < self.frameInfo.frameCX:  # Left Screen Margin
                 return 'LEFT'
             if faceArea < self._forwardLimit:     
                 return 'FORWARD'

@@ -10,8 +10,7 @@ class Raspberry:
         self._isFaceDetected = False
         self.stopped = False
         self.moduleWheel = moduleWheel      
-        self.moduleCamera = moduleCamera  
-        # self.moduleCamera.initThread()
+        self.moduleCamera = moduleCamera          
 
     def start(self):
         Thread(name='moveCamera' , target=self.moveCamera).start()

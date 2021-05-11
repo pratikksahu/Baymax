@@ -18,14 +18,14 @@ class Camera:
 
     def start(self):
         self.VS.start(0)
+        self.VS.changeDutyCycle(7)
+        self.VS.changeDutyCycle(0)
         Thread(name='setAngle' , target=self.setAngle).start()
-        return self    
+        return self
 
-    def initThread(self):
-        Thread(name='setAngle' , target=self.setAngle).start()
-
-    def move(self , angle):        
-        self.angle = angle
+    def move(self , angle):
+        if not angle == 0:
+            self.angle = angle
     
     def setAngle(self):
         while not self.stopped:
