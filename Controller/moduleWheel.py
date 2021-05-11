@@ -69,6 +69,7 @@ class Wheel:
         GPIO.output(RF, False)
         GPIO.output(LR, False)
         GPIO.output(LF, True)
+        sleep(0.1)
 
     def left(self,speed):
         self.RPWM.ChangeDutyCycle(speed)
@@ -76,6 +77,7 @@ class Wheel:
         GPIO.output(LF, False)
         GPIO.output(LR, False)
         GPIO.output(RF, True)
+        sleep(0.1)
 
 
     def stop(self):
