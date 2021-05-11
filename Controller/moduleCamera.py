@@ -1,9 +1,8 @@
 import RPi.GPIO as GPIO
 from time import sleep
+from threading import Thread
 
 #Servo Pin 18
-# 160 > 18
-# -160 < 18
 
 VERTICALSERVO = 18
 
@@ -14,26 +13,28 @@ class Camera:
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(VERTICALSERVO,GPIO.OUT)
         self.VS = GPIO.PWM(VERTICALSERVO,50)
-        self.oldAngle = 0
-        self.newAngle = 0
-    
+        self.angle = 0
+        self.stopped = False
+
     def start(self):
         self.VS.start(0)
-        return self
-    
-    def move(self , angle):
-        if not angle == 90:
-            self.newAngle = angle
-            if not (self.oldAngle == self.newAngle) :
-                self.setAngle(angle)
-                self.oldAngle = self.newAngle
+        Thread(name='setAngle' , target=self.setAngle).start()
+        return self    
+
+    def initThread(self):
+        Thread(name='setAngle' , target=self.setAngle).start()
+
+    def move(self , angle):        
+        self.angle = angle
     
     def setAngle(self):
-        self.VS.ChangeDutyCycle(2+(angle/18))
-        sleep(0.3)
-        self.VS.ChangeDutyCycle(0)
-        sleep(1)
+        while not self.stopped:
+            self.VS.ChangeDutyCycle(7+(self.angle/18))
+            sleep(0.1)
+            self.VS.ChangeDutyCycle(0)
+            sleep(0.1)
     
     def stop(self):
+        self.stopped = True
         self.VS.ChangeDutyCycle(0)
         print('Camera Module stopped')

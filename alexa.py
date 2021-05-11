@@ -183,6 +183,7 @@ def follow_face(source=0, dur=30):
                 video_getter.stop()
                 print('Time up , Stopped')
                 sleep(1)
+                moduleCamera.stop()
                 moduleWheel.stop()
                 break
             
@@ -214,6 +215,7 @@ def follow_face(source=0, dur=30):
         raspberry.stop()
         movement.stop()
         moduleWheel.stop()
+        moduleCamera.stop()
         video_shower.stop()
         video_getter.stop()
 

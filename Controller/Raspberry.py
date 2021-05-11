@@ -6,11 +6,12 @@ from Controller.moduleCamera import Camera
 class Raspberry:
     def __init__(self , moduleWheel , moduleCamera):
         self._adjustWheel = 'NOMOV'
-        self._adjustCamera = 'NOMOV'
+        self._adjustCamera = 0
         self._isFaceDetected = False
         self.stopped = False
         self.moduleWheel = moduleWheel      
         self.moduleCamera = moduleCamera  
+        # self.moduleCamera.initThread()
 
     def start(self):
         Thread(name='moveCamera' , target=self.moveCamera).start()
@@ -30,8 +31,6 @@ class Raspberry:
         while not self.stopped:            
             if self._isFaceDetected:
                 self.moduleCamera.move(self._adjustCamera)
-            # else:
-            #     self.moduleCamera.move(0)
 
     def setWheelCamera(self , wheel , camera):
         self._adjustCamera = camera
