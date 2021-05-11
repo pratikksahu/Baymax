@@ -33,9 +33,9 @@ class Movement:
     def adjustWheels(self):
         faceArea = self.facePoint.w*self.facePoint.h
         if self._isFaceDetected :
-            if self.facePoint.cx > self.frameInfo.frameCX:  # Right Screen Margin
+            if self.facePoint.cx > self.frameInfo.frameWidthLimitR:  # Right Screen Margin
                 return 'RIGHT'
-            elif self.facePoint.cx < self.frameInfo.frameCX:  # Left Screen Margin
+            elif self.facePoint.cx < self.frameInfo.frameWidthLimitL:  # Left Screen Margin
                 return 'LEFT'
             if faceArea < self._forwardLimit:     
                 return 'FORWARD'
