@@ -1,5 +1,5 @@
 import RPi.GPIO as GPIO
-
+from time import sleep
 #17 Right Reverse
 #18 Right Forward 12
 #23 Left Forward  13
