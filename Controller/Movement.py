@@ -46,7 +46,9 @@ class Movement:
 
     def adjustCamera(self):
         if self._isFaceDetected :
-            return calculateAngle(self.facePoint , self.frameInfo)
+            t =  calculateAngle(self.facePoint , self.frameInfo)
+            print('from calArea {}'.format(t))
+            return t
         return 0
 
     def setFaceDetected(self , isFaceDetected = False):

@@ -190,11 +190,12 @@ def follow_face(source=0, dur=30):
             isFaceDetected = video_shower.isFaceDetected
             if not isFaceDetected:
                 facePoint = FacePoint()
+            # Calculate directions only when face is in view
+            movement.setFacePoint(facePoint)
 
             movement.setFaceDetected(isFaceDetected)
             raspberry.setFaceDetected(isFaceDetected)
-            # Calculate directions only when face is in view
-            movement.setFacePoint(facePoint)
+            
             # Sending commands to raspberry
             raspberry.setWheelCamera(
                 movement.adjustWheels(), movement.adjustCamera())
