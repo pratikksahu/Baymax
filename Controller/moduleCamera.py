@@ -33,7 +33,7 @@ class Camera:
     
     def setAngle(self):                
         if not self.angle == None:
-            print('Set angle {}'.format(self.angle))
+            print('Set angle {}'.format(self.angle / 36))
             self.VS.ChangeDutyCycle(6+(self.angle/36))
             sleep(0.1)
             self.VS.ChangeDutyCycle(0)
