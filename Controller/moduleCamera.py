@@ -13,8 +13,7 @@ class Camera:
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(VERTICALSERVO,GPIO.OUT)
         self.VS = GPIO.PWM(VERTICALSERVO,50)
-        self.angle = 0
-        self.oldAngle = 0
+        self.angle = 0        
         self.stopped = False
 
     def start(self):
@@ -28,13 +27,11 @@ class Camera:
             self.angle = angle
     
     def setAngle(self):        
-        while not self.stopped:
-            if abs(abs(self.angle) - abs(self.oldAngle)) > 2:
-                self.oldAngle = abs(self.angle)
-                self.VS.ChangeDutyCycle(5+(self.angle/18))
-                sleep(0.2)
-                self.VS.ChangeDutyCycle(0)
-                sleep(0.3) 
+        while not self.stopped:                            
+            self.VS.ChangeDutyCycle(5+(self.angle/18))
+            sleep(0.2)
+            self.VS.ChangeDutyCycle(0)
+            sleep(0.3) 
     
     def stop(self):
         self.stopped = True
