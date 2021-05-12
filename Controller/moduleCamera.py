@@ -18,7 +18,8 @@ class Camera:
         self.stopped = False
 
     def start(self):
-        self.VS.start(0)                
+        self.VS.start(0)
+        self.VS.ChangeDutyCycle(5)        
         Thread(name='setAngle' , target=self.setAngle).start()
         return self
 
@@ -26,8 +27,7 @@ class Camera:
         if not angle == 0:
             self.angle = angle
     
-    def setAngle(self):
-        self.VS.ChangeDutyCycle(5)
+    def setAngle(self):        
         while not self.stopped:
             if abs(abs(self.angle) - abs(self.oldAngle)) > 2:
                 self.oldAngle = abs(self.angle)
