@@ -32,7 +32,7 @@ class Camera:
         while not self.stopped:
             if abs(abs(self.angle) - abs(self.oldAngle)) > 2:
                 self.oldAngle = abs(self.angle)
-                self.VS.ChangeDutyCycle(5+(self.angle/9))
+                self.VS.ChangeDutyCycle(5+(self.angle/18))
                 sleep(0.2)
                 self.VS.ChangeDutyCycle(0)
                 sleep(0.3) 
