@@ -14,7 +14,7 @@ class Camera:
         GPIO.setup(VERTICALSERVO,GPIO.OUT)
         self.VS = GPIO.PWM(VERTICALSERVO,50)
         self.angle = 0        
-        self.oldAngle = 1
+        self.oldAngle = 0
         self.stopped = False
 
     def start(self):
@@ -26,7 +26,7 @@ class Camera:
 
     def move(self , angle):
         if not angle == 0:
-            if not self.oldAngle == self.angle:
+            if not self.oldAngle == angle:
                 self.angle = angle
                 self.setAngle()
                 self.oldAngle = self.angle  
