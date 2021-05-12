@@ -1,6 +1,7 @@
 import RPi.GPIO as GPIO
 from time import sleep
 from threading import Thread
+import math
 
 #Servo Pin 18
 
@@ -34,7 +35,7 @@ class Camera:
     def setAngle(self):                
         if not self.angle == None:
             print('Set angle {}'.format(self.angle / 36))
-            self.VS.ChangeDutyCycle(6+(self.angle/36))
+            self.VS.ChangeDutyCycle(math.round(6+(self.angle/36) , 1))
             sleep(0.1)
             self.VS.ChangeDutyCycle(0)
             sleep(0.3)
