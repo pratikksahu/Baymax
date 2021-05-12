@@ -18,7 +18,7 @@ class Camera:
 
     def start(self):
         self.VS.start(0)
-        self.VS.ChangeDutyCycle(4)
+        self.VS.ChangeDutyCycle(6)
         sleep(0.1)
         self.VS.ChangeDutyCycle(0)        
         # Thread(name='setAngle' , target=self.setAngle).start()
@@ -31,7 +31,7 @@ class Camera:
     
     def setAngle(self):        
         while not self.stopped:                            
-            self.VS.ChangeDutyCycle(4+(self.angle/18))
+            self.VS.ChangeDutyCycle(6+(self.angle/18))
             sleep(0.2)
             self.VS.ChangeDutyCycle(0)
             sleep(0.3) 
