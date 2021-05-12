@@ -34,11 +34,11 @@ class Camera:
     
     def setAngle(self):                
         if not self.angle == None:
-            print('Set angle {}'.format(round(6+(self.angle / 50) , 1)))
-            self.VS.ChangeDutyCycle(round(6+(self.angle / 50) , 1))
-            sleep(0.1)
-            self.VS.ChangeDutyCycle(0)
-            sleep(0.3)
+            t =  math.floor(6+ (self.angle/18))       
+            print('Camera angle {}'.format(t))
+            self.VS.ChangeDutyCycle(t)
+            sleep(0.5)
+            self.VS.ChangeDutyCycle(0)                       
     
     def stop(self):
         self.stopped = True
