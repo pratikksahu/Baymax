@@ -37,8 +37,8 @@ class Camera:
             t =  round(6+ (self.angle/144) , 2)       
             print('Camera angle {} {}'.format(t , self.angle))
             self.VS.ChangeDutyCycle(t)
-            # sleep(0.2)
-            # self.VS.ChangeDutyCycle(0)                   
+            sleep(0.2)
+            self.VS.ChangeDutyCycle(0)                   
     
     def stop(self):
         self.stopped = True
