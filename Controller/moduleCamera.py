@@ -28,16 +28,15 @@ class Camera:
         if not angle == 0:
             if not self.oldAngle == angle:
                 self.angle = angle
-                self.setAngle(angle)
+                self.setAngle()
                 self.oldAngle = self.angle  
     
-    def setAngle(self,angle):        
-        while not self.stopped:
-            if not angle == None:
-                print('Set angle {}'.format(angle))
-                self.VS.ChangeDutyCycle(6+(angle/18))
-            # sleep(0.4)
-            # self.VS.ChangeDutyCycle(0)            
+    def setAngle(self):                
+        if not self.angle == None:
+            print('Set angle {}'.format(self.angle))
+            self.VS.ChangeDutyCycle(6+(self.angle/18))
+        # sleep(0.4)
+        # self.VS.ChangeDutyCycle(0)            
     
     def stop(self):
         self.stopped = True

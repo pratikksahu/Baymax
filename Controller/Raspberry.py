@@ -27,7 +27,7 @@ class Raspberry:
         #         self.moduleWheel.move('NOMOV')
                 
     def moveCamera(self):
-        while not self.stopped:            
+        while not self.stopped:
             if self._isFaceDetected:
                 if not self._adjustCamera == None:
                     self.moduleCamera.move(self._adjustCamera)
