@@ -33,8 +33,8 @@ class Camera:
     
     def setAngle(self,angle):        
         while not self.stopped:
-            print('in camera module'.format(angle))           
-            self.VS.ChangeDutyCycle(6+(angle/18))
+            if not angle == None:
+                self.VS.ChangeDutyCycle(6+(angle/18))
             # sleep(0.4)
             # self.VS.ChangeDutyCycle(0)            
     
