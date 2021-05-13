@@ -57,7 +57,7 @@ class CameraPID:
 
         # self.x=GPIO.PWM(xpin,50)
         self.y=GPIO.PWM(VERTICALSERVO,50)
-        self.currentx,self.currenty=7,4        
+        self.currentx,self.currenty=7,4    
 
     def start(self):
         # self.x.start(self.currentx)
