@@ -5,6 +5,7 @@ from Controller.Movement import Movement
 from Controller.Raspberry import Raspberry
 from Controller.moduleWheel import Wheel
 from Controller.moduleCamera import Camera
+from Controller.moduleCamera import CameraPID
 import argparse
 from dataClass.FrameInfo import FrameInfo
 from dataClass.FacePoint import FacePoint
@@ -167,7 +168,7 @@ def follow_face(source=0, dur=30):
 
     # To prevent GPIO setup everytime
     moduleWheel = Wheel().start()
-    moduleCamera = Camera().start()
+    moduleCamera = CameraPID().start()
     # To Send moving commands to raspberry
     raspberry = Raspberry(moduleWheel,moduleCamera).start()
     try:

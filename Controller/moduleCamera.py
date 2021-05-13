@@ -44,3 +44,48 @@ class Camera:
         self.stopped = True
         self.VS.ChangeDutyCycle(0)
         print('Camera Module stopped')
+
+
+
+class CameraPID:
+    def __init__(self):        
+        xpin = 20
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setwarnings(False)
+        # GPIO.setup(xpin,GPIO.OUT)
+        GPIO.setup(VERTICALSERVO,GPIO.OUT)
+
+        # self.x=GPIO.PWM(xpin,50)
+        self.y=GPIO.PWM(VERTICALSERVO,50)
+        self.currentx,self.currenty=7,4        
+
+    def start(self):
+        # self.x.start(self.currentx)
+        self.y.start(self.currenty)
+        sleep(1)
+        # self.x.ChangeDutyCycle(0)
+        self.y.ChangeDutyCycle(0)
+        return self
+
+    # def setposx(self,diffx):
+    #     self.currentx+=diffx
+    #     self.currentx=round(self.currentx,2)
+    #     if(self.currentx<15 and self.currentx>0):
+    #         self.x.ChangeDutyCycle(self.currentx)
+
+    def setposy(self,diffy):
+        self.currenty+=diffy
+        self.currenty=round(self.currenty,2)
+        if(self.currenty<15 and self.currenty>0):
+            self.y.ChangeDutyCycle(self.currenty)
+
+    # def setdcx(self,dcx):
+    #     self.x.ChangeDutyCycle(dcx)
+
+    def setdcy(self,dcy):
+        self.y.ChangeDutyCycle(dcy)
+    
+    def stop(self):
+        # self.setdcx(0)
+        self.setdcy(0)
+        print('Camera Module stopped')
