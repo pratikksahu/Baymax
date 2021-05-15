@@ -23,8 +23,8 @@ class Video:
         self.horizontalFactor = .2
 
 
-        self._width = 320
-        self._height = 240
+        self._width = 640
+        self._height = 480
         self.frameInfo = FrameInfo(frameWidth=int(self._width),
                                    frameWidthLimitR=int(
                                        self._width - self.horizontalFactor*self._width),
