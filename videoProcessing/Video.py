@@ -65,7 +65,7 @@ class Video:
 
         self.x=GPIO.PWM(PANSERVO,50)
         self.y=GPIO.PWM(TILTSERVO,50)
-        self.currentx,self.currenty=7,4
+        self.currentx,self.currenty=6,4
         self.x.start(self.currentx)
         self.y.start(self.currenty)
         sleep(1)
@@ -176,7 +176,7 @@ class Video:
                             valy=0.5*sign
                         self.currenty+=valy
                         self.currenty=round(self.currenty,2)
-                        if(self.currenty<15 and self.currenty>0):
+                        if(self.currenty<8 and self.currenty>5):
                             self.y.ChangeDutyCycle(self.currenty)  
 
                 cv2.imshow('frame',self.frame) #display image

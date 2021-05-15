@@ -9,7 +9,7 @@ class Movement:
         self.frameInfo = frameInfo
         self._isFaceDetected = False
         self.stopped = False
-        self._forwardLimit = 9000
+        self._forwardLimit = 10000
         self._backwardLimit = 20500
 
     def start(self):
