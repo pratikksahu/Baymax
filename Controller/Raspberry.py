@@ -14,14 +14,13 @@ class Raspberry:
         Thread(name='moveWheel' , target=self.moveWheel).start()
         return self
 
-    def moveWheel(self):    
-        pass    
-        # while not self.stopped:            
-        #     if self._isFaceDetected:
-        #         if self._adjustWheel != None:                                        
-        #             self.moduleWheel.move(self._adjustWheel)      
-        #     else:
-        #         self.moduleWheel.move('NOMOV')
+    def moveWheel(self):            
+        while not self.stopped:            
+            if self._isFaceDetected:
+                if self._adjustWheel != None:                                        
+                    self.moduleWheel.move(self._adjustWheel)      
+            else:
+                self.moduleWheel.move('NOMOV')
     
                 
 
