@@ -8,21 +8,26 @@ from time import sleep
 #23 Left Forward  13
 #24 Left Reverse
 
+RR = 17
+RF = 12
+LF = 13
+LR = 24
+
 print('Initializing Wheels')
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
-GPIO.setup(17,GPIO.OUT)
-GPIO.setup(12,GPIO.OUT)
-GPIO.setup(13,GPIO.OUT)
-GPIO.setup(24,GPIO.OUT)
+GPIO.setup(RR,GPIO.OUT)
+GPIO.setup(RF,GPIO.OUT)
+GPIO.setup(LF,GPIO.OUT)
+GPIO.setup(LR,GPIO.OUT)
 
-GPIO.output(17, False)
-GPIO.output(12, False)
-GPIO.output(13, False)
-GPIO.output(24, False)
+GPIO.output(RR, False)
+GPIO.output(RF, False)
+GPIO.output(LF, False)
+GPIO.output(LR, False)
 
-RPWM=GPIO.PWM(12,100)
-LPWM=GPIO.PWM(13,100)
+RPWM=GPIO.PWM(RF,100)
+LPWM=GPIO.PWM(LF,100)
 
 print('Starting PWM')
 RPWM.start(0)
@@ -34,10 +39,10 @@ def forward(speed):
     print('Moving Forward {}'.format(speed))
     RPWM.ChangeDutyCycle(speed)
     LPWM.ChangeDutyCycle(speed)
-    GPIO.output(24, False)
-    GPIO.output(17, False)
-    GPIO.output(12, True)
-    GPIO.output(13, True)
+    GPIO.output(LR, False)
+    GPIO.output(RR, False)
+    GPIO.output(RF, True)
+    GPIO.output(LF, True)
     sleep(3)
 
 def reverse():
@@ -45,30 +50,30 @@ def reverse():
     print('Moving Backward')
     RPWM.ChangeDutyCycle(0)
     LPWM.ChangeDutyCycle(0)
-    GPIO.output(12, False)
-    GPIO.output(13, False)
-    GPIO.output(17, True)
-    GPIO.output(24, True)
+    GPIO.output(RF, False)
+    GPIO.output(LF, False)
+    GPIO.output(RR, True)
+    GPIO.output(LR, True)
     sleep(3)
 
 def right(speed):
     #Right
     print('Moving Right {}'.format(speed))    
     LPWM.ChangeDutyCycle(speed)
-    GPIO.output(17, False)
-    GPIO.output(12, False)
-    GPIO.output(24, False)
-    GPIO.output(13, True)
+    GPIO.output(RR, False)
+    GPIO.output(RF, False)
+    GPIO.output(LR, False)
+    GPIO.output(LF, True)
     sleep(3)
 
 def left(speed):
     #Left
     print('Moving Left {}'.format(speed))
     RPWM.ChangeDutyCycle(speed)
-    GPIO.output(17, False)
-    GPIO.output(13, False)
-    GPIO.output(24, False)
-    GPIO.output(12, True)
+    GPIO.output(RR, False)
+    GPIO.output(LF, False)
+    GPIO.output(LR, False)
+    GPIO.output(RF, True)
     sleep(3)    
 
 def stop():
@@ -76,10 +81,10 @@ def stop():
     print('Stopped')
     RPWM.ChangeDutyCycle(0)
     LPWM.ChangeDutyCycle(0)
-    GPIO.output(17, False)
-    GPIO.output(12, False)
-    GPIO.output(13, False)
-    GPIO.output(24, False)
+    GPIO.output(RR, False)
+    GPIO.output(RF, False)
+    GPIO.output(LF, False)
+    GPIO.output(LR, False)
 
 print('Forward Speed 100')
 forward(100)
