@@ -88,6 +88,7 @@ class Video:
             for frame in self.camera.capture_continuous(self.rawCapture, format="bgr", use_video_port=True):
                 image = frame.array
                 # self.frame=cv2.flip(image,1)
+                self.frame=image
                 gray=cv2.cvtColor(self.frame,cv2.COLOR_BGR2GRAY)    
 
                 self.y.ChangeDutyCycle(0)
