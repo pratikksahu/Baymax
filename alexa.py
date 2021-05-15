@@ -139,7 +139,7 @@ def follow_face(dur=30):
     global outputFrame, camDirectionHTML, wheelDirectionHTML, facePointHTML,lockDirection
     print('Started for {} seconds'.format(dur))    
     video = None    
-    frameInfo = FrameInfo()
+    
     facePoint = FacePoint()    
     startTime = datetime.now()
     currentTime = 0
@@ -148,7 +148,7 @@ def follow_face(dur=30):
     video = Video().start()
 
     facePoint = video.facePoint
-
+    frameInfo = video.frameInfo
     # To Get moving commands
     movement = Movement(frameInfo=frameInfo).start()
 
