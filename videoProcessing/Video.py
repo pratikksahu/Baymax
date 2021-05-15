@@ -54,7 +54,7 @@ class Video:
         self.frame = None
         self.isFaceDetected = False
         self.facePoint = FacePoint()
-        self.adjustCameraY = 0
+        
 
     def start(self):
         print('Initialising PANTILT Module..')
@@ -110,12 +110,8 @@ class Video:
 
                 #Center point
                 cv2.circle(self.frame,(int(self.frameInfo.frameWidth/2) , int(self.frameInfo.frameHeight/2)),6,(255,0,255),cv2.FILLED)
-
-                c=0
+                
                 for(x,y,w,h) in faces:
-                    # c+=1
-                    # if(c>2):
-                    #     break
                     X = int(x)
                     Y = int(y)
                     W = int(w)
