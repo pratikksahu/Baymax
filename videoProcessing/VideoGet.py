@@ -38,6 +38,7 @@ class VideoGet:
                                    )
         self.stopped = False
         self.frame = None
+        
 
 
     def start(self):

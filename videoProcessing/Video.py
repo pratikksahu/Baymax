@@ -1,12 +1,12 @@
 # import the necessary packages
 from picamera.array import PiRGBArray
 from picamera import PiCamera
-import time
+from time import sleep
 import cv2
 from Controller.moduleCamera import CameraPID
 from dataClass.FrameInfo import FrameInfo
 from dataClass.FacePoint import FacePoint
-
+from threading import Thread
 
 class Video:
     def __init__(self):
@@ -36,22 +36,33 @@ class Video:
         self.face_cascade= cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
         
         #PID variables
-        self.Px,self.Ix,self.Dx=-0.5/self.frameInfo.frameCX,0,0
-        self.Py,self.Iy,self.Dy=-0.1/self.frameInfo.frameCY,0,0
+        self.Px,self.Ix,self.Dx=-1/self.frameInfo.frameCX,0,0
+        self.Py,self.Iy,self.Dy=-0.2/self.frameInfo.frameCY,0,0
         self.integral_x,self.integral_y=0,0
         self.differential_x,self.differential_y=0,0
         self.prev_x,self.prev_y=0,0
 
-        self.frame = None
         self.stopped = False
+
+        #Accessible Variables
+        self.frame = None
         self.isFaceDetected = False
+        self.facePoint = FacePoint()
+        self.adjustCameraY = 0
+
+    def start(self):
+        print('Starting camera....')
+        Thread(name='show', target=self.get).start()
+        sleep(2)
+        print('Camera Initialised successfully.')
+        return self
 
     def get(self):
         with PiCamera() as self.camera:
             self.camera.resolution = (self._width,self._height)
             self.camera.framerate = 30
-            self.rawCapture = PiRGBArray(self.camera, size=(self._width,self._height))
-            time.sleep(1)
+            self.rawCapture = PiRGBArray(self.camera, size=(self._width,self._height))            
+
             for frame in self.camera.capture_continuous(self.rawCapture, format="bgr", use_video_port=True):
                 image = frame.array
                 self.frame=cv2.flip(image,1)
@@ -85,8 +96,8 @@ class Video:
                     Y = int(y)
                     W = int(w)
                     H = int(h)
-                    CX = int((x+x+w)/2)
-                    CY = int((y+y+h)/2)
+                    CX = int(x+ (w/2))
+                    CY = int(y+ (h/2))
     
                     self.facePoint = FacePoint(X, Y, W, H, CX, CY)
                     # Show Coordinates with width and height of face detected
@@ -100,8 +111,9 @@ class Video:
                     cv2.line(self.frame, (int(CX), int(CY)),
                              (int(CX), 0), (0, 0, 255), 2)                        
                     #centre of face
-                    face_centre_x=x+w/2
-                    face_centre_y=y+h/2
+                    face_centre_x=CX
+                    face_centre_y=CY
+
                     #pixels to move 
                     error_x=self.frameInfo.frameCX-face_centre_x
                     error_y=self.frameInfo.frameCY-face_centre_y
@@ -124,24 +136,24 @@ class Video:
 
                     print('pixelerrorx=',error_x,'valx=',valx)
                     print('pixelerrory=',error_y,'valy=',valy)
+
                     if abs(error_x)<20:
                         self.CameraPID.setdcx(0)
                     else:
                         if abs(valx)>0.5:
                             sign=valx/abs(valx)
                             valx=0.5*sign
-                        self.CameraPID.setposx(valx)
+                        self.CameraPID.setposx(valx)                        
 
                     if abs(error_y)<20:
                         self.CameraPID.setdcy(0)
+                        self.adjustCameraY = 0
                     else:
                         if abs(valy)>0.5:
                             sign=valy/abs(valy)
                             valy=0.5*sign
                         self.CameraPID.setposy(valy)
-
-                    if(c==1):
-                        self.frame=cv2.rectangle(self.frame,(x,y),(x+w,y+h),(255,0,0),6)
+                        self.adjustCameraY = valy
 
                 cv2.imshow('frame',self.frame) #display image
 

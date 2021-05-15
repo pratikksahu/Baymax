@@ -4,16 +4,12 @@ import os
 from Controller.Movement import Movement
 from Controller.Raspberry import Raspberry
 from Controller.moduleWheel import Wheel
-from Controller.moduleCamera import Camera
-from Controller.moduleCamera import CameraPID
 import argparse
 from dataClass.FrameInfo import FrameInfo
 from dataClass.FacePoint import FacePoint
 import cv2
 from time import sleep
-from helper.CountsPerSec import CountsPerSec
-from videoProcessing.VideoGet import VideoGet
-from videoProcessing.VideoShow import VideoShow
+from videoProcessing.Video import Video
 from datetime import date, datetime
 import threading
 from threading import Thread
@@ -23,6 +19,7 @@ from flask import render_template
 from flask import Flask
 from flask_ask import Ask, request, session, question, statement
 import click
+import math
 
 
 
@@ -138,57 +135,44 @@ def videofeedip():
     return Response(yieldIP(), mimetype="text/event-stream")
 
 
-def follow_face(source=0, dur=30):
+def follow_face(dur=30):
     global outputFrame, camDirectionHTML, wheelDirectionHTML, facePointHTML,lockDirection
-    print('Started for {} seconds'.format(dur))
-    video_getter = None
-    video_shower = None
+    print('Started for {} seconds'.format(dur))    
+    video = None    
     frameInfo = FrameInfo()
-    facePoint = FacePoint()
-    facePointTemp = FacePoint()
+    facePoint = FacePoint()    
     startTime = datetime.now()
     currentTime = 0
-    isFaceDetected = False
-    isSaving = False
-    # Get video feed from camera or video file
-    video_getter = VideoGet().start()
-    frameInfo = video_getter.frameInfo
+    isFaceDetected = False    
 
-    # Initialize camera
-    sleep(2)
+    video = Video().start()
 
-    # Show processed video frame
-    video_shower = VideoShow(
-        video_getter.frame, video_getter.frameInfo).start()
-
-    facePoint = video_shower.facePoint
+    facePoint = video.facePoint
 
     # To Get moving commands
     movement = Movement(frameInfo=frameInfo).start()
 
     # To prevent GPIO setup everytime
     moduleWheel = Wheel().start()
-    moduleCamera = CameraPID().start()
+
     # To Send moving commands to raspberry
-    raspberry = Raspberry(moduleWheel,moduleCamera).start()
+    raspberry = Raspberry(moduleWheel).start()
     try:
 
         while True:
-            facePoint = video_shower.facePoint
+            facePoint = video.facePoint
             currentTime = (datetime.now() - startTime).seconds
-            # print((datetime.now() - startTime).microseconds / 1000)
+            
             if(currentTime % dur == 0) and (currentTime != 0):
                 raspberry.stop()
                 movement.stop()                                
-                video_shower.stop()
-                video_getter.stop()
+                video.stop()
                 print('Time up , Stopped')
-                sleep(1)
-                moduleCamera.stop()
+                sleep(1)                
                 moduleWheel.stop()
                 break
             
-            isFaceDetected = video_shower.isFaceDetected
+            isFaceDetected = video.isFaceDetected
             if not isFaceDetected:
                 facePoint = FacePoint()
             # Calculate directions only when face is in view
@@ -199,27 +183,23 @@ def follow_face(source=0, dur=30):
             
             # Sending commands to raspberry
             raspberry.setWheelCamera(
-                movement.adjustWheels(), movement.adjustCamera())
+                movement.adjustWheels())
 
             with lockDirection:
-                c = movement.adjustCamera()
+                c = video.adjustCameraY
                 w = movement.adjustWheels()
                 if c != None:
                     camDirectionHTML = c
                 if w != None:
                     wheelDirectionHTML = w
                 facePointHTML = facePoint
-
-            frame = video_getter.frame
-            video_shower.frame = frame
-            outputFrame = video_shower.frame
+            
+            outputFrame = video.frame
     except KeyboardInterrupt:
         raspberry.stop()
         movement.stop()
-        moduleWheel.stop()
-        moduleCamera.stop()
-        video_shower.stop()
-        video_getter.stop()
+        moduleWheel.stop()                
+        video.stop()
 
 
 @ask.launch
@@ -256,7 +236,7 @@ def followDurationIntent(duration, room):
         unit = 'S'    
 
     #Add +2 seconds to compensate camera initialisation time
-    Thread(target=follow_face, args=[0, dur+2]).start()
+    Thread(target=follow_face, args=[dur+2]).start()
     unit = 'Seconds'
     return question("Started following for {} {}".format(dur, unit))
 
@@ -275,7 +255,7 @@ if __name__ == '__main__':
             app_video.config['ASK_VERIFY_REQUESTS'] = False
     setIp()
     
-    Thread(target=follow_face, args=[0, 100]).start()
+    Thread(target=follow_face, args=[100]).start()
     server_flask = Thread(target=start_flask)
     video_flask = Thread(target=start_flask_video, args=(getIp(),))
 
