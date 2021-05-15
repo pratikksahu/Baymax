@@ -25,16 +25,9 @@ RPWM=GPIO.PWM(12,100)
 LPWM=GPIO.PWM(13,100)
 
 print('Starting PWM')
-RPWM.start(100)
-LPWM.start(100)
+RPWM.start(0)
+LPWM.start(0)
 sleep(2)
-
-print('Changing Duty cycle to 0')
-RPWM.ChangeDutyCycle(0)
-LPWM.ChangeDutyCycle(0)
-sleep(2)
-
-
 
 def forward(speed):
     #Forward
@@ -88,22 +81,30 @@ def stop():
     GPIO.output(13, False)
     GPIO.output(24, False)
 
+print('Forward Speed 100')
+forward(100)
+stop()
 
+print('Forward Speed 50')
+forward(50)
 stop()
-reverse()
-stop()
-forward(100)
-stop()
-forward(100)
-stop()
+
+print('Right Speed 100')
 right(100)
 stop()
+
+print('Right Speed 20')
 right(20)
 stop()
+
+print('Left Speed 100')
 left(100)
 stop()
+
+print('Left Speed 20')
 left(20)
 stop()
+
+print('Reverse Speed 100')
 reverse()
 stop()
-
