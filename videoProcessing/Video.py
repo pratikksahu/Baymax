@@ -177,16 +177,16 @@ class Video:
                         if(self.currenty<15 and self.currenty>0):
                             self.y.ChangeDutyCycle(self.currenty)  
 
-                cv2.imshow('frame',self.frame) #display image
+                # cv2.imshow('frame',self.frame) #display image
 
-                key = cv2.waitKey(1) & 0xFF
+                # key = cv2.waitKey(1) & 0xFF
                 self.rawCapture.truncate(0)
                 if self.stopped:
                     break
-                if key == ord("q"):
-                    break
+                # if key == ord("q"):
+                #     break
                 
-            cv2.destroyAllWindows()
+            # cv2.destroyAllWindows()
 
     def stop(self):
         self.stopped = True
