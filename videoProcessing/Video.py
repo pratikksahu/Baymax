@@ -20,7 +20,7 @@ class Video:
         self.verticalFactor = .2
 
         #To change horizontal margins
-        self.horizontalFactor = .2
+        self.horizontalFactor = .3
 
 
         self._width = 640
