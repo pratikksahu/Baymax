@@ -156,10 +156,7 @@ class Video:
 
 
                     valx=round(valx,2)
-                    valy=round(valy,2)
-
-                    print('pixelerrorx=',error_x,'valx=',valx)
-                    print('pixelerrory=',error_y,'valy=',valy)
+                    valy=round(valy,2)                    
 
                     # if abs(error_x)<20:
                     #     self.CameraPID.setdcx(0)
