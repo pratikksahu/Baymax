@@ -7,6 +7,12 @@ from Controller.moduleCamera import CameraPID
 from dataClass.FrameInfo import FrameInfo
 from dataClass.FacePoint import FacePoint
 from threading import Thread
+import RPi.GPIO as GPIO
+
+
+TILTSERVO = 18
+PANSERVO = 19
+
 
 class Video:
     def __init__(self):
@@ -32,7 +38,7 @@ class Video:
                                        frameCX=int(self._width/2),
                                        frameCY=int(self._height/2)
                                    )
-        self.CameraPID = CameraPID()
+        # self.CameraPID = CameraPID()
         self.face_cascade= cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
         
         #PID variables
@@ -51,6 +57,22 @@ class Video:
         self.adjustCameraY = 0
 
     def start(self):
+        print('Initialising PANTILT Module..')
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setwarnings(False)
+        GPIO.setup(PANSERVO,GPIO.OUT)
+        GPIO.setup(TILTSERVO,GPIO.OUT)
+
+        self.x=GPIO.PWM(PANSERVO,50)
+        self.y=GPIO.PWM(TILTSERVO,50)
+        self.currentx,self.currenty=7,4
+        self.x.start(self.currentx)
+        self.y.start(self.currenty)
+        sleep(1)
+        self.x.ChangeDutyCycle(0)
+        self.y.ChangeDutyCycle(0)
+        print('PANTILT Module initialised successfully')
+
         print('Starting camera....')
         Thread(name='show', target=self.get).start()
         sleep(2)
@@ -68,8 +90,9 @@ class Video:
                 self.frame=cv2.flip(image,1)
                 gray=cv2.cvtColor(self.frame,cv2.COLOR_BGR2GRAY)    
 
-                self.CameraPID.setdcx(0)
-                self.CameraPID.setdcy(0)
+                self.y.ChangeDutyCycle(0)
+                # self.CameraPID.setdcx(0)
+                # self.CameraPID.setdcy(0)
 
                 #detect face coordinates x,y,w,h
                 faces=self.face_cascade.detectMultiScale(gray,1.3,5)
@@ -137,23 +160,24 @@ class Video:
                     print('pixelerrorx=',error_x,'valx=',valx)
                     print('pixelerrory=',error_y,'valy=',valy)
 
-                    if abs(error_x)<20:
-                        self.CameraPID.setdcx(0)
-                    else:
-                        if abs(valx)>0.5:
-                            sign=valx/abs(valx)
-                            valx=0.5*sign
-                        self.CameraPID.setposx(valx)                        
+                    # if abs(error_x)<20:
+                    #     self.CameraPID.setdcx(0)
+                    # else:
+                    #     if abs(valx)>0.5:
+                    #         sign=valx/abs(valx)
+                    #         valx=0.5*sign
+                    #     self.CameraPID.setposx(valx)                        
 
                     if abs(error_y)<20:
-                        self.CameraPID.setdcy(0)
-                        self.adjustCameraY = 0
+                        self.y.ChangeDutyCycle(0)
                     else:
                         if abs(valy)>0.5:
                             sign=valy/abs(valy)
                             valy=0.5*sign
-                        self.CameraPID.setposy(valy)
-                        self.adjustCameraY = valy
+                        self.currenty+=valy
+                        self.currenty=round(self.currenty,2)
+                        if(self.currenty<15 and self.currenty>0):
+                            self.y.ChangeDutyCycle(self.currenty)  
 
                 cv2.imshow('frame',self.frame) #display image
 
