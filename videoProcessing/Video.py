@@ -65,7 +65,7 @@ class Video:
 
         self.x=GPIO.PWM(PANSERVO,50)
         self.y=GPIO.PWM(TILTSERVO,50)
-        self.currentx,self.currenty=8,4
+        self.currentx,self.currenty=5,4
         self.x.start(self.currentx)
         self.y.start(self.currenty)
         sleep(1)
