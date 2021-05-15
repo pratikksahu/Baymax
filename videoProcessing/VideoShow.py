@@ -20,7 +20,7 @@ class VideoShow:
         self.facePoint = FacePoint()
         self.frameInfo = frameInfo
         self.frame = frame
-        self.stopped = False        
+        self.stopped = False
         self.isFaceDetected = False
 
     def start(self):
