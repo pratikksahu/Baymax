@@ -112,9 +112,9 @@ class Video:
 
                 c=0
                 for(x,y,w,h) in faces:
-                    c+=1
-                    if(c>1):
-                        break
+                    # c+=1
+                    # if(c>1):
+                    #     break
                     X = int(x)
                     Y = int(y)
                     W = int(w)
