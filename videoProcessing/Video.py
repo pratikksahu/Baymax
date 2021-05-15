@@ -17,8 +17,8 @@ class Video:
         self.horizontalFactor = .2
 
 
-        self._width = 640
-        self._height = 480
+        self._width = 320
+        self._height = 240
         self.frameInfo = FrameInfo(frameWidth=int(self._width),
                                    frameWidthLimitR=int(
                                        self._width - self.horizontalFactor*self._width),
@@ -36,8 +36,8 @@ class Video:
         self.face_cascade= cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
         
         #PID variables
-        self.Px,self.Ix,self.Dx=-1/self.frameInfo.frameCX,0,0
-        self.Py,self.Iy,self.Dy=-0.2/self.frameInfo.frameCY,0,0
+        self.Px,self.Ix,self.Dx= -1/self.frameInfo.frameCX,0,0
+        self.Py,self.Iy,self.Dy= -0.2/self.frameInfo.frameCY,0,0
         self.integral_x,self.integral_y=0,0
         self.differential_x,self.differential_y=0,0
         self.prev_x,self.prev_y=0,0
