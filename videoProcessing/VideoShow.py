@@ -48,9 +48,9 @@ class VideoShow:
                 Y = int(y)
                 W = int(w)
                 H = int(h)
-                CX = int((x+x+w)/2)
-                CY = int((y+y+h)/2)
-
+                CX = int(x+ (w/2))
+                CY = int(y+ (h/2))
+                
                 self.facePoint = FacePoint(X, Y, W, H, CX, CY)
                 # Show Coordinates with width and height of face detected
                 cv2.putText(self.frame, ("X:{} Y:{} W:{} H:{}".format(

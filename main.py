@@ -63,7 +63,7 @@ def start(source=0):
 
         #Sending commands to raspberry
         raspberry.setWheelCamera(movement.adjustWheels() ,movement.adjustCamera())
-        raspberry.moveCamera()
+        # raspberry.moveCamera()
         # raspberry.moveWheel()
 
 
