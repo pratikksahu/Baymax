@@ -10,7 +10,7 @@
     (function worker() {
       $.get("/information", function (data) {
         $("#info").html(data); // update page with new data
-        setTimeout(worker, 1); // run `worker()` again after 1000ms (1s)
+        // setTimeout(worker, 1); // run `worker()` again after 1000ms (1s)
       });
     })();
   </script>

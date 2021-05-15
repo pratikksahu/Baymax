@@ -9,8 +9,7 @@
   <script type="text/javascript">
     (function worker() {
       $.get("/videofeedip", function (data) {
-        $("#info").html(data); // update page with new data
-        // setTimeout(worker, 1); // run `worker()` again after 1000ms (1s)
+        $("#info").html(data); // update page with new data        
       });
     })();
   </script>
