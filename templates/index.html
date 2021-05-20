@@ -18,6 +18,7 @@
 
     var counter;
     function start(url_direction) {
+      clearInterval(counter);
       var xhttp = new XMLHttpRequest();
       xhttp.open("POST", url_direction, true);
       counter = setInterval(function () {
