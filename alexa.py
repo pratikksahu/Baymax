@@ -14,6 +14,7 @@ from datetime import date, datetime
 import threading
 from threading import Thread
 import re
+from Controller.moduleWheel import Wheel
 from flask import Response
 from flask import render_template
 from flask import Flask , make_response , redirect , request , url_for
@@ -102,8 +103,11 @@ def image_information():
 
     return Response(yieldInformation(), mimetype="text/event-stream")
 
+wheel = Wheel().start()
 @app_video.route('/<direction>', methods=['POST'])
 def move_robot(direction):
+    if direction == "/1":   
+        wheel.move('FORWARD')
     print(direction)
     response = make_response(redirect(url_for('index')))
     return(response)
