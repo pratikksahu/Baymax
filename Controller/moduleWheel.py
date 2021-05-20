@@ -35,6 +35,7 @@ class Wheel:
         return self
         
     def move(self , direction):
+        print(direction)
         if direction == 'FORWARD':
             self.forward(100)
         elif direction == 'RIGHT':
