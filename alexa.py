@@ -106,6 +106,7 @@ def image_information():
 wheel = Wheel().start()
 @app_video.route('/<direction>', methods=['POST'])
 def move_robot(direction):
+    global wheel
     if direction == "/1":   
         wheel.move('FORWARD')
     print(direction)
