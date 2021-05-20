@@ -109,7 +109,8 @@ def move_robot(direction):
     global wheel
     if direction == "1":   
         wheel.move('FORWARD')
-    print(direction)
+    if direction == "5":   
+        wheel.move('NOMOV')    
     response = make_response(redirect(url_for('index')))
     return(response)
 
