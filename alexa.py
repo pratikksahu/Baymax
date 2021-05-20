@@ -107,7 +107,7 @@ wheel = Wheel().start()
 @app_video.route('/<direction>', methods=['POST'])
 def move_robot(direction):
     global wheel
-    if direction == "/1":   
+    if direction == "1":   
         wheel.move('FORWARD')
     print(direction)
     response = make_response(redirect(url_for('index')))
