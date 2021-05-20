@@ -3,7 +3,6 @@ from picamera.array import PiRGBArray
 from picamera import PiCamera
 from time import sleep
 import cv2
-from Controller.moduleCamera import CameraPID
 from dataClass.FrameInfo import FrameInfo
 from dataClass.FacePoint import FacePoint
 from threading import Thread
