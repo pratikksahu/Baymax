@@ -1,6 +1,9 @@
 import logging
 import socket
 import os
+
+from flask.helpers import flash, url_for
+from werkzeug.utils import redirect
 from Controller.Movement import Movement
 from Controller.Raspberry import Raspberry
 import argparse
@@ -17,13 +20,16 @@ from threading import Thread
 import re
 from flask import Response
 from flask import render_template
-from flask import Flask
-from flask_ask import Ask, request, session, question, statement
+from flask import Flask , request , make_response , redirect , url_for
+from flask_ask import Ask, question, statement
 import click
 
 
+IMAGES_FOLDER = os.path.join('templates','image_assets')
+
 app = Flask(__name__)
-app_video = Flask("video_feed_display")
+app_video = Flask("video_feed_display" , static_url_path='/static')
+# app_video.config['UPLOAD_FOLDER'] = IMAGES_FOLDER
 ask = Ask(app, "/")
 
 log = logging.getLogger('werkzeug')
@@ -56,6 +62,8 @@ def index():
 
 @app.route("/")
 def indexURL():
+    alt_image = os.path.join(app.config['UPLOAD_FOLDER'], 'alt.jpg')
+    img_stop = os.path.join(app.config['UPLOAD_FOLDER'], '5.png')
     return render_template("videofeedip.html")
 
 
@@ -86,6 +94,13 @@ def video_feed():
                     mimetype="multipart/x-mixed-replace; boundary=frame")
 
 
+@app_video.route('/<direction>', methods=['POST'])
+def move_robot(direction):
+    print(direction)
+    response = make_response(redirect(url_for('index')))
+    return(response)
+
+
 @app_video.route("/information")
 def image_information():
 
@@ -105,6 +120,7 @@ def start_flask():
 
 
 def start_flask_video(ipa):
+
     app_video.run(host=ipa, port=8000, debug=True,
                   threaded=True, use_reloader=False)
 
@@ -246,7 +262,7 @@ if __name__ == '__main__':
         if verify == 'false':
             app.config['ASK_VERIFY_REQUESTS'] = False
             app_video.config['ASK_VERIFY_REQUESTS'] = False
-    Thread(target=follow_face, args=[0, 120]).start()
+    Thread(target=follow_face, args=[0, 12000]).start()
     server_flask = Thread(target=start_flask)
     video_flask = Thread(target=start_flask_video, args=(getIp(),))
 

@@ -1,23 +1,181 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <title>Baymax</title>
+    <title>Walle</title>
   </head>
   <script
     type="text/javascript"
     src="http://code.jquery.com/jquery-1.8.0.min.js"
   ></script>
   <script type="text/javascript">
+
     (function worker() {
-      $.get("/information", function (data) {
+      $.get("/information" , function (data) {
         $("#info").html(data); // update page with new data
         setTimeout(worker, 1); // run `worker()` again after 1000ms (1s)
       });
     })();
+
+    var counter;
+    function start(url_direction) {
+      var xhttp = new XMLHttpRequest();
+      xhttp.open("POST", url_direction, true);
+      counter = setInterval(function () {
+        console.log(url_direction);
+        xhttp.send(url_direction);
+        xhttp.open("POST", url_direction, true);
+      }, 1);
+    }
+    function end() {
+      clearInterval(counter);
+    }
+    var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    var desktopStyle_div = {
+      position: "relative",
+      "text-align": "center",
+      top: "200px",
+    };
+    var mobileStyle_div = {
+      position: "relative",
+      "text-align": "center",
+      clear: "both",
+    };
+    var mobileStyle_button={
+      width: "150px",
+      height: "150px",
+    }
+    window.onload = function () {
+      var div = document.getElementById("rightdiv");      
+      if (isMobile) {
+        Object.assign(div.style, mobileStyle_div);        
+      } else {
+        Object.assign(div.style, desktopStyle_div);        
+      }
+    };
   </script>
+  <style type="text/css">
+    #imgboxdiv {
+      width: 100%;
+      min-width: 320px;
+      position: relative;
+    }
+    #topDiv {
+      position: relative;
+      text-align: center;
+    }
+    #rightdiv {
+      position: relative;
+      text-align: center;
+    }
+    #leftdiv {
+      position: relative;
+      float: left;
+    }
+
+    #buttonTop {
+      margin-top: 10px;
+      top: 0;      
+    }
+
+    img {
+      width: 100%;
+      border-radius: 10px;
+    }
+    #stop-button {
+      width: 50px;
+      height: 60px;            
+      margin: 10px;      
+    }
+    .button{
+      width: 90px;
+      height: 90px;            
+    }
+    #arrow-forward{      
+      transform: rotate(-90deg);
+    }
+    #arrow-left{
+      transform: rotate(180deg);
+    }
+    #arrow-right{
+      transform: rotate(0deg);
+    }
+    #arrow-backward{
+      transform: rotate(90deg);
+    }
+  </style>
   <meta charset="utf-8" />
   <body>
-    <h1>Baymax</h1>
-    <img src="{{ url_for('video_feed') }}" />
-    <div id = "info"></div>
+    <div id="topDiv">
+      <div id="leftdiv">
+        <h1>Walle</h1>
+        <div id="imgboxdiv">
+          <img
+            src="{{ url_for('video_feed') }}"
+            alt="Not Found"
+            onerror="this.src"
+            ="{{alt_image}}"
+          />
+        </div>
+      </div>
+      <div id="rightdiv">
+        <div id="buttonTop">
+          <img
+            class="button"
+            id="arrow-forward"
+            src="/static/arrow.png"
+            name="forward"
+            value="FORWARD"
+            onmousedown="start('/1')"
+            onmouseup="end()"
+          />
+        </div>
+        <div id="buttonMid">
+          <img
+            class="button"
+            id="arrow-left"
+            src="/static/arrow.png"
+            name="left"
+            value="LEFT"
+            onmousedown="start('/3')"
+            onmouseup="end()"
+          />
+          <img            
+            id="stop-button"
+            src="/static/5.png"
+            name="stop"
+            value="STOP"
+            onmousedown="start('/5')"
+            onmouseup="end()"
+          />
+          <img
+            class="button"
+            id="arrow-right"
+            src="/static/arrow.png"
+            name="right"
+            value="RIGHT"
+            onmousedown="start('/4')"
+            onmouseup="end()"
+          />
+        </div>
+        <div id="buttonBottom">
+          <img
+            class="button"
+            id="arrow-backward"  
+            src="/static/arrow.png"
+            name="backward"
+            value="BACKWARD"
+            onmousedown="start('/2')"
+            onmouseup="end()"
+          />          
+        </div>
+        <div id="info">
+          <b
+            >FacePoint: Facepoint<br />
+            Camera: Camera <br />
+            Wheel: Wheel</b
+          >
+        </div>
+      </div>
+    </div>
   </body>
 </html>
