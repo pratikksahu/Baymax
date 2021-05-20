@@ -16,7 +16,7 @@ from threading import Thread
 import re
 from flask import Response
 from flask import render_template
-from flask import Flask
+from flask import Flask , make_response , redirect , request , url_for
 from flask_ask import Ask, request, session, question, statement
 import click
 import math
@@ -102,6 +102,11 @@ def image_information():
 
     return Response(yieldInformation(), mimetype="text/event-stream")
 
+@app_video.route('/<direction>', methods=['POST'])
+def move_robot(direction):
+    print(direction)
+    response = make_response(redirect(url_for('index')))
+    return(response)
 
 def start_flask():
     app.run(debug=True,
