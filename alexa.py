@@ -168,8 +168,7 @@ def manual_mode():
         currentTime = (datetime.now() - startTime).seconds
         if (currentTime % dur == 0) and (currentTime != 0):
             break
-        outputFrame = video_getter.frame
-    Thread(target=follow_face, args=[0, 30]).start()
+        outputFrame = video_getter.frame    
 
 
 def follow_face(source=0, dur=30):
