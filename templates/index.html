@@ -1,34 +1,50 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="utf-8" />
     <title>Walle</title>
   </head>
   <script
     type="text/javascript"
     src="http://code.jquery.com/jquery-1.8.0.min.js"
   ></script>
-  <script type="text/javascript">
-
-    (function worker() {
-      $.get("/information" , function (data) {
-        $("#info").html(data); // update page with new data
-        setTimeout(worker, 1); // run `worker()` again after 1000ms (1s)
-      });
+  <script type="text/javascript"> 
+    (function worker() {              
+      console.log("{{video_flag}}");
+      if("{{video_flag}}" == "2")
+        $.ajax({
+          url: "/information",
+          type: "GET",
+          beforeSend: function (xhr) {
+            xhr.setRequestHeader("Cache-Control", "no-cache");
+          },
+          success: function (data) {
+            $("#info").html(data);
+          },
+          timeout: 100,
+        });      
+      setTimeout(worker, 3);
     })();
 
     var counter;
+    var flag = true;
     function start(url_direction) {
-      var xhttp = new XMLHttpRequest();
-      xhttp.open("POST", url_direction, true);
-      counter = setInterval(function () {
-        console.log(url_direction);
-        xhttp.send(url_direction);
-        xhttp.open("POST", url_direction, true);
-      }, 1);
+      $.ajax({
+        url: url_direction,
+        type: "POST",
+        beforeSend: function (xhr) {
+          xhr.setRequestHeader("Cache-Control", "public");
+        },
+        success: function () {
+          console.log(url_direction);
+        },
+        timeout: 10,
+      });
     }
     function end() {
       clearInterval(counter);
     }
+
     var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     var desktopStyle_div = {
       position: "relative",
@@ -40,16 +56,16 @@
       "text-align": "center",
       clear: "both",
     };
-    var mobileStyle_button={
+    var mobileStyle_button = {
       width: "150px",
       height: "150px",
-    }
+    };
     window.onload = function () {
-      var div = document.getElementById("rightdiv");      
+      var div = document.getElementById("rightdiv");
       if (isMobile) {
-        Object.assign(div.style, mobileStyle_div);        
+        Object.assign(div.style, mobileStyle_div);
       } else {
-        Object.assign(div.style, desktopStyle_div);        
+        Object.assign(div.style, desktopStyle_div);
       }
     };
   </script>
@@ -65,16 +81,28 @@
     }
     #rightdiv {
       position: relative;
-      text-align: center;
     }
     #leftdiv {
+      width: 100%;
+      height: 100%;
+      max-height: 480px;
+      min-height: 384px;
+      max-width: 640px;
+      min-width: 512px;
       position: relative;
       float: left;
     }
 
     #buttonTop {
       margin-top: 10px;
-      top: 0;      
+      top: 0;
+    }
+    #buttonMid {
+      position: relative;
+      top: 0;
+    }
+    #buttonBottom {
+      position: relative;
     }
 
     img {
@@ -83,27 +111,26 @@
     }
     #stop-button {
       width: 50px;
-      height: 60px;            
-      margin: 10px;      
+      height: 60px;
+      margin: 10px;
     }
-    .button{
+    .button {
       width: 90px;
-      height: 90px;            
+      height: 90px;
     }
-    #arrow-forward{      
+    #arrow-forward {
       transform: rotate(-90deg);
     }
-    #arrow-left{
+    #arrow-left {
       transform: rotate(180deg);
     }
-    #arrow-right{
+    #arrow-right {
       transform: rotate(0deg);
     }
-    #arrow-backward{
+    #arrow-backward {
       transform: rotate(90deg);
     }
   </style>
-  <meta charset="utf-8" />
   <body>
     <div id="topDiv">
       <div id="leftdiv">
@@ -113,7 +140,7 @@
             src="{{ url_for('video_feed') }}"
             alt="Not Found"
             onerror="this.src"
-            ="{{alt_image}}"
+            ="/static/alt.jpg"
           />
         </div>
       </div>
@@ -139,7 +166,7 @@
             onmousedown="start('/3')"
             onmouseup="end()"
           />
-          <img            
+          <img
             id="stop-button"
             src="/static/5.png"
             name="stop"
@@ -160,13 +187,13 @@
         <div id="buttonBottom">
           <img
             class="button"
-            id="arrow-backward"  
+            id="arrow-backward"
             src="/static/arrow.png"
             name="backward"
             value="BACKWARD"
             onmousedown="start('/2')"
             onmouseup="end()"
-          />          
+          />
         </div>
         <div id="info">
           <b
@@ -174,6 +201,7 @@
             Camera: Camera <br />
             Wheel: Wheel</b
           >
+          <div id="video_flag" style="display: none;">"{{video_flag}}"</div>
         </div>
       </div>
     </div>
