@@ -37,7 +37,7 @@ class Video:
                                        frameCX=int(self._width/2),
                                        frameCY=int(self._height/2)
                                    )
-        # self.CameraPID = CameraPID()
+        
         self.face_cascade= cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
         
         #PID variables

@@ -1,6 +1,7 @@
 import logging
 import socket
 import os
+from walle.videoProcessing.Video_manual import VideoManual
 from Controller.Movement import Movement
 from Controller.Raspberry import Raspberry
 from Controller.moduleWheel import Wheel
@@ -49,14 +50,15 @@ outputFrame = None
 camDirectionHTML = "Waiting for face"
 wheelDirectionHTML = "Waiting for face"
 facePointHTML = FacePoint()
-
+video_flag = 1 # 1 for just video , 2 for video with face detection
 VIDEO_FEED_IP = ""
 
 
 @app_video.route("/")
 def index():
+    global video_flag
     # return the rendered template
-    return render_template("index.html")
+    return render_template("index.html" , video_flag=video_flag)
 
 
 @app.route("/")
@@ -106,7 +108,7 @@ def image_information():
 wheel = Wheel().start()
 @app_video.route('/<direction>', methods=['POST'])
 def move_robot(direction):
-    global wheel
+    global wheel , video_flag
     if direction == "1":   
         wheel.move('FORWARD')
     if direction == "4":   
@@ -117,8 +119,9 @@ def move_robot(direction):
         wheel.move('BACKWARD')
     if direction == "5":   
         wheel.move('NOMOV')    
-    response = make_response(redirect(url_for('index')))
-    return(response)
+    return render_template("index.html" , video_flag=video_flag)
+    # response = make_response(redirect(url_for('index')))
+    # return(response)
 
 def start_flask():
     app.run(debug=True,
@@ -151,10 +154,26 @@ def videofeedip():
 
     return Response(yieldIP(), mimetype="text/event-stream")
 
+def manual_mode(dur=30):
+    global video_flag,outputFrame
+    video_manual = None
+    video_manual = VideoManual().start()
+    video_flag = 1
+    startTime = datetime.now()
+    currentTime = 0
+
+    while True:
+        currentTime = (datetime.now() - startTime).seconds            
+        if(currentTime % dur == 0) and (currentTime != 0):
+            video_manual.stop()
+            sleep(1)                
+            break
+        outputFrame = video_manual.frame
 
 def follow_face(dur=30):
-    global outputFrame, camDirectionHTML, wheelDirectionHTML, facePointHTML,lockDirection
+    global outputFrame, camDirectionHTML, wheelDirectionHTML, facePointHTML,lockDirection,video_flag
     print('Started for {} seconds'.format(dur))    
+    video_flag = 2
     video = None    
     
     facePoint = FacePoint()    
@@ -273,6 +292,7 @@ if __name__ == '__main__':
     setIp()
     
     # Thread(target=follow_face, args=[100]).start()
+    # Thread(target=manual_mode, args=[100]).start()
     server_flask = Thread(target=start_flask)
     video_flask = Thread(target=start_flask_video, args=(getIp(),))
 
