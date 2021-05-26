@@ -1,7 +1,7 @@
 import logging
 import socket
 import os
-from walle.videoProcessing.Video_manual import VideoManual
+from videoProcessing.Video_manual import VideoManual
 from Controller.Movement import Movement
 from Controller.Raspberry import Raspberry
 from Controller.moduleWheel import Wheel
