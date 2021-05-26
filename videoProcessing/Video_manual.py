@@ -10,6 +10,9 @@ class VideoManual:
     def __init__(self) -> None:
         self.frame = None
         self.stopped = False
+        self._width = 640
+        self._height = 480
+        
     def start(self):
         Thread(name='manual_mode', target=self.get).start()
         return self    
