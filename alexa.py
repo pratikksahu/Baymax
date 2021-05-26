@@ -168,11 +168,11 @@ def manual_mode(dur=30):
 
     while True:
         currentTime = (datetime.now() - startTime).seconds            
-        if(currentTime % dur == 0) and (currentTime != 0):
+        if((currentTime % dur == 0) and (currentTime != 0)) or manual_mode == 0:
             video_manual.stop()
             manual_mode = 0
             sleep(1)                
-            break
+            break                    
         outputFrame = video_manual.frame
 
 
@@ -181,7 +181,7 @@ def Gpio_Intent(status, room):
     global manual_mode
     if status in STATUSON:
         manual_mode = 1
-        # Thread(target=manual_mode, args=[30]).start()
+        Thread(target=manual_mode, args=[30]).start()
         return statement('Manual Mode turned {} for 30 seconds'.format(status))
     if status in STATUSOFF:
         manual_mode = 0
