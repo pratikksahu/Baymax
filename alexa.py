@@ -160,6 +160,7 @@ def videofeedip():
 
 def manualmode(dur=30):
     global video_flag,outputFrame,manual_mode
+    print('Manual Mode Started')   
     video_manual = None
     video_manual = VideoManual().start()
     video_flag = 1
@@ -171,7 +172,8 @@ def manualmode(dur=30):
         if((currentTime % dur == 0) and (currentTime != 0)) or manual_mode == 0:
             video_manual.stop()
             manual_mode = 0
-            sleep(1)                
+            sleep(1)          
+            print('Manual Mode Stopped')      
             break                    
         outputFrame = video_manual.frame
 
@@ -221,7 +223,7 @@ def follow_face(dur=30):
                 raspberry.stop()
                 movement.stop()                                
                 video.stop()
-                print('Time up , Stopped')
+                print('Stopped following')
                 sleep(1)                
                 moduleWheel.stop()
                 break
