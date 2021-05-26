@@ -52,6 +52,9 @@ wheelDirectionHTML = "Waiting for face"
 facePointHTML = FacePoint()
 video_flag = 1 # 1 for just video , 2 for video with face detection
 VIDEO_FEED_IP = ""
+manual_mode = 0
+STATUSON = ['on','high']
+STATUSOFF = ['off','low']
 
 
 @app_video.route("/")
@@ -108,17 +111,18 @@ def image_information():
 wheel = Wheel().start()
 @app_video.route('/<direction>', methods=['POST'])
 def move_robot(direction):
-    global wheel , video_flag
-    if direction == "1":   
-        wheel.move('FORWARD')
-    if direction == "4":   
-        wheel.move('RIGHT')
-    if direction == "3":   
-        wheel.move('LEFT')
-    if direction == "2":   
-        wheel.move('BACKWARD')
-    if direction == "5":   
-        wheel.move('NOMOV')    
+    global wheel , video_flag , manual_mode
+    if manual_mode == 1:
+        if direction == "1":   
+            wheel.move('FORWARD')
+        if direction == "4":   
+            wheel.move('RIGHT')
+        if direction == "3":   
+            wheel.move('LEFT')
+        if direction == "2":   
+            wheel.move('BACKWARD')
+        if direction == "5":   
+            wheel.move('NOMOV')    
     return render_template("index.html" , video_flag=video_flag)
     # response = make_response(redirect(url_for('index')))
     # return(response)
@@ -155,7 +159,7 @@ def videofeedip():
     return Response(yieldIP(), mimetype="text/event-stream")
 
 def manual_mode(dur=30):
-    global video_flag,outputFrame
+    global video_flag,outputFrame,manual_mode
     video_manual = None
     video_manual = VideoManual().start()
     video_flag = 1
@@ -166,9 +170,23 @@ def manual_mode(dur=30):
         currentTime = (datetime.now() - startTime).seconds            
         if(currentTime % dur == 0) and (currentTime != 0):
             video_manual.stop()
+            manual_mode = 0
             sleep(1)                
             break
         outputFrame = video_manual.frame
+
+
+@ask.intent('manualmode', mapping={'status': 'status'})
+def Gpio_Intent(status, room):
+    global manual_mode
+    if status in STATUSON:
+        manual_mode = 1
+        # Thread(target=manual_mode, args=[30]).start()
+        return statement('Manual Mode turned {} for 30 seconds'.format(status))
+    if status in STATUSOFF:
+        manual_mode = 0
+        return statement('Manual Mode turned {}'.format(status))
+
 
 def follow_face(dur=30):
     global outputFrame, camDirectionHTML, wheelDirectionHTML, facePointHTML,lockDirection,video_flag
@@ -244,7 +262,7 @@ def launch():
     return question(speech_text).reprompt(speech_text).simple_card(speech_text)
 
 
-@ask.intent('GpioIntent', mapping={'status': 'status'})
+@ask.intent('lights', mapping={'status': 'status'})
 def Gpio_Intent(status, room):
     return question('Lights turned {}'.format(status))
 
@@ -253,9 +271,9 @@ def Gpio_Intent(status, room):
 def Gpio_Intent(time, room):
     return question('Alarm set for {}'.format(time))
 
-
 @ask.intent('followDuration', mapping={'duration': 'duration'})
 def followDurationIntent(duration, room):
+    global manual_mode
     regex = re.compile('[0-9]{1,}[HSM]{1}')
     res = re.search(regex, str(duration))
     dur = 0
@@ -270,11 +288,13 @@ def followDurationIntent(duration, room):
         if(unit == 'M' or unit == 'H'):
             dur = dur*60
         unit = 'S'    
-
-    #Add +2 seconds to compensate camera initialisation time
-    Thread(target=follow_face, args=[dur+2]).start()
-    unit = 'Seconds'
-    return question("Started following for {} {}".format(dur, unit))
+    if manual_mode == 0:
+        #Add +2 seconds to compensate camera initialisation time
+        Thread(target=follow_face, args=[dur+2]).start()
+        unit = 'Seconds'
+        return statement("Started following for {} {}".format(dur, unit))
+    else:
+        return statement("Please disable manual mode first")    
 
 
 @ask.intent('AMAZON.FallbackIntent')
@@ -289,10 +309,7 @@ if __name__ == '__main__':
         if verify == 'false':
             app.config['ASK_VERIFY_REQUESTS'] = False
             app_video.config['ASK_VERIFY_REQUESTS'] = False
-    setIp()
-    
-    # Thread(target=follow_face, args=[100]).start()
-    # Thread(target=manual_mode, args=[100]).start()
+    setIp()        
     server_flask = Thread(target=start_flask)
     video_flask = Thread(target=start_flask_video, args=(getIp(),))
 
