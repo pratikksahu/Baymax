@@ -158,7 +158,7 @@ def videofeedip():
 
     return Response(yieldIP(), mimetype="text/event-stream")
 
-def manual_mode(dur=30):
+def manualmode(dur=30):
     global video_flag,outputFrame,manual_mode
     video_manual = None
     video_manual = VideoManual().start()
@@ -181,7 +181,7 @@ def Gpio_Intent(status, room):
     global manual_mode
     if status in STATUSON:
         manual_mode = 1
-        Thread(target=manual_mode, args=[30]).start()
+        Thread(target=manualmode, args=[30]).start()
         return statement('Manual Mode turned {} for 30 seconds'.format(status))
     if status in STATUSOFF:
         manual_mode = 0
