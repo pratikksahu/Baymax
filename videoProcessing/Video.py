@@ -62,13 +62,13 @@ class Video:
         GPIO.setup(PANSERVO,GPIO.OUT)
         GPIO.setup(TILTSERVO,GPIO.OUT)
 
-        self.x=GPIO.PWM(PANSERVO,50)
+        # self.x=GPIO.PWM(PANSERVO,50)
         self.y=GPIO.PWM(TILTSERVO,50)
         self.currentx,self.currenty=7,5
-        self.x.start(self.currentx)
+        # self.x.start(self.currentx)
         self.y.start(self.currenty)
         sleep(1)
-        self.x.ChangeDutyCycle(0)
+        # self.x.ChangeDutyCycle(0)
         self.y.ChangeDutyCycle(0)
         print('PANTILT Module initialised successfully')
 
