@@ -176,7 +176,7 @@ class Video:
                         self.currenty=round(self.currenty,2)
                         if(self.currenty<15 and self.currenty>0):
                             self.y.ChangeDutyCycle(self.currenty)  
-
+                    print(self.currenty)
                 # cv2.imshow('frame',self.frame) #display image
 
                 # key = cv2.waitKey(1) & 0xFF
