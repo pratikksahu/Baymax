@@ -41,8 +41,8 @@ class Video:
         self.face_cascade= cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
         
         #PID variables
-        self.Px,self.Ix,self.Dx= -1/self.frameInfo.frameCX,0,0
-        self.Py,self.Iy,self.Dy= -0.2/self.frameInfo.frameCY,0,0
+        self.Px,self.Ix,self.Dx= -2.5/self.frameInfo.frameCX,0,0
+        self.Py,self.Iy,self.Dy= -0.6/self.frameInfo.frameCY,0,0
         self.integral_x,self.integral_y=0,0
         self.differential_x,self.differential_y=0,0
         self.prev_x,self.prev_y=0,0
