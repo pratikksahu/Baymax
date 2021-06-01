@@ -152,16 +152,16 @@ class Video:
                     valx=round(valx,2)
                     valy=round(valy,2)                    
 
-                    if abs(error_x)<20:
-                        self.CameraPID.setdcx(0)
-                    else:
-                        if abs(valx)>0.5:
-                            sign=valx/abs(valx)
-                            valx=0.5*sign
-                        self.currentx+=valx
-                        self.currentx=round(self.currentx,2)
-                        if(self.currentx<15 and self.currentx>0):
-                            self.x.ChangeDutyCycle(self.currentx)              
+                    # if abs(error_x)<20:
+                    #     self.CameraPID.setdcx(0)
+                    # else:
+                    #     if abs(valx)>0.5:
+                    #         sign=valx/abs(valx)
+                    #         valx=0.5*sign
+                    #     self.currentx+=valx
+                    #     self.currentx=round(self.currentx,2)
+                    #     if(self.currentx<15 and self.currentx>0):
+                    #         self.x.ChangeDutyCycle(self.currentx)              
 
                     if abs(error_y)<20:
                         self.y.ChangeDutyCycle(0)
