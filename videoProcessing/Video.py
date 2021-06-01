@@ -9,7 +9,7 @@ from threading import Thread
 import RPi.GPIO as GPIO
 
 
-TILTSERVO = 23
+TILTSERVO = 18
 PANSERVO = 19
 
 
