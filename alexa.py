@@ -243,7 +243,7 @@ def follow_face(dur=30):
                 movement.adjustWheels())
 
             with lockDirection:
-                c = video.adjustCameraY
+                c = video.currenty
                 w = movement.adjustWheels()
                 if c != None:
                     camDirectionHTML = c
