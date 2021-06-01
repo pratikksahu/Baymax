@@ -161,7 +161,7 @@ class Video:
                         self.currentx+=valx
                         self.currentx=round(self.currentx,2)
                         if(self.currentx<15 and self.currentx>0):
-                            x.ChangeDutyCycle(self.currentx)              
+                            self.x.ChangeDutyCycle(self.currentx)              
 
                     if abs(error_y)<20:
                         self.y.ChangeDutyCycle(0)

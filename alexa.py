@@ -108,10 +108,11 @@ def image_information():
 
     return Response(yieldInformation(), mimetype="text/event-stream")
 
-wheel = Wheel().start()
+
 @app_video.route('/<direction>', methods=['POST'])
 def move_robot(direction):
-    global wheel , video_flag , manual_mode
+    global  video_flag , manual_mode
+    wheel = Wheel().start()
     if manual_mode == 1:
         if direction == "1":   
             wheel.move('FORWARD')
