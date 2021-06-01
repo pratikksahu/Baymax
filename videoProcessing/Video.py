@@ -110,10 +110,9 @@ class Video:
                 cv2.circle(self.frame,(int(self.frameInfo.frameWidth/2) , int(self.frameInfo.frameHeight/2)),6,(255,0,255),cv2.FILLED)
                 c = 0
                 for(x,y,w,h) in faces:
-
+                    c= c + 1
                     if c >1:
-                        break
-                    c = c + 1
+                        break                    
                     X = int(x)
                     Y = int(y)
                     W = int(w)
