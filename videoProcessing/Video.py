@@ -175,8 +175,8 @@ class Video:
                         self.currenty+=valy
                         self.currenty=round(self.currenty,2)
                         if(self.currenty<15 and self.currenty>0):
-                            self.y.ChangeDutyCycle(self.currenty)  
-                            self.y.ChangeDutyCycle(0)
+                            self.y.ChangeDutyCycle(self.currenty)
+                            sleep(0.001)                            
                     print(self.currenty)
                 # cv2.imshow('frame',self.frame) #display image
 
