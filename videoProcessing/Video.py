@@ -64,7 +64,7 @@ class Video:
 
         self.x=GPIO.PWM(PANSERVO,50)
         self.y=GPIO.PWM(TILTSERVO,50)
-        self.currentx,self.currenty=7,6
+        self.currentx,self.currenty=7,5
         self.x.start(self.currentx)
         self.y.start(self.currenty)
         sleep(1)
@@ -91,7 +91,7 @@ class Video:
                 gray=cv2.cvtColor(self.frame,cv2.COLOR_BGR2GRAY)    
 
                 self.y.ChangeDutyCycle(0)
-                self.x.ChangeDutyCycle(0)
+                # self.x.ChangeDutyCycle(0)
 
                 #detect face coordinates x,y,w,h
                 faces=self.face_cascade.detectMultiScale(gray,1.3,5)
@@ -108,8 +108,12 @@ class Video:
 
                 #Center point
                 cv2.circle(self.frame,(int(self.frameInfo.frameWidth/2) , int(self.frameInfo.frameHeight/2)),6,(255,0,255),cv2.FILLED)
-                
+                c = 0
                 for(x,y,w,h) in faces:
+
+                    if c >1:
+                        break
+                    c = c + 1
                     X = int(x)
                     Y = int(y)
                     W = int(w)
