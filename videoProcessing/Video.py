@@ -108,11 +108,8 @@ class Video:
 
                 #Center point
                 cv2.circle(self.frame,(int(self.frameInfo.frameWidth/2) , int(self.frameInfo.frameHeight/2)),6,(255,0,255),cv2.FILLED)
-                c = 0
-                for(x,y,w,h) in faces:
-                    c= c + 1
-                    if c >1:
-                        break                    
+                
+                for(x,y,w,h) in faces:                 
                     X = int(x)
                     Y = int(y)
                     W = int(w)
@@ -175,9 +172,9 @@ class Video:
                         self.currenty+=valy
                         self.currenty=round(self.currenty,2)
                         if(self.currenty<15 and self.currenty>0):
-                            self.y.ChangeDutyCycle(self.currenty)
-                            sleep(0.001)                            
-                    print(self.currenty)
+                            self.y.ChangeDutyCycle(self.currenty)                                   
+                    
+                print(self.currenty)    
                 # cv2.imshow('frame',self.frame) #display image
 
                 # key = cv2.waitKey(1) & 0xFF
