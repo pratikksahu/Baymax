@@ -239,8 +239,8 @@ def follow_face(dur=30):
             raspberry.setFaceDetected(isFaceDetected)
             
             # Sending commands to raspberry
-            # raspberry.setWheelCamera(
-            #     movement.adjustWheels())
+            raspberry.setWheelCamera(
+                movement.adjustWheels())
 
             with lockDirection:
                 c = video.currenty
