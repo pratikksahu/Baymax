@@ -55,7 +55,7 @@ VIDEO_FEED_IP = ""
 manual_mode = 0
 STATUSON = ['on','high']
 STATUSOFF = ['off','low']
-
+wheel = None
 
 @app_video.route("/")
 def index():
@@ -111,8 +111,7 @@ def image_information():
 
 @app_video.route('/<direction>', methods=['POST'])
 def move_robot(direction):
-    global  video_flag , manual_mode
-    wheel = Wheel().start()
+    global  video_flag , manual_mode , wheel    
     if manual_mode == 1:
         if direction == "1":   
             wheel.move('FORWARD')
@@ -160,7 +159,8 @@ def videofeedip():
     return Response(yieldIP(), mimetype="text/event-stream")
 
 def manualmode(dur=30):
-    global video_flag,outputFrame,manual_mode
+    global video_flag,outputFrame,manual_mode , wheel
+    wheel = Wheel().start()
     print('Manual Mode Started')   
     video_manual = None
     video_manual = VideoManual().start()
