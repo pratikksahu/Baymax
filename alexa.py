@@ -184,7 +184,7 @@ def Gpio_Intent(status, room):
     global manual_mode
     if status in STATUSON:
         manual_mode = 1
-        Thread(target=manualmode, args=[30]).start()
+        Thread(target=manualmode, args=[100]).start()
         return statement('Manual Mode turned {} for 30 seconds'.format(status))
     if status in STATUSOFF:
         manual_mode = 0
