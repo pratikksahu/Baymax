@@ -55,7 +55,7 @@ VIDEO_FEED_IP = ""
 manual_mode = 0
 STATUSON = ['on','high']
 STATUSOFF = ['off','low']
-wheel = None
+wheel = Wheel().start()
 
 @app_video.route("/")
 def index():
@@ -160,7 +160,7 @@ def videofeedip():
 
 def manualmode(dur=30):
     global video_flag,outputFrame,manual_mode , wheel
-    wheel = Wheel().start()
+    
     print('Manual Mode Started')   
     video_manual = None
     video_manual = VideoManual().start()
