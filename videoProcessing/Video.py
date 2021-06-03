@@ -62,13 +62,13 @@ class Video:
         GPIO.setup(PANSERVO,GPIO.OUT)
         GPIO.setup(TILTSERVO,GPIO.OUT)
 
-        # self.x=GPIO.PWM(PANSERVO,50)
+        self.x=GPIO.PWM(PANSERVO,50)
         self.y=GPIO.PWM(TILTSERVO,50)
         self.currentx,self.currenty=7,5
-        # self.x.start(self.currentx)
+        self.x.start(self.currentx)
         self.y.start(self.currenty)
         sleep(1)
-        # self.x.ChangeDutyCycle(0)
+        self.x.ChangeDutyCycle(0)
         self.y.ChangeDutyCycle(0)
         print('PANTILT Module initialised successfully')
 
@@ -91,7 +91,7 @@ class Video:
                 gray=cv2.cvtColor(self.frame,cv2.COLOR_BGR2GRAY)    
 
                 self.y.ChangeDutyCycle(0)
-                # self.x.ChangeDutyCycle(0)
+                self.x.ChangeDutyCycle(0)
 
                 #detect face coordinates x,y,w,h
                 faces=self.face_cascade.detectMultiScale(gray,1.3,5)
@@ -152,16 +152,16 @@ class Video:
                     valx=round(valx,2)
                     valy=round(valy,2)                    
 
-                    # if abs(error_x)<20:
-                    #     self.CameraPID.setdcx(0)
-                    # else:
-                    #     if abs(valx)>0.5:
-                    #         sign=valx/abs(valx)
-                    #         valx=0.5*sign
-                    #     self.currentx+=valx
-                    #     self.currentx=round(self.currentx,2)
-                    #     if(self.currentx<15 and self.currentx>0):
-                    #         self.x.ChangeDutyCycle(self.currentx)              
+                    if abs(error_x)<20:
+                        self.CameraPID.setdcx(0)
+                    else:
+                        if abs(valx)>0.5:
+                            sign=valx/abs(valx)
+                            valx=0.5*sign
+                        self.currentx+=valx
+                        self.currentx=round(self.currentx,2)
+                        if(self.currentx<15 and self.currentx>0):
+                            self.x.ChangeDutyCycle(self.currentx)              
 
                     if abs(error_y)<20:
                         self.y.ChangeDutyCycle(0)

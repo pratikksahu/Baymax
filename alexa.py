@@ -300,10 +300,12 @@ def followDurationIntent(duration, room):
         return statement("Please disable manual mode first")    
 
 
+
 @ask.intent('AMAZON.FallbackIntent')
 def fallback():
     speech_text = 'You can say hello to me!'
     return question(speech_text).reprompt(speech_text).simple_card('HelloWorld', speech_text)
+
 
 
 if __name__ == '__main__':
