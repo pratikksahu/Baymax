@@ -149,7 +149,7 @@ class Video:
                     valy=self.Py*error_y +self.Dy*self.differential_y + self.Iy*self.integral_y
 
 
-                    valx=round(valx,2)
+                    valx=round(valx,2) * -1
                     valy=round(valy,2)                    
                     print(error_x,valx)
                     if abs(error_x)<20:
