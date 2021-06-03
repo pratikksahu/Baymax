@@ -192,7 +192,7 @@ def Gpio_Intent(status, room):
 
 
 def follow_face(dur=30):
-    global outputFrame, camDirectionHTML, wheelDirectionHTML, facePointHTML,lockDirection,video_flag
+    global outputFrame, camDirectionHTML, wheelDirectionHTML, facePointHTML,lockDirection,video_flag,wheel
     print('Started for {} seconds'.format(dur))    
     video_flag = 2
     video = None    
@@ -209,11 +209,9 @@ def follow_face(dur=30):
     # To Get moving commands
     movement = Movement(frameInfo=frameInfo).start()
 
-    # To prevent GPIO setup everytime
-    moduleWheel = Wheel().start()
 
     # To Send moving commands to raspberry
-    raspberry = Raspberry(moduleWheel).start()
+    raspberry = Raspberry(wheel).start()
     try:
 
         while True:
