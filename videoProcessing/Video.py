@@ -160,7 +160,7 @@ class Video:
                             valx=0.5*sign
                         self.currentx+=valx
                         self.currentx=round(self.currentx,2)
-                        if(self.currentx<15 and self.currentx>0):
+                        if(self.currentx<7.5 and self.currentx>6.5):
                             self.x.ChangeDutyCycle(self.currentx)              
 
                     if abs(error_y)<20:
