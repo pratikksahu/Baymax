@@ -108,7 +108,7 @@ class Video:
 
                 #Center point
                 cv2.circle(self.frame,(int(self.frameInfo.frameWidth/2) , int(self.frameInfo.frameHeight/2)),6,(255,0,255),cv2.FILLED)
-                
+                c = 0
                 for(x,y,w,h) in faces:                 
                     X = int(x)
                     Y = int(y)
@@ -116,7 +116,9 @@ class Video:
                     H = int(h)
                     CX = int(x+ (w/2))
                     CY = int(y+ (h/2))
-    
+                    c = c + 1
+                    if c > 2:
+                        break
                     self.facePoint = FacePoint(X, Y, W, H, CX, CY)
                     # Show Coordinates with width and height of face detected
                     cv2.putText(self.frame, ("X:{} Y:{} W:{} H:{}".format(
