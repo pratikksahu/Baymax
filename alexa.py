@@ -224,7 +224,7 @@ def follow_face(dur=30):
                 video.stop()
                 print('Stopped following')
                 sleep(1)                
-                moduleWheel.stop()
+                wheel.stop()
                 break
             
             isFaceDetected = video.isFaceDetected
@@ -253,7 +253,7 @@ def follow_face(dur=30):
     except KeyboardInterrupt:
         raspberry.stop()
         movement.stop()
-        moduleWheel.stop()                
+        wheel.stop()                
         video.stop()
 
 
