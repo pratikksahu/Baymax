@@ -153,7 +153,7 @@ class Video:
                     valy=round(valy,2)                    
 
                     if abs(error_x)<20:
-                        self.CameraPID.setdcx(0)
+                        self.x.ChangeDutyCycle(0)
                     else:
                         if abs(valx)>0.5:
                             sign=valx/abs(valx)
