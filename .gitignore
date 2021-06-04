@@ -9,3 +9,4 @@ input
 testData
 *.mp4
 .vscode
+.DS_Store
