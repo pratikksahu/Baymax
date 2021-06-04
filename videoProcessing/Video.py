@@ -39,7 +39,12 @@ class Video:
                                    )
         
         self.face_cascade= cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-        
+        self.recognizer = cv2.face.LBPHFaceRecognizer_create()
+        self.recognizer.read('trainer.yml')
+
+        self.names = ['None', 'Samiksha', 'Pratik']
+
+
         #PID variables
         self.Px,self.Ix,self.Dx= -1.5/self.frameInfo.frameCX,0,0
         self.Py,self.Iy,self.Dy= -0.4/self.frameInfo.frameCY,0,0
@@ -116,13 +121,22 @@ class Video:
                     H = int(h)
                     CX = int(x+ (w/2))
                     CY = int(y+ (h/2))
-                    c = c + 1
-                    if c > 2:
-                        break
-                    self.facePoint = FacePoint(X, Y, W, H, CX, CY)
+                    
+                    id, confidence = self.recognizer.predict(gray[y:y+h,x:x+w])
+
+                    # Check if confidence is less them 100 ==> "0" is perfect match 
+                    if (confidence < 100):
+                        id = self.names[id]
+                        confidence = "  {}-{}%".format(id,round(100 - confidence))
+                        self.facePoint = FacePoint(X, Y, W, H, CX, CY)
+                    else:
+                        id = "unknown"
+                        confidence = "  {}-{}%".format(id,round(100 - confidence))
+
+                    # self.facePoint = FacePoint(X, Y, W, H, CX, CY)
+
                     # Show Coordinates with width and height of face detected
-                    cv2.putText(self.frame, ("X:{} Y:{} W:{} H:{}".format(
-                        x, y, w, h)), (x, y-5), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255))
+                    cv2.putText(self.frame, confidence, (x, y-5), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255))
                     cv2.rectangle(self.frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
                     # X Axis
                     cv2.line(self.frame, (int(CX), int(CY)),
