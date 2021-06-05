@@ -40,7 +40,7 @@ class Video:
         
         self.face_cascade= cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
         self.recognizer = cv2.face.LBPHFaceRecognizer_create()
-        self.recognizer.read('trainer.yml')
+        self.recognizer.read('videoProcessing/trainer.yml')
 
         self.names = ['None', 'Samiksha', 'Pratik']
 
