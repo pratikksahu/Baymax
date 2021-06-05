@@ -178,17 +178,17 @@ class Video:
                     #     self.currentx=round(self.currentx,2)
                     #     if(self.currentx<9 and self.currentx>5):
                     #         self.x.ChangeDutyCycle(self.currentx)              
-
-                    if abs(error_y)<20:
-                        self.y.ChangeDutyCycle(0)
-                    else:
-                        if abs(valy)>0.5:
-                            sign=valy/abs(valy)
-                            valy=0.5*sign
-                        self.currenty+=valy
-                        self.currenty=round(self.currenty,2)
-                        if(self.currenty<15 and self.currenty>0):
-                            self.y.ChangeDutyCycle(self.currenty)                                   
+                    if (confidence < 100):
+                        if abs(error_y)<20:
+                            self.y.ChangeDutyCycle(0)
+                        else:
+                            if abs(valy)>0.5:
+                                sign=valy/abs(valy)
+                                valy=0.5*sign
+                            self.currenty+=valy
+                            self.currenty=round(self.currenty,2)
+                            if(self.currenty<15 and self.currenty>0):
+                                self.y.ChangeDutyCycle(self.currenty)                                   
                                     
                 # cv2.imshow('frame',self.frame) #display image
 
