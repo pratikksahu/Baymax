@@ -127,16 +127,16 @@ class Video:
                     # Check if confidence is less them 100 ==> "0" is perfect match 
                     if (confidence < 100):
                         id = self.names[id]
-                        confidence = "  {}-{}%".format(id,round(100 - confidence))
+                        confidence_str = "  {}-{}%".format(id,round(100 - confidence))
                         self.facePoint = FacePoint(X, Y, W, H, CX, CY)
                     else:
                         id = "unknown"
-                        confidence = "  {}-{}%".format(id,round(100 - confidence))
+                        confidence_str = "  {}-{}%".format(id,round(100 - confidence))
 
                     # self.facePoint = FacePoint(X, Y, W, H, CX, CY)
 
                     # Show Coordinates with width and height of face detected
-                    cv2.putText(self.frame, confidence, (x, y-5), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255))
+                    cv2.putText(self.frame, confidence_str, (x, y-5), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255))
                     cv2.rectangle(self.frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
                     # X Axis
                     cv2.line(self.frame, (int(CX), int(CY)),
