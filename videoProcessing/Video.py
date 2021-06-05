@@ -132,7 +132,7 @@ class Video:
                     else:
                         id = "unknown"
                         confidence_str = "  {}-{}%".format(id,round(100 - confidence))
-                    print(id)
+                    print(id , confidence)
                     # self.facePoint = FacePoint(X, Y, W, H, CX, CY)
 
                     # Show Coordinates with width and height of face detected
