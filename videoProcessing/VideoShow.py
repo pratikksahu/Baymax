@@ -19,6 +19,10 @@ class VideoShow:
         self.stopped = False
         self.isFaceDetected = False
 
+        self.recognizer = cv2.face.LBPHFaceRecognizer_create()
+        self.recognizer.read('trainer.yml')
+        self.names = ['None', 'Samiksha', 'Pratik']
+
     def start(self):
         threading.Thread(name='show',target=self.show).start()
         return self
@@ -54,7 +58,15 @@ class VideoShow:
                 CX = int((x+x+w)/2)
                 CY = int((y+y+h)/2)
 
-                self.facePoint = FacePoint(X, Y, W, H, CX, CY)
+                id, confidence = self.recognizer.predict(gray[y:y+h,x:x+w])
+                if (confidence < 100):
+                        id = self.names[id]
+                        confidence = "  {}-{}%".format(id,round(100 - confidence))
+                        self.facePoint = FacePoint(X, Y, W, H, CX, CY)
+                else:
+                    id = "unknown"
+                    confidence = "  {}-{}%".format(id,round(100 - confidence))
+                # self.facePoint = FacePoint(X, Y, W, H, CX, CY)
                 # Show Coordinates with width and height of face detected
                 cv2.putText(self.frame, ("X:{} Y:{} W:{} H:{}".format(
                     x, y, w, h)), (x, y-5), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255))
