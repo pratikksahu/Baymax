@@ -6,6 +6,7 @@ from threading import Thread
 import numpy as np
 import cv2
 import RPi.GPIO as GPIO
+from Controller.moduleWheel import Wheel
 
 TILTSERVO = 18
 PANSERVO = 19
@@ -17,6 +18,7 @@ class VideoLine:
         self.stopped = False
         self._width = 640
         self._height = 480
+        self._wheel = Wheel().start()
         
         
     def start(self):
@@ -81,14 +83,18 @@ class VideoLine:
 
                     if cx >= self._height:
                         print('right')
+                        self._wheel.move('RIGHT')
 
                     if cx < self._height and cx > 150:
-                        print("stop")
+                        print("FORWARD")
+                        self._wheel.move('FORWARD')
                     if cx <= 50:
                         print("left")
+                        self._wheel.move('LEFT')
 
                 else:
-                        print("forward")
+                        print("stop")
+                        self._wheel.move('NOMOV')
 
 
                 self.rawCapture.truncate(0)
@@ -102,5 +108,3 @@ class VideoLine:
     
     def stop(self):
         self.stopped = True
-
-t = VideoLine().start()
