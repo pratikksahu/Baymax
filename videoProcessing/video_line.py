@@ -82,7 +82,7 @@ class VideoLine:
                     if cx >= self._height:
                         print('right')
 
-                    if cx < self._height and cx > 50:
+                    if cx < self._height and cx > 150:
                         print("stop")
                     if cx <= 50:
                         print("left")
