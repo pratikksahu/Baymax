@@ -38,9 +38,9 @@ class Wheel:
         if direction == 'FORWARD':
             self.forward(100)
         elif direction == 'RIGHT':
-            self.right(20)
+            self.right(100)
         elif direction == 'LEFT':
-            self.left(20)
+            self.left(100)
         elif direction == 'BACKWARD':
             self.reverse()
         elif direction == 'NOMOV':

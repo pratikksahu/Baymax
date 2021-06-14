@@ -30,7 +30,7 @@ class VideoLine:
 
         self.x=GPIO.PWM(PANSERVO,50)
         self.y=GPIO.PWM(TILTSERVO,50)
-        self.currentx,self.currenty=7,12
+        self.currentx,self.currenty=7,10
         self.x.start(self.currentx)
         self.y.start(self.currenty)
         sleep(1)
@@ -81,14 +81,14 @@ class VideoLine:
 
                     cv2.drawContours(crop_img, contours, -1, (0,255,0), 1)
 
-                    if cx >= self._height - 30:
+                    if cx >= self._height :
                         print("right")
                         self._wheel.move('LEFT')
 
-                    if cx < self._height - 30 and cx > 80:
+                    if cx < self._height and cx > 50:
                         print("FORWARD")
                         self._wheel.move('FORWARD')
-                    if cx <= 80:
+                    if cx <= 50:
                     
                         print('left')
                         self._wheel.move('RIGHT')
