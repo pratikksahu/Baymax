@@ -1,4 +1,5 @@
 # import the necessary packages
+from videoProcessing.Video import Video
 from picamera.array import PiRGBArray
 from picamera import PiCamera
 from time import sleep
@@ -104,3 +105,5 @@ class VideoLine:
     
     def stop(self):
         self.stopped = True
+
+t = VideoLine().start()
