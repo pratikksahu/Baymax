@@ -16,8 +16,8 @@ class VideoLine:
     def __init__(self) -> None:
         self.frame = None
         self.stopped = False
-        self._width = 640
-        self._height = 480
+        self._width = 160
+        self._height = 120
         self._wheel = Wheel().start()
         
         
@@ -85,10 +85,10 @@ class VideoLine:
                         print('right')
                         self._wheel.move('RIGHT')
 
-                    if cx < self._height and cx > 150:
+                    if cx < self._height and cx > 50:
                         print("FORWARD")
                         self._wheel.move('FORWARD')
-                    if cx <= 150:
+                    if cx <= 50:
                         print("left")
                         self._wheel.move('LEFT')
 
