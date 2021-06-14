@@ -2,8 +2,6 @@
 from picamera.array import PiRGBArray
 from picamera import PiCamera
 from time import sleep
-from FrameInfo import FrameInfo
-from FacePoint import FacePoint
 from threading import Thread
 import numpy as np
 import cv2
