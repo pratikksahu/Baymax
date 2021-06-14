@@ -88,7 +88,7 @@ class VideoLine:
                     if cx < self._height and cx > 150:
                         print("FORWARD")
                         self._wheel.move('FORWARD')
-                    if cx <= 50:
+                    if cx <= 150:
                         print("left")
                         self._wheel.move('LEFT')
 
