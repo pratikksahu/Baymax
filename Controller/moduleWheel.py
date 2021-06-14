@@ -36,11 +36,11 @@ class Wheel:
         
     def move(self , direction):        
         if direction == 'FORWARD':
-            self.forward(100)
+            self.forward(50)
         elif direction == 'RIGHT':
-            self.right(100)
+            self.right(50)
         elif direction == 'LEFT':
-            self.left(100)
+            self.left(50)
         elif direction == 'BACKWARD':
             self.reverse()
         elif direction == 'NOMOV':
