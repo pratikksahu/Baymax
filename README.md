@@ -2,8 +2,14 @@
 Personal Assistant on Wheels
 
 
-
+##WEB UI
 https://user-images.githubusercontent.com/58379829/130020254-9703ce2b-c5f4-40ac-a48f-77a857207900.mp4
+
+##Model
+
+
+https://user-images.githubusercontent.com/58379829/130029498-d17a01a2-f075-48ac-87f7-6d071d18d407.mp4
+
 
 
 
