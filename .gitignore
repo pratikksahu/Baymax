@@ -9,3 +9,5 @@ input
 testData
 *.mp4
 
+credentials.json
+token.json
