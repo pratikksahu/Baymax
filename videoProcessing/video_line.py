@@ -94,7 +94,7 @@ class VideoLine:
                         self.adjustWheels(self,self.move)
 
                 else:
-                        self.move = "NOMOV"      
+                        self.move = "NOMOV"
                         self.adjustWheels(self,self.move)                                          
 
 
@@ -102,7 +102,6 @@ class VideoLine:
                 if self.stopped:
                     break
 
-                            #Display the resulting frame
                 self.frame = crop_img
     def adjustWheels(self,movement):
         self._wheel.move(movement)
