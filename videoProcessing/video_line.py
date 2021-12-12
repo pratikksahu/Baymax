@@ -48,10 +48,9 @@ class VideoLine:
 
             for frame in self.camera.capture_continuous(self.rawCapture, format="bgr", use_video_port=True):
                 image = frame.array
-            
 
                   # Crop the image
-                crop_img = self.frame[60:self._height, 0:self._width]
+                crop_img = image[60:self._height, 0:self._width]
 
      # Convert to grayscale
                 gray = cv2.cvtColor(crop_img, cv2.COLOR_BGR2GRAY)
