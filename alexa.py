@@ -200,7 +200,6 @@ def Gpio_Intent(status, room):
 def follow_line():
     global outputFrame
     videoline = VideoLine(wheel).start()
-    sleep(2)
     outputFrame = videoline.frame
 
 def follow_face(dur=30):

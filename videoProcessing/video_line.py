@@ -37,7 +37,8 @@ class VideoLine:
         self.x.ChangeDutyCycle(0)
         self.y.ChangeDutyCycle(0)
         print('PANTILT Module initialised successfully') 
-        Thread(name='manual_mode', target=self.get).start()  
+        Thread(name='video_line', target=self.get).start()  
+        return self
     
     def get(self):
         with PiCamera() as self.camera:
@@ -46,7 +47,8 @@ class VideoLine:
             self.rawCapture = PiRGBArray(self.camera, size=(self._width,self._height))            
 
             for frame in self.camera.capture_continuous(self.rawCapture, format="bgr", use_video_port=True):
-                image = frame.array            
+                image = frame.array
+            
 
                   # Crop the image
                 crop_img = self.frame[60:self._height, 0:self._width]
