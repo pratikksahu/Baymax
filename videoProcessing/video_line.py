@@ -17,7 +17,7 @@ class VideoLine:
         self.frame = None
         self.stopped = False
         self._width = 160
-        self._height = 120
+        self._height = 128
         self._wheel = moduleWheel
         self.move = ""
         
@@ -83,19 +83,19 @@ class VideoLine:
                     cv2.drawContours(crop_img, contours, -1, (0,255,0), 1)
 
                     if cx >= self._height :
-                        self.move = "Right"                        
-                        self._wheel.move('RIGHT')
+                        self.move = "RIGHT"                        
+                        self.adjustWheels(self.move)
 
                     if cx < self._height and cx > 50:                    
                         self.move = "FORWARD"
-                        self._wheel.move('FORWARD')
+                        self.adjustWheels(self.move)
                     if cx <= 50:
-                        self.move = "Left"                        
-                        self._wheel.move('LEFT')
+                        self.move = "LEFT"                        
+                        self.adjustWheels(self.move)
 
                 else:
-                        self.move = "Stop"                        
-                        self._wheel.move('NOMOV')
+                        self.move = "NOMOV"      
+                        self.adjustWheels(self.move)                                          
 
 
                 self.rawCapture.truncate(0)
@@ -104,9 +104,8 @@ class VideoLine:
 
                             #Display the resulting frame
                 self.frame = crop_img
-                # cv2.imshow('frame',crop_img)
-                # if cv2.waitKey(1) & 0xFF == ord('q'):
-                #     break
-    
+    def adjustWheels(self,movement):
+        self._wheel.move(movement)
+
     def stop(self):
         self.stopped = True
