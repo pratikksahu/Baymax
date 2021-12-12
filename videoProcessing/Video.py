@@ -173,7 +173,7 @@ class Video:
                             valy=0.5*sign
                         self.currenty+=valy
                         self.currenty=round(self.currenty,2)
-                        if(self.currenty<15 and self.currenty>0):
+                        if(self.currenty<15 and self.currenty>4):
                             self.y.ChangeDutyCycle(self.currenty)                                   
                                     
                 # cv2.imshow('frame',self.frame) #display image
