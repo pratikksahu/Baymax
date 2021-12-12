@@ -11,6 +11,7 @@ from dataClass.FacePoint import FacePoint
 import cv2
 from time import sleep
 from videoProcessing.Video import Video
+from videoProcessing.video_line import VideoLine
 from datetime import date, datetime
 import threading
 from threading import Thread
@@ -362,7 +363,10 @@ def fallback():
     speech_text = 'You can say hello to me!'
     return question(speech_text).reprompt(speech_text).simple_card('HelloWorld', speech_text)
 
-
+def follow_line():
+    global outputFrame
+    videoline = VideoLine().start()
+    outputFrame = videoline.frame
 
 if __name__ == '__main__':
     if 'ASK_VERIFY_REQUESTS' in os.environ:
@@ -371,7 +375,8 @@ if __name__ == '__main__':
             app.config['ASK_VERIFY_REQUESTS'] = False
             app_video.config['ASK_VERIFY_REQUESTS'] = False
     setIp()
-    Thread(target=follow_face, args=[1000]).start()
+    Thread(target=follow_line).start()
+    # Thread(target=follow_face, args=[1000]).start()
     # Thread(target=fetch_event).start()
     server_flask = Thread(target=start_flask)
     video_flask = Thread(target=start_flask_video, args=(getIp(),))

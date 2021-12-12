@@ -47,7 +47,7 @@ class VideoLine:
 
             for frame in self.camera.capture_continuous(self.rawCapture, format="bgr", use_video_port=True):
                 image = frame.array
-                self.frame=image
+                # self.frame=image
 
                   # Crop the image
                 crop_img = self.frame[60:self._height, 0:self._width]
@@ -103,6 +103,7 @@ class VideoLine:
                     break
 
                             #Display the resulting frame
+                self.frame = crop_img
                 cv2.imshow('frame',crop_img)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
