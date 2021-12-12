@@ -84,18 +84,18 @@ class VideoLine:
 
                     if cx >= self._height :
                         self.move = "RIGHT"                        
-                        self.adjustWheels(self.move)
+                        self.adjustWheels(self,self.move)
 
                     if cx < self._height and cx > 50:                    
                         self.move = "FORWARD"
-                        self.adjustWheels(self.move)
+                        self.adjustWheels(self,self.move)
                     if cx <= 50:
                         self.move = "LEFT"                        
-                        self.adjustWheels(self.move)
+                        self.adjustWheels(self,self.move)
 
                 else:
                         self.move = "NOMOV"      
-                        self.adjustWheels(self.move)                                          
+                        self.adjustWheels(self,self.move)                                          
 
 
                 self.rawCapture.truncate(0)
