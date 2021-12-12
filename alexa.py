@@ -211,7 +211,7 @@ def follow_line(dur):
             print('Path follow Stopped')      
             break 
         with lockDirection:                
-                w = videoline.adjustWheels()
+                w = videoline.move
                 if w != None:
                     wheelDirectionHTML = w
         outputFrame = videoline.frame
