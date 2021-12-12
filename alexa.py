@@ -206,7 +206,7 @@ def follow_line(dur):
     while True:
         currentTime = (datetime.now() - startTime).seconds            
         if((currentTime % dur == 0) and (currentTime != 0)):
-            videoline.stop()            
+            videoline.stop()
             sleep(1)          
             print('Path follow Stopped')      
             break 

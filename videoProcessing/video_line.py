@@ -108,4 +108,5 @@ class VideoLine:
         self._wheel.move(movement)
 
     def stop(self):
+        self._wheel.stop()
         self.stopped = True
