@@ -13,12 +13,12 @@ PANSERVO = 19
 
 
 class VideoLine:
-    def __init__(self) -> None:
+    def __init__(self , moduleWheel) -> None:
         self.frame = None
         self.stopped = False
         self._width = 160
         self._height = 120
-        self._wheel = Wheel().start()
+        self._wheel = moduleWheel
         
         
     def start(self):
@@ -46,8 +46,7 @@ class VideoLine:
             self.rawCapture = PiRGBArray(self.camera, size=(self._width,self._height))            
 
             for frame in self.camera.capture_continuous(self.rawCapture, format="bgr", use_video_port=True):
-                image = frame.array
-                # self.frame=image
+                image = frame.array            
 
                   # Crop the image
                 crop_img = self.frame[60:self._height, 0:self._width]
