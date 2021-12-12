@@ -197,10 +197,20 @@ def Gpio_Intent(status, room):
         manual_mode = 0
         return statement('Manual Mode turned {}'.format(status))
 
-def follow_line():
+def follow_line(dur):
     global outputFrame
     videoline = VideoLine(wheel).start()
-    outputFrame = videoline.frame
+    startTime = datetime.now()
+    currentTime = 0
+
+    while True:
+        currentTime = (datetime.now() - startTime).seconds            
+        if((currentTime % dur == 0) and (currentTime != 0)):
+            videoline.stop()            
+            sleep(1)          
+            print('Path follow Stopped')      
+            break 
+        outputFrame = videoline.frame
 
 def follow_face(dur=30):
     global outputFrame, camDirectionHTML, wheelDirectionHTML, facePointHTML,lockDirection,video_flag,wheel
@@ -375,7 +385,7 @@ if __name__ == '__main__':
             app.config['ASK_VERIFY_REQUESTS'] = False
             app_video.config['ASK_VERIFY_REQUESTS'] = False
     setIp()
-    Thread(target=follow_line).start()
+    Thread(target=follow_line , args=[60,]).start()
     # Thread(target=follow_face, args=[1000]).start()
     # Thread(target=fetch_event).start()
     server_flask = Thread(target=start_flask)

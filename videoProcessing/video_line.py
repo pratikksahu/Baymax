@@ -104,9 +104,9 @@ class VideoLine:
 
                             #Display the resulting frame
                 self.frame = crop_img
-                cv2.imshow('frame',crop_img)
-                if cv2.waitKey(1) & 0xFF == ord('q'):
-                    break
+                # cv2.imshow('frame',crop_img)
+                # if cv2.waitKey(1) & 0xFF == ord('q'):
+                #     break
     
     def stop(self):
         self.stopped = True
