@@ -197,6 +197,10 @@ def Gpio_Intent(status, room):
         manual_mode = 0
         return statement('Manual Mode turned {}'.format(status))
 
+def follow_line():
+    global outputFrame
+    videoline = VideoLine(wheel).start()
+    outputFrame = videoline.frame
 
 def follow_face(dur=30):
     global outputFrame, camDirectionHTML, wheelDirectionHTML, facePointHTML,lockDirection,video_flag,wheel
@@ -363,10 +367,6 @@ def fallback():
     speech_text = 'You can say hello to me!'
     return question(speech_text).reprompt(speech_text).simple_card('HelloWorld', speech_text)
 
-def follow_line():
-    global outputFrame
-    videoline = VideoLine().start()
-    outputFrame = videoline.frame
 
 if __name__ == '__main__':
     if 'ASK_VERIFY_REQUESTS' in os.environ:
