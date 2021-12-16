@@ -198,7 +198,7 @@ def Gpio_Intent(status, room):
         return statement('Manual Mode turned {}'.format(status))
 
 def follow_line(dur):
-    global outputFrame, wheelDirectionHTML
+    global outputFrame, wheelDirectionHTML, camDirectionHTML, facePointHTML , lockDirection
     videoline = VideoLine(wheel).start()
     startTime = datetime.now()
     currentTime = 0
@@ -211,10 +211,11 @@ def follow_line(dur):
             print('Path follow Stopped')      
             break 
         with lockDirection:                            
-            w = videoline.getWheels()
-            print(w)
+            w = videoline.getWheels()            
             if w != None:
                 wheelDirectionHTML = w
+                camDirectionHTML = 'DOWN'
+                facePointHTML = 'NO FACE'
         outputFrame = videoline.frame
 
 def follow_face(dur=30):
