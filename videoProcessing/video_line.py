@@ -31,7 +31,7 @@ class VideoLine:
 
         self.x=GPIO.PWM(PANSERVO,50)
         self.y=GPIO.PWM(TILTSERVO,50)
-        self.currentx,self.currenty=7,11
+        self.currentx,self.currenty=7,12
         self.x.start(self.currentx)
         self.y.start(self.currenty)
         sleep(1)
