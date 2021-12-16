@@ -11,7 +11,7 @@
   <script type="text/javascript"> 
     (function worker() {              
       console.log("{{video_flag}}");
-      if("{{video_flag}}" == "2")
+      if("{{video_flag}}" != "1")
         $.ajax({
           url: "/information",
           type: "GET",
