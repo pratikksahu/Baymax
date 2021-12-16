@@ -105,6 +105,9 @@ class VideoLine:
     def adjustWheels(self,movement,speed = 20):
         self._wheel.move(movement,speed)
 
+    def getWheels(self):
+        return self.move
+
     def stop(self):
         self._wheel.stop()
         self.stopped = True
