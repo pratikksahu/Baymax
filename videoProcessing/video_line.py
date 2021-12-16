@@ -103,8 +103,6 @@ class VideoLine:
 
                 self.frame = crop_img
     def adjustWheels(self,movement,speed = 20):
-        # pass
-        print(movement)
         self._wheel.move(movement)
 
     def stop(self):
