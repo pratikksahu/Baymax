@@ -82,13 +82,13 @@ class VideoLine:
                     cv2.drawContours(crop_img, contours, -1, (0,255,0), 1)                    
                     if cx >= 80 :
                         self.move = 'RIGHT'                        
-                        self.adjustWheels(self.move,40)
+                        self.adjustWheels(self.move,60)
                     elif cx < 80 and cx > 60:                    
                         self.move = 'FORWARD'
-                        self.adjustWheels(self.move ,30)
+                        self.adjustWheels(self.move ,50)
                     elif cx <= 60:
                         self.move = 'LEFT'                        
-                        self.adjustWheels(self.move,40)
+                        self.adjustWheels(self.move,60)
             
 
                 else:
