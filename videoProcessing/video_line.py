@@ -83,10 +83,10 @@ class VideoLine:
                     if cx >= 80 :
                         self.move = 'RIGHT'                        
                         self.adjustWheels(self.move,60)
-                    elif cx < 80 and cx > 60:                    
+                    elif cx < 80 and cx > 50:                    
                         self.move = 'FORWARD'
                         self.adjustWheels(self.move ,50)
-                    elif cx <= 60:
+                    elif cx <= 50:
                         self.move = 'LEFT'                        
                         self.adjustWheels(self.move,60)
             
