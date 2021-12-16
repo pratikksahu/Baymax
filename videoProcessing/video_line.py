@@ -75,13 +75,12 @@ class VideoLine:
                     M = cv2.moments(c)
 
                     cx = int(M['m10']/M['m00'])
-                    cy = int(M['m01']/M['m00'])
-                    cv2.putText(crop_img ,str(cx) , (0,100) , cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255) )
+                    cy = int(M['m01']/M['m00'])                    
                     cv2.line(crop_img,(cx,0),(cx,720),(255,0,0),1)
                     cv2.line(crop_img,(0,cy),(1280,cy),(255,0,0),1)
 
                     cv2.drawContours(crop_img, contours, -1, (0,255,0), 1)
-
+                    print(cx)
                     if cx >= self._height :
                         self.move = "LEFT"                        
                         self.adjustWheels(self.move,10)
@@ -103,7 +102,8 @@ class VideoLine:
 
                 self.frame = crop_img
     def adjustWheels(self,movement,speed = 20):
-        print(movement)
+        pass
+        # print(movement)
         # self._wheel.move(movement,speed)
 
     def stop(self):
