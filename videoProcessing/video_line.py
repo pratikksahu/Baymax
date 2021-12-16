@@ -81,15 +81,16 @@ class VideoLine:
 
                     cv2.drawContours(crop_img, contours, -1, (0,255,0), 1)
                     print(cx)
-                    if cx >= self._height :
-                        self.move = "LEFT"                        
-                        self.adjustWheels(self.move,10)
-                    if cx < self._height and cx > 50:                    
-                        self.move = "FORWARD"
-                        self.adjustWheels(self.move ,10)
-                    if cx <= 50:
+                    if cx >= 85 :
                         self.move = "RIGHT"                        
                         self.adjustWheels(self.move,10)
+                    if cx < 85 and cx > 60:                    
+                        self.move = "FORWARD"
+                        self.adjustWheels(self.move ,10)
+                    if cx <= 60:
+                        self.move = "LEFT"                        
+                        self.adjustWheels(self.move,10)
+            
 
                 else:
                         self.move = "NOMOV"
@@ -102,9 +103,9 @@ class VideoLine:
 
                 self.frame = crop_img
     def adjustWheels(self,movement,speed = 20):
-        pass
+        # pass
         # print(movement)
-        # self._wheel.move(movement,speed)
+        self._wheel.move(movement,speed)
 
     def stop(self):
         self._wheel.stop()
