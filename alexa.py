@@ -197,6 +197,10 @@ def Gpio_Intent(status, room):
         manual_mode = 0
         return statement('Manual Mode turned {}'.format(status))
 
+@ask.intent('followLine')
+def start_follow_line():
+    Thread(target=follow_line , args=[120,]).start()
+
 def follow_line(dur):
     global outputFrame, wheelDirectionHTML, camDirectionHTML, facePointHTML , lockDirection,video_flag
     video_flag = 2
@@ -392,7 +396,7 @@ if __name__ == '__main__':
             app.config['ASK_VERIFY_REQUESTS'] = False
             app_video.config['ASK_VERIFY_REQUESTS'] = False
     setIp()
-    Thread(target=follow_line , args=[60,]).start()
+    # Thread(target=follow_line , args=[60,]).start()
     # Thread(target=follow_face, args=[60]).start()
     # Thread(target=fetch_event).start()
     server_flask = Thread(target=start_flask)
