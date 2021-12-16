@@ -210,10 +210,11 @@ def follow_line(dur):
             sleep(1)          
             print('Path follow Stopped')      
             break 
-        with lockDirection:                
-                w = videoline.getWheels()
-                if w != None:
-                    wheelDirectionHTML = w
+        with lockDirection:      
+            wheelDirectionHTML = videoline.getWheels()          
+                # w = videoline.getWheels()
+                # if w != None:
+                #     wheelDirectionHTML = videoline.getWheels()
         outputFrame = videoline.frame
 
 def follow_face(dur=30):
