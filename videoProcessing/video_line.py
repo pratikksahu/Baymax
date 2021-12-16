@@ -102,8 +102,8 @@ class VideoLine:
                     break
 
                 self.frame = crop_img
-    def adjustWheels(self,movement):
-        self._wheel.move(movement)
+    def adjustWheels(self,movement,speed):
+        self._wheel.move(movement,speed)
 
     def stop(self):
         self._wheel.stop()
