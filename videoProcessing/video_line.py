@@ -105,7 +105,7 @@ class VideoLine:
     def adjustWheels(self,movement,speed = 20):
         # pass
         print(movement)
-        # self._wheel.move(movement,speed)
+        self._wheel.move(movement,speed)
 
     def stop(self):
         self._wheel.stop()
