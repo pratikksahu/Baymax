@@ -200,6 +200,7 @@ def Gpio_Intent(status, room):
 @ask.intent('followLine')
 def start_follow_line():
     Thread(target=follow_line , args=[120,]).start()
+    return statement('Started following the line')
 
 def follow_line(dur):
     global outputFrame, wheelDirectionHTML, camDirectionHTML, facePointHTML , lockDirection,video_flag
