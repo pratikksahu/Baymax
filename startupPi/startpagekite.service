@@ -11,4 +11,4 @@ Restart=always
 User=pi
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=network-online.target
