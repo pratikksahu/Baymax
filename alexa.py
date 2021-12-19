@@ -34,8 +34,9 @@ app = Flask(__name__)
 app_video = Flask("video_feed_display")
 ask = Ask(app, "/")
 
-log = logging.getLogger('werkzeug')
-log.setLevel(logging.ERROR)
+app.logger.setLevel(logging.DEBUG)
+# log = logging.getLogger('werkzeug')
+# log.setLevel(logging.DEBUG)
 
 
 # def secho(text, file=None, nl=None, err=None, color=None, **styles):
