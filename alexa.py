@@ -221,9 +221,9 @@ def follow_line(dur):
     while True:
         currentTime = (datetime.now() - startTime).seconds            
         if((currentTime % dur == 0) and (currentTime != 0)) or killThread:
-            videoline.stop()
-            wheel.stop()
-            sleep(1)          
+            videoline.stop()            
+            sleep(1)        
+            wheel.stop()  
             print('Path follow Stopped')      
             break 
         with lockDirection:                            
@@ -397,8 +397,9 @@ def fetch_event():
 
 @ask.intent('AMAZON.FallbackIntent')
 def fallback():
-    global runningThreads,killThread
+    global runningThreads,killThread,wheel
     killThread = True
+    wheel.stop()
     speech_text = 'You can say hello to me or ask me to do something !'
     return question(speech_text).reprompt(speech_text).simple_card('Baymax', speech_text)
 
