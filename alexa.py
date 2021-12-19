@@ -331,6 +331,9 @@ def follow_face(dur=30):
 
 @ask.launch
 def launch():
+    global runningThreads,killThread,wheel
+    killThread = True
+    wheel.stop()
     speech_text = 'Hello , My name is baymax.What can I do for you?'
     return question(speech_text).reprompt(speech_text).simple_card(speech_text)
 
