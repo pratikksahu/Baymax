@@ -222,6 +222,7 @@ def follow_line(dur):
         currentTime = (datetime.now() - startTime).seconds            
         if((currentTime % dur == 0) and (currentTime != 0)) or killThread:
             videoline.stop()
+            wheel.stop()
             sleep(1)          
             print('Path follow Stopped')      
             break 
