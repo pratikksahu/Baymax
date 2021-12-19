@@ -34,21 +34,20 @@ app = Flask(__name__)
 app_video = Flask("video_feed_display")
 ask = Ask(app, "/")
 
-app.logger.setLevel(logging.DEBUG)
-# log = logging.getLogger('werkzeug')
-# log.setLevel(logging.DEBUG)
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.DEBUG)
 
 
-# def secho(text, file=None, nl=None, err=None, color=None, **styles):
-#     pass
+def secho(text, file=None, nl=None, err=None, color=None, **styles):
+    pass
 
 
-# def echo(text, file=None, nl=None, err=None, color=None, **styles):
-#     pass
+def echo(text, file=None, nl=None, err=None, color=None, **styles):
+    pass
 
 
-# click.echo = echo
-# click.secho = secho
+click.echo = echo
+click.secho = secho
 
 lock = threading.Lock()
 lockDirection = threading.Lock()
@@ -260,9 +259,9 @@ def followDurationIntent(duration, room):
         runningThreads.append(t)
         t.start()
         unit = 'Seconds'
-        return statement("Started following for {} {}".format(dur, unit))
+        return question("Started following for {} {}".format(dur, unit))
     else:
-        return statement("Please disable manual mode first")  
+        return question("Please disable manual mode first")  
 
 def follow_face(dur=30):
     global outputFrame, camDirectionHTML, wheelDirectionHTML, facePointHTML,lockDirection,video_flag,wheel,killThread,camera
