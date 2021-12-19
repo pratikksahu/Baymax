@@ -63,6 +63,7 @@ STATUSOFF = ['off','low']
 wheel = Wheel().start()
 events= None
 runningThreads = []
+killThread = False
 
 
 @app_video.route("/")
@@ -167,7 +168,7 @@ def videofeedip():
     return Response(yieldIP(), mimetype="text/event-stream")
 
 def manualmode(dur=30):
-    global video_flag,outputFrame,manual_mode , wheel
+    global video_flag,outputFrame,manual_mode , wheel,killThread
     
     print('Manual Mode Started')   
     video_manual = None
@@ -178,7 +179,7 @@ def manualmode(dur=30):
 
     while True:
         currentTime = (datetime.now() - startTime).seconds            
-        if((currentTime % dur == 0) and (currentTime != 0)) or manual_mode == 0:
+        if((currentTime % dur == 0) and (currentTime != 0)) or manual_mode == 0 or killThread:
             video_manual.stop()
             manual_mode = 0
             sleep(1)          
@@ -189,7 +190,8 @@ def manualmode(dur=30):
 
 @ask.intent('manualmode', mapping={'status': 'status'})
 def Gpio_Intent(status, room):
-    global manual_mode , runningThreads
+    global manual_mode , runningThreads , killThread
+    killThread = False
     if status in STATUSON:
         manual_mode = 1
         t = Thread(target=manualmode, args=[100])
@@ -202,14 +204,15 @@ def Gpio_Intent(status, room):
 
 @ask.intent('followLine')
 def start_follow_line():
-    global runningThreads
+    global runningThreads,killThread
+    killThread = False
     t = Thread(target=follow_line , args=[120,])
     runningThreads.append(t)
     t.start()
     return question('Started following the line')
 
 def follow_line(dur):
-    global outputFrame, wheelDirectionHTML, camDirectionHTML, facePointHTML , lockDirection,video_flag
+    global outputFrame, wheelDirectionHTML, camDirectionHTML, facePointHTML , lockDirection,video_flag,killThread
     video_flag = 2
     videoline = VideoLine(wheel).start()
     startTime = datetime.now()
@@ -217,7 +220,7 @@ def follow_line(dur):
 
     while True:
         currentTime = (datetime.now() - startTime).seconds            
-        if((currentTime % dur == 0) and (currentTime != 0)):
+        if((currentTime % dur == 0) and (currentTime != 0)) or killThread:
             videoline.stop()
             sleep(1)          
             print('Path follow Stopped')      
@@ -232,7 +235,8 @@ def follow_line(dur):
 
 @ask.intent('followDuration', mapping={'duration': 'duration'})
 def followDurationIntent(duration, room):
-    global manual_mode , runningThreads
+    global manual_mode , runningThreads,killThread
+    killThread = False
     regex = re.compile('[0-9]{1,}[HSM]{1}')
     res = re.search(regex, str(duration))
     dur = 0
@@ -258,7 +262,7 @@ def followDurationIntent(duration, room):
         return statement("Please disable manual mode first")  
 
 def follow_face(dur=30):
-    global outputFrame, camDirectionHTML, wheelDirectionHTML, facePointHTML,lockDirection,video_flag,wheel
+    global outputFrame, camDirectionHTML, wheelDirectionHTML, facePointHTML,lockDirection,video_flag,wheel,killThread
     print('Started for {} seconds'.format(dur))    
     video_flag = 2
     video = None    
@@ -284,7 +288,7 @@ def follow_face(dur=30):
             facePoint = video.facePoint
             currentTime = (datetime.now() - startTime).seconds
             
-            if(currentTime % dur == 0) and (currentTime != 0):
+            if((currentTime % dur == 0) and (currentTime != 0)) or killThread:
                 raspberry.stop()
                 movement.stop()                                
                 video.stop()
@@ -325,7 +329,7 @@ def follow_face(dur=30):
 
 @ask.launch
 def launch():
-    speech_text = 'Hello , My name is baymax.'
+    speech_text = 'Hello , My name is baymax.What can I do for you?'
     return question(speech_text).reprompt(speech_text).simple_card(speech_text)
 
 
@@ -392,9 +396,8 @@ def fetch_event():
 
 @ask.intent('AMAZON.FallbackIntent')
 def fallback():
-    global runningThreads
-    for t in runningThreads:
-        t.stop()
+    global runningThreads,killThread
+    killThread = True
     speech_text = 'You can say hello to me or ask me to do something !'
     return question(speech_text).reprompt(speech_text).simple_card('Baymax', speech_text)
 
