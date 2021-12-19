@@ -198,7 +198,7 @@ def Gpio_Intent(status, room):
         t = Thread(target=manualmode, args=[100])
         runningThreads.append(t)
         t.start()
-        return question('Manual Mode turned {} for 100 seconds'.format(status))
+        return question('Manual Mode turned {} for 100 seconds'.format(status)).reprompt('You can turn off by saying, Turn off the manual mode')
     if status in STATUSOFF:
         manual_mode = 0
         return question('Manual Mode turned {}'.format(status))
@@ -334,7 +334,7 @@ def launch():
     global runningThreads,killThread,wheel
     killThread = True
     wheel.stop()
-    speech_text = 'Hello , My name is baymax.What can I do for you?'
+    speech_text = 'Hello , My name is baymax. What can I do for you?'
     return question(speech_text).reprompt(speech_text).simple_card(speech_text)
 
 
