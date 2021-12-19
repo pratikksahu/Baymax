@@ -212,7 +212,7 @@ def start_follow_line():
     return question('Started following the line')
 
 def follow_line(dur):
-    global outputFrame, wheelDirectionHTML, camDirectionHTML, facePointHTML , lockDirection,video_flag,killThread
+    global outputFrame, wheelDirectionHTML, camDirectionHTML, facePointHTML , lockDirection,video_flag,killThread,wheel
     video_flag = 2
     videoline = VideoLine(wheel).start()
     startTime = datetime.now()
