@@ -138,12 +138,12 @@ def move_robot(direction):
     # return(response)
 
 def start_flask():
-    app.run(debug=False,
+    app.run(debug=True,
             threaded=True, port=5000, use_reloader=False)
 
 
 def start_flask_video(ipa):
-    app_video.run(host=ipa, port=8000, debug=False,
+    app_video.run(host=ipa, port=8000, debug=True,
                   threaded=True, use_reloader=False)
 
 
