@@ -139,7 +139,7 @@ def move_robot(direction):
 
 def start_flask():
     app.run(debug=True,
-            threaded=True, port=5000, use_reloader=False)
+            threaded=True, port=5000, use_reloader=False , ssl_context=("cert.pem", "key.pem"))
 
 
 def start_flask_video(ipa):
@@ -150,7 +150,7 @@ def start_flask_video(ipa):
 def setIp():
     global VIDEO_FEED_IP
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(("https://8.8.8.8", 80))
+    s.connect(("8.8.8.8", 80))
     VIDEO_FEED_IP = s.getsockname()[0]
 
 
