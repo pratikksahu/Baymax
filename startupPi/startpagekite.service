@@ -3,7 +3,7 @@ Description=pagekite server start
 After=network-online.target 
 
 [Service]
-ExecStart=/usr/bin/python3 /home/pi/Desktop/walle/pagekite.py 5000 edithbanchhor.pagekite.me
+ExecStart=/usr/bin/python3 /home/pi/Desktop/walle/pagekite.py
 WorkingDirectory=/home/pi/Desktop/walle
 StandardOutput=inherit
 StandardError=inherit
