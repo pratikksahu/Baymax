@@ -150,7 +150,7 @@ def start_flask_video(ipa):
 def setIp():
     global VIDEO_FEED_IP
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(("8.8.8.8", 80))
+    s.connect(("https://8.8.8.8", 80))
     VIDEO_FEED_IP = s.getsockname()[0]
 
 
