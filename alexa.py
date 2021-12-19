@@ -138,12 +138,12 @@ def move_robot(direction):
     # return(response)
 
 def start_flask():
+    # app.run(debug=True,
+    #         threaded=True, port=5000, use_reloader=False , ssl_context=("cert.pem", "key.pem"))
+    # app.run(debug=True,
+    #         threaded=True, port=5000, use_reloader=False)
     app.run(debug=True,
-            threaded=True, port=5000, use_reloader=False , ssl_context=("cert.pem", "key.pem"))
-    # app.run(debug=True,
-    #         threaded=True, port=5000, use_reloader=False)
-    # app.run(debug=True,
-    #         threaded=True, port=5000, use_reloader=False)
+            threaded=True, port=5000, use_reloader=False)
 
 def start_flask_video(ipa):
     app_video.run(host=ipa, port=8000, debug=True,
