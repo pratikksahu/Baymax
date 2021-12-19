@@ -34,8 +34,8 @@ app = Flask(__name__)
 app_video = Flask("video_feed_display")
 ask = Ask(app, "/")
 
-log = logging.getLogger('werkzeug')
-log.setLevel(logging.ERROR)
+# log = logging.getLogger('werkzeug')
+# log.setLevel(logging.ERROR)
 
 
 # def secho(text, file=None, nl=None, err=None, color=None, **styles):
@@ -138,12 +138,12 @@ def move_robot(direction):
     # return(response)
 
 def start_flask():
-    app.run(debug=True,
+    app.run(debug=False,
             threaded=True, port=5000, use_reloader=False)
 
 
 def start_flask_video(ipa):
-    app_video.run(host=ipa, port=8000, debug=True,
+    app_video.run(host=ipa, port=8000, debug=False,
                   threaded=True, use_reloader=False)
 
 
