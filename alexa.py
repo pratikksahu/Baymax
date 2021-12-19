@@ -156,7 +156,7 @@ def setIp():
 
 def getIp():
     global VIDEO_FEED_IP
-    print("VIDEO FEED LINK - http://{}:8000".format(VIDEO_FEED_IP))
+    print("VIDEO FEED LINK - https://{}:8000".format(VIDEO_FEED_IP))
     return VIDEO_FEED_IP
 
 
