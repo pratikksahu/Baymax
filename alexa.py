@@ -274,7 +274,7 @@ def follow_face(dur=30):
     currentTime = 0
     isFaceDetected = False    
 
-    video = Video().start()
+    video = Video(camera).start()
 
     facePoint = video.facePoint
     frameInfo = video.frameInfo
