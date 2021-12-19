@@ -14,7 +14,7 @@ PANSERVO = 19
 
 
 class Video:
-    def __init__(self):
+    def __init__(self,moduleCamera):
         # To change vertical margins
         self.verticalFactor = .2
 
@@ -53,17 +53,14 @@ class Video:
         self.frame = None
         self.isFaceDetected = False
         self.facePoint = FacePoint()
+
+        self._camera = moduleCamera
         
 
     def start(self):
-        print('Initialising PANTILT Module..')
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setwarnings(False)
-        GPIO.setup(PANSERVO,GPIO.OUT)
-        GPIO.setup(TILTSERVO,GPIO.OUT)
-
-        self.x=GPIO.PWM(PANSERVO,50)
-        self.y=GPIO.PWM(TILTSERVO,50)
+        self.x=self._camera.x
+        self.y=self._camera.y
+        
         self.currentx,self.currenty=7,5
         self.x.start(self.currentx)
         self.y.start(self.currenty)

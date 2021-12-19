@@ -13,24 +13,19 @@ PANSERVO = 19
 
 
 class VideoLine:
-    def __init__(self , moduleWheel) -> None:
+    def __init__(self , moduleWheel , moduleCamera) -> None:
         self.frame = None
         self.stopped = False
         self._width = 160
         self._height = 128
         self._wheel = moduleWheel
+        self._camera = moduleCamera
         self.move = ''
         
         
-    def start(self):
-        print('Initialising PANTILT Module..')
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setwarnings(False)
-        GPIO.setup(PANSERVO,GPIO.OUT)
-        GPIO.setup(TILTSERVO,GPIO.OUT)
-
-        self.x=GPIO.PWM(PANSERVO,50)
-        self.y=GPIO.PWM(TILTSERVO,50)
+    def start(self):        
+        self.x=self._camera.x
+        self.y=self._camera.y
         self.currentx,self.currenty=7,12
         self.x.start(self.currentx)
         self.y.start(self.currenty)

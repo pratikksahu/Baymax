@@ -5,6 +5,7 @@ from videoProcessing.Video_manual import VideoManual
 from Controller.Movement import Movement
 from Controller.Raspberry import Raspberry
 from Controller.moduleWheel import Wheel
+from Controller.moduleCamera import Camera
 import argparse
 from dataClass.FrameInfo import FrameInfo
 from dataClass.FacePoint import FacePoint
@@ -16,7 +17,6 @@ from datetime import date, datetime
 import threading
 from threading import Thread
 import re
-from Controller.moduleWheel import Wheel
 from flask import Response
 from flask import render_template
 from flask import Flask , make_response , redirect , request , url_for
@@ -61,6 +61,7 @@ manual_mode = 0
 STATUSON = ['on','high']
 STATUSOFF = ['off','low']
 wheel = Wheel().start()
+camera = Camera().start()
 events= None
 runningThreads = []
 killThread = False
@@ -212,9 +213,9 @@ def start_follow_line():
     return question('Started following the line')
 
 def follow_line(dur):
-    global outputFrame, wheelDirectionHTML, camDirectionHTML, facePointHTML , lockDirection,video_flag,killThread,wheel
+    global outputFrame, wheelDirectionHTML, camDirectionHTML, facePointHTML , lockDirection,video_flag,killThread,wheel,camera
     video_flag = 2
-    videoline = VideoLine(wheel).start()
+    videoline = VideoLine(wheel,camera).start()
     startTime = datetime.now()
     currentTime = 0
 
@@ -263,7 +264,7 @@ def followDurationIntent(duration, room):
         return statement("Please disable manual mode first")  
 
 def follow_face(dur=30):
-    global outputFrame, camDirectionHTML, wheelDirectionHTML, facePointHTML,lockDirection,video_flag,wheel,killThread
+    global outputFrame, camDirectionHTML, wheelDirectionHTML, facePointHTML,lockDirection,video_flag,wheel,killThread,camera
     print('Started for {} seconds'.format(dur))    
     video_flag = 2
     video = None    

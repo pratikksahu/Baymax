@@ -13,7 +13,7 @@ LR = 24
 class Wheel:
     def __init__(self):
         
-        print('Initializing Wheels')
+        print('Initializing WHEEL MODULE...')
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
         GPIO.setup(RR,GPIO.OUT)
