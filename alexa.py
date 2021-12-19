@@ -125,13 +125,13 @@ def move_robot(direction):
     if manual_mode == 1:
         if direction == "1":   
             wheel.move('FORWARD')
-        if direction == "4":   
+        elif direction == "4":   
             wheel.move('RIGHT')
-        if direction == "3":   
+        elif direction == "3":   
             wheel.move('LEFT')
-        if direction == "2":   
+        elif direction == "2":   
             wheel.move('BACKWARD')
-        if direction == "5":   
+        elif direction == "5":   
             wheel.move('NOMOV')    
     return render_template("index.html" , video_flag=video_flag)
     # response = make_response(redirect(url_for('index')))
