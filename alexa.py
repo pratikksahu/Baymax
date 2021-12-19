@@ -62,6 +62,7 @@ STATUSON = ['on','high']
 STATUSOFF = ['off','low']
 wheel = Wheel().start()
 events= None
+runningThreads = []
 
 
 @app_video.route("/")
@@ -188,19 +189,24 @@ def manualmode(dur=30):
 
 @ask.intent('manualmode', mapping={'status': 'status'})
 def Gpio_Intent(status, room):
-    global manual_mode
+    global manual_mode , runningThreads
     if status in STATUSON:
         manual_mode = 1
-        Thread(target=manualmode, args=[100]).start()
-        return statement('Manual Mode turned {} for 30 seconds'.format(status))
+        t = Thread(target=manualmode, args=[100])
+        runningThreads.append(t)
+        t.start()
+        return question('Manual Mode turned {} for 100 seconds'.format(status))
     if status in STATUSOFF:
         manual_mode = 0
-        return statement('Manual Mode turned {}'.format(status))
+        return question('Manual Mode turned {}'.format(status))
 
 @ask.intent('followLine')
 def start_follow_line():
-    Thread(target=follow_line , args=[120,]).start()
-    return statement('Started following the line')
+    global runningThreads
+    t = Thread(target=follow_line , args=[120,])
+    runningThreads.append(t)
+    t.start()
+    return question('Started following the line')
 
 def follow_line(dur):
     global outputFrame, wheelDirectionHTML, camDirectionHTML, facePointHTML , lockDirection,video_flag
@@ -223,6 +229,33 @@ def follow_line(dur):
             camDirectionHTML = 'DOWN'
             facePointHTML = 'NO FACE'
         outputFrame = videoline.frame
+
+@ask.intent('followDuration', mapping={'duration': 'duration'})
+def followDurationIntent(duration, room):
+    global manual_mode , runningThreads
+    regex = re.compile('[0-9]{1,}[HSM]{1}')
+    res = re.search(regex, str(duration))
+    dur = 0
+    if(res != None):
+        res = res.group()
+        unit = res[len(res) - 1]
+        j = len(res) - 2
+        for i in range(len(res) - 1):
+            dur += int(int(res[i]) * math.pow(10, j))
+            j = j - 1
+
+        if(unit == 'M' or unit == 'H'):
+            dur = dur*60
+        unit = 'S'    
+    if manual_mode == 0:
+        #Add +2 seconds to compensate camera initialisation time
+        t = Thread(target=follow_face, args=[dur+2])
+        runningThreads.append(t)
+        t.start()
+        unit = 'Seconds'
+        return statement("Started following for {} {}".format(dur, unit))
+    else:
+        return statement("Please disable manual mode first")  
 
 def follow_face(dur=30):
     global outputFrame, camDirectionHTML, wheelDirectionHTML, facePointHTML,lockDirection,video_flag,wheel
@@ -305,30 +338,6 @@ def Gpio_Intent(status, room):
 def Gpio_Intent(time, room):
     return question('Alarm set for {}'.format(time))
 
-@ask.intent('followDuration', mapping={'duration': 'duration'})
-def followDurationIntent(duration, room):
-    global manual_mode
-    regex = re.compile('[0-9]{1,}[HSM]{1}')
-    res = re.search(regex, str(duration))
-    dur = 0
-    if(res != None):
-        res = res.group()
-        unit = res[len(res) - 1]
-        j = len(res) - 2
-        for i in range(len(res) - 1):
-            dur += int(int(res[i]) * math.pow(10, j))
-            j = j - 1
-
-        if(unit == 'M' or unit == 'H'):
-            dur = dur*60
-        unit = 'S'    
-    if manual_mode == 0:
-        #Add +2 seconds to compensate camera initialisation time
-        Thread(target=follow_face, args=[dur+2]).start()
-        unit = 'Seconds'
-        return statement("Started following for {} {}".format(dur, unit))
-    else:
-        return statement("Please disable manual mode first")    
 
 @ask.intent('calender_event')
 def calender_eventIntent():
@@ -345,9 +354,6 @@ def calender_eventIntent():
         e= e+event['summary']+"\n"
     
     return statement(e)
-
-
-
 
 def fetch_event():
     global events
@@ -386,8 +392,11 @@ def fetch_event():
 
 @ask.intent('AMAZON.FallbackIntent')
 def fallback():
-    speech_text = 'You can say hello to me!'
-    return question(speech_text).reprompt(speech_text).simple_card('HelloWorld', speech_text)
+    global runningThreads
+    for t in runningThreads:
+        t.stop()
+    speech_text = 'You can say hello to me or ask me to do something !'
+    return question(speech_text).reprompt(speech_text).simple_card('Baymax', speech_text)
 
 
 if __name__ == '__main__':
@@ -397,9 +406,6 @@ if __name__ == '__main__':
             app.config['ASK_VERIFY_REQUESTS'] = False
             app_video.config['ASK_VERIFY_REQUESTS'] = False
     setIp()
-    # Thread(target=follow_line , args=[60,]).start()
-    # Thread(target=follow_face, args=[60]).start()
-    # Thread(target=fetch_event).start()
     server_flask = Thread(target=start_flask)
     video_flask = Thread(target=start_flask_video, args=(getIp(),))
 
