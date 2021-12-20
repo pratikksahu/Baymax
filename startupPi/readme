@@ -33,4 +33,6 @@ systemctl | grep start
 sudo ps -ax | grep python  //Returns id of processes
 sudo kill <pid> <pid>
 
+#Useful Links
 https://www.youtube.com/watch?v=ENjRzQkqEVA
+https://dev.to/jmnsf/pagekite-expose-your-team-s-localhosts-to-the-world-under-your-own-domain-169a
