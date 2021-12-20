@@ -187,6 +187,7 @@ def manualmode(dur=30):
             video_manual.stop()
             manual_mode = 0
             sleep(1)          
+            wheel.stop()
             print('Manual Mode Stopped')      
             break                    
         outputFrame = video_manual.frame
