@@ -17,7 +17,7 @@ class VideoManual:
     def start(self):
         self.y=self._camera.y
         self.currentY = 6
-        self.y.start(self.currenty)
+        self.y.start(self.currentY)
         self.y.ChangeDutyCycle(0)
         Thread(name='manual_mode', target=self.get).start()
         return self    
