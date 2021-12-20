@@ -29,11 +29,11 @@ class VideoManual:
             self.rawCapture = PiRGBArray(self.camera, size=(self._width,self._height))            
 
             for frame in self.camera.capture_continuous(self.rawCapture, format="bgr", use_video_port=True):
-                image = frame.array
-                self.frame=image
+                image = frame.array                
                 self.rawCapture.truncate(0)
                 if self.stopped:
                     break
+                self.frame=image
     
     def stop(self):
         self.stopped = True
