@@ -7,13 +7,18 @@ from dataClass.FacePoint import FacePoint
 from threading import Thread
 
 class VideoManual:
-    def __init__(self) -> None:
+    def __init__(self , moduleCamera) -> None:
         self.frame = None
         self.stopped = False
         self._width = 640
         self._height = 480
+        self._camera = moduleCamera        
         
     def start(self):
+        self.y=self._camera.y
+        self.currentY = 6
+        self.y.start(self.currenty)
+        self.y.ChangeDutyCycle(0)
         Thread(name='manual_mode', target=self.get).start()
         return self    
     

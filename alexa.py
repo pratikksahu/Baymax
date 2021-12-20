@@ -172,11 +172,11 @@ def videofeedip():
     return Response(yieldIP(), mimetype="text/event-stream")
 
 def manualmode(dur=30):
-    global video_flag,outputFrame,manual_mode , wheel,killThread
+    global video_flag,outputFrame,manual_mode , wheel,killThread,camera
     
     print('Manual Mode Started')   
     video_manual = None
-    video_manual = VideoManual().start()
+    video_manual = VideoManual(camera).start()
     video_flag = 1
     startTime = datetime.now()
     currentTime = 0
