@@ -183,7 +183,7 @@ def manualmode(dur=30):
 
     while True:
         currentTime = (datetime.now() - startTime).seconds            
-        if((currentTime % dur == 0) and (currentTime != 0)) or manual_mode == 0 or killThread:
+        if((currentTime % dur == 0) and (currentTime != 0)) or killThread:
             video_manual.stop()
             manual_mode = 0
             sleep(1)          
@@ -334,8 +334,7 @@ def follow_face(dur=30):
 
 @ask.launch
 def launch():
-    global runningThreads,killThread,wheel,manual_mode
-    manual_mode = 0
+    global runningThreads,killThread,wheel
     killThread = True
     wheel.stop()
     speech_text = 'Hello , My name is baymax. What can I do for you?'
@@ -405,8 +404,7 @@ def fetch_event():
 
 @ask.intent('AMAZON.FallbackIntent')
 def fallback():
-    global runningThreads,killThread,wheel,manual_mode
-    manual_mode = 0
+    global runningThreads,killThread,wheel
     killThread = True
     wheel.stop()
     speech_text = 'You can say hello to me or ask me to do something !'
