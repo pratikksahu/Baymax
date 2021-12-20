@@ -334,7 +334,8 @@ def follow_face(dur=30):
 
 @ask.launch
 def launch():
-    global runningThreads,killThread,wheel
+    global runningThreads,killThread,wheel,manual_mode
+    manual_mode = 0
     killThread = True
     wheel.stop()
     speech_text = 'Hello , My name is baymax. What can I do for you?'
@@ -404,7 +405,8 @@ def fetch_event():
 
 @ask.intent('AMAZON.FallbackIntent')
 def fallback():
-    global runningThreads,killThread,wheel
+    global runningThreads,killThread,wheel,manual_mode
+    manual_mode = 0
     killThread = True
     wheel.stop()
     speech_text = 'You can say hello to me or ask me to do something !'

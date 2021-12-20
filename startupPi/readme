@@ -1,5 +1,5 @@
 Path to service = /etc/systemd/system/
-
+sudo rm startalexa.service startpagekite.service
 Copy service file
 sudo cp startalexa.service /etc/systemd/system/
 sudo cp startpagekite.service /etc/systemd/system/
@@ -34,4 +34,3 @@ sudo ps -ax | grep python  //Returns id of processes
 sudo kill <pid> <pid>
 
 https://www.youtube.com/watch?v=ENjRzQkqEVA
-ssh -i "myaws.pem" openvpnas@ec2-13-233-251-236.ap-south-1.compute.amazonaws.com
